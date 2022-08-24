@@ -12,10 +12,11 @@ header-img: "img/scenery/about_bg.jpg"
 > 哪里更远
 
 
-
+<!--
 ## Just Me
 
 <img src="/img/scenery/about_bg2.jpg" width="350" alt="about_bg2"></img>
+
 
 > 有一种状态 叫一个人 它总是挑战语言的贫乏 只能在某首歌中找寻灵感；
 >
@@ -63,6 +64,6 @@ header-img: "img/scenery/about_bg.jpg"
 > Mr.Seven：https://itimetraveler.github.io
 
 ## Contact me
+-->
 
-> myId: duyy21
-> Email：\<myId\>@mails.thu.edu.cn
+> Email：duyy21@mails.thu.edu.cn

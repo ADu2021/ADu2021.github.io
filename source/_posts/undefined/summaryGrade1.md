@@ -7,6 +7,7 @@ header-img: /img/header_img/summaryGrade1_bg.jpg
 tags: 
 - 总结
 categories:
+- 总结
 ---
 
 # 大一学年总结

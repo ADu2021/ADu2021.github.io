@@ -112,11 +112,11 @@ friends: [
 ## Doc:https://github.com/gitalk/gitalk/blob/master/readme-cn.md
 ##
 gitalk:
-  owner:                          # 'GitHub repo owner'
-  admin:                          # 'GitHub repo'
-  repo:                           # ['GitHub repo owner and collaborators, only these guys can initialize github issues']
-  clientID:                       # 'GitHub Application Client ID'
-  clientSecret:                   # 'GitHub Application Client Secret'
+  owner: ADu2021                         # 'GitHub repo owner'
+  admin: [ADu2021]                         # 'GitHub repo'
+  repo:  git@github.com:ADu2021/ADu2021.github.io.git                         # ['GitHub repo owner and collaborators, only these guys can initialize github issues']
+  clientID: ff75338a1add7ef1c2c6                      # 'GitHub Application Client ID'
+  clientSecret: 0d3daff08fa21827ac90b2682d812688a20635ee # isn't this unsafe???   # 'GitHub Application Client Secret'
   perPage: 10                     # Pagination size, with maximum 100.
   pagerDirection: last            # Comment sorting direction, available values are last and first.
   createIssueManually: false      # By default, Gitalk will create a corresponding github issue for your every single page automatically when the logined user is belong to the admin users. You can create it manually by setting this option to true
