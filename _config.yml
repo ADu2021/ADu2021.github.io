@@ -98,19 +98,10 @@ featured-condition-size: 0    # A tag will be featured if the size of it is more
 
 ## Friends
 friends: [
-    {
-        title: "V_Vincen",
-        href: "https://v-vincen.life/"
-    },{
-        title: "Bean Tech",
-        href: "http://beantech.org"
-    },{
-        title: "Hux Blog",
-        href: "http://huangxuan.me"
-    },{
-        title: "Hexo",
-        href: "https://hexo.io/"
-    }
+#    {
+#        title: "V_Vincen",
+#        href: "https://v-vincen.life/"
+#    },
 ]
 # no friends' website... 
 
@@ -185,7 +176,7 @@ skip_render:
 
 
 # Writing
-new_post_name: :lang/:title.md    # File name of new posts
+new_post_name: :cn/:title.md    # File name of new posts
 default_layout: post
 auto_spacing: true
 titlecase: false    # Transform title into titlecase
