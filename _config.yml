@@ -112,8 +112,8 @@ friends: [
 ## Doc:https://github.com/gitalk/gitalk/blob/master/readme-cn.md
 ##
 gitalk:
-  owner: ADu2021                         # 'GitHub repo owner'
-  admin: "['ADu2021']"                         # 'GitHub repo'
+  owner: 'ADu2021'                        # 'GitHub repo owner'
+  admin: ['ADu2021']                        # 'GitHub repo'
   repo:  adu2021.github.io                       # ['GitHub repo owner and collaborators, only these guys can initialize github issues']
   clientID: ff75338a1add7ef1c2c6                      # 'GitHub Application Client ID'
   clientSecret: 0d3daff08fa21827ac90b2682d812688a20635ee # isn't this unsafe???   # 'GitHub Application Client Secret'
