@@ -30,7 +30,7 @@ permalink_defaults:
 # CDN Setting
 ## Docs: https://www.jsdelivr.com/?docs=gh
 ## If Github Pages deploy，you can ues jsdelivr settings
-#
+# Warning : this doesn't work
 #jsdelivr:
 #  jsdelivr_url: https://cdn.jsdelivr.net/gh/
 #  github_username: ADu2021

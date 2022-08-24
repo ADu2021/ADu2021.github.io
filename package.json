@@ -1,7 +1,7 @@
 {
   "name": "hexo-site",
   "version": "0.0.0",
-  "private": false,
+  "private": true,
   "scripts": {
     "build": "hexo generate",
     "clean": "hexo clean",
