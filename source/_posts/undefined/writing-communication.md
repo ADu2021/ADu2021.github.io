@@ -2,8 +2,8 @@
 title: 删帖风云——社交媒体管控下网络舆论的兴亡
 catalog: true
 date: 2022-06-12 20:50:02
-subtitle: \[写作与沟通课程论文\]
-header-img: /img/header_img/summaryGrade1_bg.jpg
+subtitle: 写作与沟通课程论文
+header-img: /img/header_img/archive_bg3.jpg
 tags:
 - 课程论文
 categories:

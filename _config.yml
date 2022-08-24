@@ -114,7 +114,7 @@ friends: [
 gitalk:
   owner: ADu2021                         # 'GitHub repo owner'
   admin: [ADu2021]                         # 'GitHub repo'
-  repo:  git@github.com:ADu2021/ADu2021.github.io.git                         # ['GitHub repo owner and collaborators, only these guys can initialize github issues']
+  repo:  adu2021.github.io                       # ['GitHub repo owner and collaborators, only these guys can initialize github issues']
   clientID: ff75338a1add7ef1c2c6                      # 'GitHub Application Client ID'
   clientSecret: 0d3daff08fa21827ac90b2682d812688a20635ee # isn't this unsafe???   # 'GitHub Application Client Secret'
   perPage: 10                     # Pagination size, with maximum 100.
