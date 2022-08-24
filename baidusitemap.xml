@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://adu2021.github.io/cn/test/</loc>
+    <loc>https://adu2021.github.io/undefined/test/</loc>
     <lastmod>2022-08-24</lastmod>
+  </url>
+  <url>
+    <loc>https://adu2021.github.io/undefined/summaryGrade1/</loc>
+    <lastmod>2022-08-05</lastmod>
   </url>
   <url>
     <loc>https://adu2021.github.io/cn/Hexo-Theme-LiveMyLife/</loc>
     <lastmod>2020-04-17</lastmod>
   </url>
   <url>
-    <loc>https://adu2021.github.io/en/Hexo-Theme-LiveMyLife/</loc>
+    <loc>https://adu2021.github.io/undefined/Hexo-Theme-LiveMyLife/</loc>
     <lastmod>2020-04-17</lastmod>
   </url>
 </urlset> 
