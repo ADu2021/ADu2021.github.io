@@ -139,10 +139,10 @@
   <!--[if lt IE 9]> <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script> <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script> <![endif]-->
 
   <!-- ga & ba script hoook -->
-  <link rel="canonical" href="https://adu2021.github.io/archives/">
+  <link rel="canonical" href="https://adu2021.github.io/undefined/Java-Android/">
   <title>
     
-      ADu&#39;s Blog
+      Java&amp;Android Debug Log - ADu&#39;s Blog
     
   </title>
 <meta name="generator" content="Hexo 5.4.0"></head>
@@ -348,19 +348,19 @@
     .body--light {
       /* intro-header */
       --intro-header-background-image-url-home: url('/img/header_img/newhome_bg.jpg');
-      --intro-header-background-image-url-post: url('');
-      --intro-header-background-image-url-page: url('/img/header_img/archive_bg2.jpg');
+      --intro-header-background-image-url-post: url('https://i.imgur.com/qVj4cCe.jpg');
+      --intro-header-background-image-url-page: url('/https://i.imgur.com/qVj4cCe.jpg');
     }
     .body--dark {
       --intro-header-background-image-url-home: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('/img/header_img/newhome_bg.jpg');
-      --intro-header-background-image-url-post: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('');
-      --intro-header-background-image-url-page: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('/img/header_img/archive_bg2.jpg');
+      --intro-header-background-image-url-post: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('https://i.imgur.com/qVj4cCe.jpg');
+      --intro-header-background-image-url-page: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2)), url('/https://i.imgur.com/qVj4cCe.jpg');
     }
 
     header.intro-header {
-       /*page*/
-        background-image: var(--intro-header-background-image-url-page);
-        /* background-image: url('/img/header_img/archive_bg2.jpg'); */
+       /*post*/
+        background-image: var(--intro-header-background-image-url-post);
+        /* background-image: url('https://i.imgur.com/qVj4cCe.jpg'); */
       
     }
 
@@ -378,10 +378,44 @@
       <div class="row">
         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
           
-          <div class="site-heading">
-            <h1>ADu&#39;s Blog</h1>
-            <!--<hr class="small">-->
-            <span class="subheading">你好呀~</span>
+          <div class="post-heading">
+            <div class="tags">
+              
+              <a class="tag" href="/tags/#Java" title="Java">Java</a>
+              
+              <a class="tag" href="/tags/#Android" title="Android">Android</a>
+              
+            </div>
+            <h1>Java&amp;Android Debug Log</h1>
+            <h2 class="subheading"></h2>
+            <span class="meta">
+              Posted by Du Yiyang on
+              2022-08-28
+            </span>
+
+
+            
+            <!-- WordCount start -->
+            <div class="blank_box"></div>
+            <span class="meta">
+              Estimated Reading Time <span class="post-count">9</span> Minutes
+            </span>
+            <div class="blank_box"></div>
+            <span class="meta">
+              Words <span class="post-count">2.3k</span> In Total
+            </span>
+            <div class="blank_box"></div>
+            <!-- WordCount end -->
+            
+            
+            <!-- 不蒜子统计 start -->
+            <span class="meta" id="busuanzi_container_page_pv">
+              Viewed <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span> Times
+            </span>
+            <!-- 不蒜子统计 end -->
+            
+
+
           </div>
           
         </div>
@@ -422,304 +456,439 @@
 	Friends Blog、
 	anchorjs、
 	) -->
-		<!-- Main Content -->
-<div class="container">
-  <div class="row">
-    
+		<!-- Modify by Yu-Hsuan Yen -->
+<!-- Post Content -->
+<article>
+  <div class="container">
+    <div class="row">
+      <!-- Post Container -->
+      <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1 post-container">
 
-    <!-- USE SIDEBAR -->
-    <!-- Post Container -->
-    <div class="
-                col-lg-8 col-lg-offset-1
-                col-md-8 col-md-offset-1
-                col-sm-12
-                col-xs-12
-                post-container
-            ">
+        <h1>Android Studio 摸索记录</h1>
+<p>小学期要用Android Studio开发，于是先自己试试，发现有很多需要适应的地方，于是把一些bug/需求的解决方式记录下来。</p>
+<h2 id="Week2：瞎玩">Week2：瞎玩</h2>
+<ul>
+<li>
+<p>bug：使用jetpack：navigation时，gradle编译出现“Could not find org.jetbrains.kotlin:kotlin-stdlib:”错误，网上的方案都没有用</p>
+<p>解决方案：上方工具栏Tools-&gt;Kotlin-&gt;Configure Kotlin in Project-&gt;Android，自动配置就好了（好像是在gradle里面自动加了ktx相关的几条依赖）</p>
+</li>
+<li>
+<p>问题：使用了自带侧边栏的那个Project模板，他动作的触发器在哪里？</p>
+<p>好像navigation已经实现了，所以不需要触发器。</p>
+<p>新建一个fragment_xxx.xml，然后添加到navigation（graph）中，然后再activity_main_drawer.xml里添加这个（侧边栏布局），最后在MainActivity.java中mAppBarConfiguration变量里添加对应的id（这个用来告诉顶部导航栏这是顶级fragment，不要生成返回按钮）</p>
+</li>
+<li>
+<p>new了一个java.net.URL，报java.net.malformedurlexception</p>
+<p>解决：try-catch，捕获异常即可。</p>
+<p><em>Note：其实应该充分利用Java语言的这种异常捕获的特性。还有就是如果出现那种闪退的RE，先套一层try-catch语句看看除了什么错会比较不错。</em></p>
+</li>
+<li>
+<p>从站点读取rss时，报Cleartext HTTP traffic not permitted错</p>
+<p>解决：use https instead of http</p>
+</li>
+<li>
+<p>bug：<code>FATAL EXCEPTION：Attempt to invoke virtual method 'void android.widget.TextView.setText(java.lang.CharSequence)' on a null object reference</code></p>
+<p>原因：不能从mainActivity中调用findViewById(R.id.xx)来获得另一个fragment里面的resources</p>
+<p>解决：不会解决（模板的结构没那么简单emm），但是把逻辑都丢给fragment自己处理就不存在这个问题了。</p>
+</li>
+<li>
+<p>bug：（接着上一个bug，）fragment自己也在调用getViewById的时候return null了。</p>
+<p>解决：reason：调用位于OnCreateView，应该在OnViewCreader处调用。这里可以参考官方文档中fragment 的life cycle。</p>
+<p><em>Note：Activity和Fragment都有自己的life cycle，具体表现就是可以重写各种onXxx函数，用于控制相应生命周期的行为。</em></p>
+</li>
+<li>
+<p>bug：通过Navigation.findNavController(v).navigate(R.id.contentFragment);转换fragment时，出现FATAL ERROR：Unable to instantiate fragment : could not find Fragment constructor</p>
+<p>reason：因为ContentFragment是用navigation graph里面的图形界面创建的，他默认是一个访问类型（default）的class，但是这里应该是一个public的类。</p>
+<p>solution：class定义前面加上public即可。注意：ContentFragment这个类应该有一个public的空构造函数，不过java会默认生成就是了，故不用实现任何构造函数即可。</p>
+</li>
+<li>
+<p>需求：显示/处理Html文本（parse HTML）</p>
+<p>方案1：use webview and it’s loadData method</p>
+<p>方案2：use <code>HtmlCompat.fromHtml(raw_text,HtmlCompat.FROM_HTML_MODE_LEGACY)</code> function</p>
+</li>
+<li>
+<p>bug：webView组件在加载图片的时候，加载的图片的那个宽度比屏幕宽度大，很丑。</p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/10395292/android-webview-scaling-image-to-fit-the-screen">https://stackoverflow.com/questions/10395292/android-webview-scaling-image-to-fit-the-screen</a> 相当于在html内嵌了style</p>
+</li>
+<li>
+<p>需求：改变模板自带的Toolbar的title，总不能让他默认显示我fragment的名字吧。</p>
+<p>方案：来一个<code>private androidx.appcompat.widget.Toolbar toolbar</code>的变量获取toolbar对象，在MainActivity的<code>onStart()</code>调用<code>toolbar.setTitle();</code>。或者fragment的<code>onViewCreated()</code>里面先获取MainActivity，再调用MainActivity里自己实现的一个控制接口。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MainActivity mainActivity = (MainActivity) getContext();</span><br><span class="line">mainActivity.setBarTitle(<span class="string">&quot;&lt;Fragment Title&gt;&quot;</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>需求：实现一个新闻列表（比如从rss feed里显示title和abstract）</p>
+<p>实现：用RecyclerView。参见<a target="_blank" rel="noopener" href="https://developer.android.com/develop/ui/views/layout/recyclerview">Create dynamic lists with RecyclerView</a></p>
+<p>基本就是实现三个部分：首先是用一个.xml定义列表里每个unit的样式；然后创建一个CustomAdapter（其中有一个ViewHolder内部类用于接收unit的样式并定义其行为，类似于placeHolder占位符），Adapter实现占位的创建和绑定（赋予其真正的数据）等函数；最后在activity/fragment里面调用这个CustomAdapter类管理RecyclerView。文档写得挺清楚的，就是实现起来花一点时间。</p>
+<ul>
+<li>
+<p>需求：上面那个用RecyclerView实现的列表，我想让两个unit之间有个空隙，怎么实现？</p>
+<p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/1598119/is-there-an-easy-way-to-add-a-border-to-the-top-and-bottom-of-an-android-view">Stack Overflow</a> 这样实现。相当于是用一些fancy的background绘制出了这种效果。<em>需要注意这样的话unit里面的文本最好设置android::margin，不然就会出现文本出框的现象。。</em></p>
+</li>
+</ul>
+</li>
+<li>
+<p>问题：是不是还需要实现自己的<code>onSaveInstanceState()</code>函数啊。</p>
+</li>
+<li>
+<p>TODO：情景：在一大堆新闻列表里，我点进去了某一个（此时换fragment加载content），然后又退出来，这时候：如果重新https请求、处理、显示新闻列表岂不是很慢？如果能用一些变量存一些会好一些。就是要考虑清楚存在哪里。</p>
+</li>
+</ul>
+<h2 id="Week3-开发">Week3 开发</h2>
+<ul>
+<li>
+<p>需求：Tablayout在有太多的tab时候会挤到一起，怎么实现滑动？<br>
+实现：android:tabMode=“scrollable”<br>
+bug：error: attribute android:tabMode not found.<br>
+solution：use setTabMode() instead</p>
+</li>
+<li>
+<p>需求：添加图片资源<br>
+实现：点击IDE左侧的&quot;Resource Manager&quot;，+，Import Drawables即可</p>
+</li>
+<li>
+<p>需求：给每个tab设置自己的（点击）行为<br>
+实现：tabLayout.addOnTabSelectedListener，实现public void onTabSelected(TabLayout.Tab tab)方法。<br>
+注意：实现那个方法中用到了tab.getText()的逻辑，如果创建时没有setText，是会返回null的。</p>
+</li>
+<li>
+<p>api中有用的信息：<br>
+“image”：在摘要页面显示，在文章中显示，需要保存<br>
+“publishTime”：在文章中显示，排序，搜索，需要保存<br>
+“keywords”：搜索，需要保存<br>
+“video”：在文章中显示，需要保存<br>
+“title”：在摘要页面显示，在文章中显示，需要保存<br>
+“content”：在摘要页面显示（部分），在文章中显示，需要保存<br>
+“publisher”：（来源），在文章中显示，需要保存<br>
+“category”：需要保存<br>
+<strong>“page”:页数，优化加载速度</strong></p>
+</li>
+<li>
+<p>注意：TabLayout.Tab的getId()默认返回-1，自己定义id就不要用-1了。</p>
+</li>
+<li>
+<p>bug: Permission denied (missing INTERNET permission?)<br>
+solution:在manifest中添加<uses-permission android:name="android.permission.INTERNET" /></p>
+</li>
+<li>
+<p>需求：自定义初始界面标题（toolbar.title）<br>
+实现：需要重载MainActivity的onStart函数（而不是在onCreate），在这里调toolbar.setTitle();<br>
+注意：fragment的onViewCreated函数调用应该是在activity的onCreate的super.onCreate里面，所以这时候activity的toolbar对象还没有初始化，是null。</p>
+</li>
+<li>
+<p>需求：进场动画<br>
+实现：<br>
+RecyclerView：<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/26724964/how-to-animate-recyclerview-items-when-they-appear">https://stackoverflow.com/questions/26724964/how-to-animate-recyclerview-items-when-they-appear</a><br>
+xml：android:animateLayoutChanges=“true”</p>
+</li>
+<li>
+<p>需求：Programmatically create a MaterialButton with Outline style<br>
+解决：<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/60590968/set-materialbutton-style-to-textbutton-programmatically">https://stackoverflow.com/questions/60590968/set-materialbutton-style-to-textbutton-programmatically</a><br>
+为了达到圆角的效果还得再加上button.setCornerRadius(75);</p>
+</li>
+<li>
+<p>bug：在themes.xml中用全局style修改字体后，从隐藏到显示的新tab的字体并没有改变。<br>
+fix：<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/31067265/change-the-font-of-tab-text-in-android-design-support-tablayout">https://stackoverflow.com/questions/31067265/change-the-font-of-tab-text-in-android-design-support-tablayout</a><br>
+note：似乎所有直接new出来的东西都不会过xml里的风格，需要programmatically设置字体。最后再管它们比较好一点。</p>
+</li>
+<li>
+<p>数据库：Room(<a target="_blank" rel="noopener" href="https://developer.android.com/training/data-storage/room/">https://developer.android.com/training/data-storage/room/</a>)<br>
+异步操作：RxJava<br>
+反正就是要把database的操作都放到一个新的线程上面。不过存的时候好像还是得回到MainThread上面来。</p>
+</li>
+<li>
+<p>roomdatabase：error: Cannot figure out how to save this field into database. You can consider adding a type converter for it.<br>
+solution：<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/44986626/android-room-database-how-to-handle-arraylist-in-an-entity">https://stackoverflow.com/questions/44986626/android-room-database-how-to-handle-arraylist-in-an-entity</a><br>
+要用到Gson，在gradle中implementation ‘com.google.code.gson:gson:2.9.1’</p>
+</li>
+<li>
+<p>一个搞笑的bug：本来加载出来的新闻里只有少数几条有照片，结果上下滑动几下之后，所有的新闻就都有图片了。。。。<br>
+解决方案：<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/33835867/recyclerview-adapter-showing-wrong-images">https://stackoverflow.com/questions/33835867/recyclerview-adapter-showing-wrong-images</a><br>
+note：一开始意识到是recyclerView回收机制造成问题的时候甚至想弃用recyclerView，，，得亏进行了一些个搜索。</p>
+</li>
+<li>
+<p>需求：ImageView屏幕居中<br>
+实现：Parent View 设置android:gravity=“center”</p>
+</li>
+<li>
+<p>bug：部分图片加载不出来<br>
+尝试：一开始以为还是recyclerView的问题，多种解决方案无果后，发现url为http的图片全都加载不出来而https的都可以，于是搜索之后很快就解决了。<br>
+solution：<a target="_blank" rel="noopener" href="https://blog.csdn.net/wuqingsen1/article/details/103311349">https://blog.csdn.net/wuqingsen1/article/details/103311349</a> （add android:usesCleartextTraffic=“true” to application）<br>
+note：问题定位错了，浪费了几个小时。。。</p>
+</li>
+<li>
+<p>bug：还是有一张图片加载不出来<br>
+观察：这张图片尺寸很大，且注意到报错Canvas: trying to draw too large bitmap.<br>
+solution：Picasso (…).resize(0, 800).resize(1000,0).onlyScaleDown()(…)<br>
+note：这加载图片真不是件容易事儿。。。</p>
+</li>
+<li>
+<p>需求：保存（新闻列表的）阅读位置<br>
+解决：每次从阅读文章退回的时候不要重新刷新即可</p>
+</li>
+<li>
+<p>note：能够及时和甲方（助教）沟通一些需求上不明确的点很重要。</p>
+</li>
+<li>
+<p>bug：点击按钮打开DatePicker，如果连续（在DatePicker未打开前）点两下按钮，则crash，报错：<br>
+java.lang.IllegalStateException: Fragment already added: MaterialDatePicker{4f3cc88} (1b47f65d-e0c6-42ee-b81b-63e07f7d6f44 tag=设置开始与截止日期)<br>
+solution：在onClick事件中加一条if(materialDatePicker.isAdded()) return;</p>
+</li>
+<li>
+<p>需求：设置起始时间、截止时间（UI）<br>
+实现：MaterialDatePicker，通过泛型传入Pair&lt;int,int&gt;来实现DateRangePicker<br>
+获取时间参考https://stackoverflow.com/questions/58931051/materialdatepicker-get-selected-dates</p>
+</li>
+<li>
+<p>bug：Method callback = this.getClass().getMethod(“parseJson”, String.class);，其中parseJson(String)是父类的protected函数，但是callback无法调用<br>
+原因：调用callback的对象是另一个类，不在protected的涵盖范围内<br>
+解决：protected-&gt;public</p>
+</li>
+<li>
+<p>神奇的发现：api接口中有个page参数（这个参数在文档里未给出），相当于同一搜索条件可以分页加载，这就使我们不用通过修改size来加载更多新闻了。（从O（n^2）到了O（n））<br>
+麻烦的是需要小部分重构（因为之前是用Array存的，不方便扩展，需要重构为ArrayList）。不过重构的时候顺便删掉了很多冗余的东西。</p>
+</li>
+</ul>
 
-      <!-- Main Content -->
-<div class="container">
-  <div class="row">
-    <div class="col-lg-8 col-lg-offset-0 col-md-10 col-md-offset-1">
-      <!-- 归档列表 -->
 
-      
-
-      <!-- 归档列表 -->
-      
-      <div class="one-tag-list">
-        <span class="fa fa-calendar-times-o listing-seperator" id="2022">
-          <span class="tag-text">2022</span>
-        </span>
-        <ul>
+        <hr>
+        <!-- Pager -->
+        <ul class="pager">
           
-          <li>
-            09-06
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/undefined/2022javaDebug/" style="color: #0085a1">
-              <span>
-                Java小学期实验报告
-                
-                -- 
-                
-              </span>
-            </a>
+          <li class="previous">
+            <a href="/undefined/2022javaDebug/" data-toggle="tooltip" data-placement="top" title="Java小学期实验报告">&larr; Previous Post</a>
           </li>
           
-          <li>
-            08-28
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/undefined/Java-Android/" style="color: #0085a1">
-              <span>
-                Java&Android Debug Log
-                
-                -- 
-                
-              </span>
-            </a>
-          </li>
           
-          <li>
-            08-24
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/undefined/test/" style="color: #0085a1">
-              <span>
-                Nice to meet you
-                
-                -- 
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            08-10
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/undefined/message-to-SDSZer/" style="color: #0085a1">
-              <span>
-                新生寄语
-                
-                -- 
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            08-05
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/undefined/summaryGrade1/" style="color: #0085a1">
-              <span>
-                大一学年总结
-                
-                -- 
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            06-12
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/undefined/writing-communication/" style="color: #0085a1">
-              <span>
-                删帖风云——社交媒体管控下网络舆论的兴亡
-                
-                -- 
-                
-              </span>
-            </a>
+          <li class="next">
+            <a href="/undefined/test/" data-toggle="tooltip" data-placement="top" title="Nice to meet you">Next Post &rarr;</a>
           </li>
           
         </ul>
+
+        
+        <!-- tip start -->
+        <!-- tip -->
+<!-- tip start -->
+<div class="tip">
+  <p>
+    
+      If you like this blog or find it useful for you, you are welcome to comment on it. You are also welcome to share this blog, so that more people can participate in it. If the images used in the blog infringe your copyright, please contact the author to delete them. Thank you !
+    
+  </p>
+</div>
+<!-- tip end -->
+
+        <!-- tip end -->
+        
+
+        
+        <!-- Sharing Srtart -->
+        <!-- Social Social Share Post -->
+<!-- Docs:https://github.com/overtrue/share.js -->
+
+<div class="social-share" data-initialized="true" data-disabled="tencent ,douban ,qzone ,linkedin ,facebook ,google ,diandian" data-wechat-qrcode-helper="" align="center">
+  <ul class="list-inline text-center social-share-ul">
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-twitter">
+        <i class="fa fa-twitter fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a class="social-share-icon icon-wechat">
+        <i class="fa fa-weixin fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-weibo">
+        <i class="fa fa-weibo fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-qq">
+        <i class="fa fa-qq fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon" href="mailto:?subject=Java&amp;Android Debug Log&body=Hi,I found this website and thought you might like it https://adu2021.github.io/undefined/Java-Android/">
+        <i class="fa fa-envelope fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+<!-- css & js -->
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css"> -->
+<script defer="defer" async="true" src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+        <!-- Sharing End -->
+        
+        <hr>
+
+        <!-- comments start -->
+        <!-- 1. gitalk comment -->
+
+  <!-- gitalk start -->
+  <!-- Docs:https://github.com/gitalk/gitalk/blob/master/readme-cn.md -->
+
+  <div id="gitalk-container"></div>
+
+  
+    <!-- <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.js"></script> -->
+    <script src="/js/comment/gitalk.js"></script>
+  
+
+  <script>
+    var gitalk = new Gitalk({
+      clientID: 'ff75338a1add7ef1c2c6',
+      clientSecret: '0d3daff08fa21827ac90b2682d812688a20635ee',
+      repo: 'adu2021.github.io',
+      owner: 'ADu2021',
+      admin: 'ADu2021',
+      id: 'Sun Aug 28 2022 23:57:36 GMT+0000', // Ensure uniqueness and length less than 50
+      distractionFreeMode: false, // Facebook-like distraction free mode
+      perPage: 10,
+      pagerDirection: 'last',
+      createIssueManually: false,
+      language: 'zh-CN',
+      proxy: 'https://shielded-brushlands-08810.herokuapp.com/https://github.com/login/oauth/access_token'
+    });
+    gitalk.render('gitalk-container');
+
+    var gtFolded = () => {
+      setTimeout(function () {
+        let markdownBody = document.getElementsByClassName("markdown-body");
+        let list = Array.from(markdownBody);
+        list.forEach(item => {
+          if (item.clientHeight > 250) {
+            item.classList.add('gt-comment-body-folded');
+            item.style.maxHeight = '250px';
+            item.title = 'Click to Expand';
+            item.onclick = function () {
+              item.classList.remove('gt-comment-body-folded');
+              item.style.maxHeight = '';
+              item.title = '';
+              item.onclick = null;
+            };
+          }
+        })
+      }, 800);
+    }
+  </script>
+
+  <!-- gitalk end -->
+
+
+<!-- 2. gitment comment -->
+
+
+<!-- 3. disqus comment -->
+
+
+        <!-- comments end -->
+        <hr>
+
       </div>
-      
-    </div>
-  </div>
-</div>
 
+      <!-- Catalog: Tabe of Content -->
+      <!-- Table of Contents -->
 
-      <!-- 如果开启评论功能 -->
-      
-    </div>
-
-    <!-- Sidebar Container -->
-<div class="
-    col-lg-3 col-lg-offset-0
-    col-md-3 col-md-offset-0
-    col-sm-12
-    col-xs-12
-    sidebar-container
-">
     
-        <!-- Visitors -->
-<h5><a href="/">VISITORS</a></h5>
-
-<div class="widget">
-  <span>
-    Viewed <b><i><span id="busuanzi_value_site_pv"><i class="fa fa-spinner fa-spin"></i></span></i></b> Times
-  </span>
-  <br />
-  <span>
-    <b><i><span id="busuanzi_value_site_uv"><i class="fa fa-spinner fa-spin"></i></span></i></b> Visitors In Total
-  </span>
-</div>
-
-
-        <hr>
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">Android Studio 摸索记录</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Week2%EF%BC%9A%E7%9E%8E%E7%8E%A9"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">Week2：瞎玩</span></a></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#Week3-%E5%BC%80%E5%8F%91"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">Week3 开发</span></a></li></ol></li></ol>
+        
+        </div>
+      </aside>
     
+
+
+
+      <!-- Sidebar Container -->
+      <div class="
+                col-lg-8 col-lg-offset-1
+                col-md-10 col-md-offset-1
+                sidebar-container">
+
         <!-- Featured Tags -->
+        
+        <section>
+          <!-- no hr -->
+          <h5>
+            <a href="/tags/">FEATURED TAGS</a>
+          </h5>
+          <div class="tags">
+            
+            <a class="tag" href="/tags/#Java" title="Java">Java</a>
+            
+            <a class="tag" href="/tags/#Android" title="Android">Android</a>
+            
+          </div>
+        </section>
+        
 
-<section>
-  <h5><a href="/tags/">FEATURED TAGS</a></h5>
-  <div class="tags">
-    
-    
-    <a href="/tags/#Java" title="Java" rel="2">Java</a>
-    
-    
-    
-    <a href="/tags/#Android" title="Android" rel="2">Android</a>
-    
-    
-    
-    <a href="/tags/#总结" title="总结" rel="1">总结</a>
-    
-    
-    
-    <a href="/tags/#课程论文" title="课程论文" rel="1">课程论文</a>
-    
-    
+        <!-- Friends Blog -->
+        
+        <hr>
+        <h5>FRIENDS</h5>
+        <ul class="list-inline">
+
+          
+        </ul>
+        
+      </div>
+    </div>
   </div>
-</section>
+</article>
 
 
-        <hr>
-    
-        <!-- Short About -->
-<section class="visible-md visible-lg">
-  <h5><a href="/about/">ABOUT ME</a></h5>
-  <div class="short-about">
 
-    
-    <img id="avatar_pic" src="/img/avatar/code-face.jpg" alt="avatar_pic" style="box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, .5);
-    -moz-box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, .5);
-    -webkit-box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, .5);" />
-    
+<!-- anchorjs start -->
+<!-- async load function -->
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script type="text/javascript">
+  // async load function
+  function async (u, c) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) {
+      o.addEventListener('load', function(e) {
+        c(null, e);
+      }, false);
+    }
+    s.parentNode.insertBefore(o, s);
+  };
+</script>
+<script type="text/javascript">
+  //anchor-js, Doc:http://bryanbraun.github.io/anchorjs/
+  async ("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js", function() {
+    anchors.options = {
+      visible: 'hover',
+      placement: 'left',
+      // icon: 'ℬ'
+      icon: '❡'
+    };
+    anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+  });
+</script>
+<style>
+  /* place left on bigger screen */
+  @media all and (min-width: 800px) {
+    .anchorjs-link {
+      position: absolute;
+      left: -0.75em;
+      font-size: 1.1em;
+      margin-top: -0.1em;
+    }
+  }
+</style>
 
-    
-    <p>That&#39;s interesting</p>
-    
+<!-- anchorjs end -->
 
-    <!-- SNS Link -->
-    <ul class="list-inline">
-      
-
-      
-      <li>
-        <a target="_blank" href="https://github.com/ADu2021">
-          <span class="fa-stack fa-lg">
-            <i class="fa fa-circle fa-stack-2x"></i>
-            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-          </span>
-        </a>
-      </li>
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-    </ul>
-  </div>
-</section>
-
-        <hr>
-    
-        <!-- RECENT POSTS -->
-
-<h5><a href="/">RECENT POSTS</a></h5>
-<div class="widget">
-  <ul>
-    
-    <a href="../undefined/2022javaDebug/">
-      <li>Java小学期实验报告</li>
-    </a>
-    
-    <a href="../undefined/Java-Android/">
-      <li>Java&amp;Android Debug Log</li>
-    </a>
-    
-    <a href="../undefined/test/">
-      <li>Nice to meet you</li>
-    </a>
-    
-    <a href="../undefined/message-to-SDSZer/">
-      <li>新生寄语</li>
-    </a>
-    
-    <a href="../undefined/summaryGrade1/">
-      <li>大一学年总结</li>
-    </a>
-    
-  </ul>
-</div>
-
-
-        <hr>
-    
-        <!-- Archives -->
-
-<h5><a href="/archives/">archives</a></h5>
-<div class="widget">
-  <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="2022/09/">September 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="2022/08/">August 2022</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="2022/06/">June 2022</a><span class="archive-list-count">1</span></li></ul>
-</div>
-
-
-        <hr>
-    
-        <!-- Categories -->
-
-<h5><a href="/categories/">categories</a></h5>
-<div class="widget">
-  <ul>
-    
-    <a href="/categories/#Development">
-      <li>Development</li>
-    </a>
-    
-    <a href="/categories/#杂谈">
-      <li>杂谈</li>
-    </a>
-    
-    <a href="/categories/#总结">
-      <li>总结</li>
-    </a>
-    
-    <a href="/categories/#课程论文">
-      <li>课程论文</li>
-    </a>
-    
-  </ul>
-</div>
-
-
-        <hr>
-    
-</div>
-
-
-    
-  </div>
-</div>
 
 
 		<!-- Footer (contains ThemeColor、viewer) -->
