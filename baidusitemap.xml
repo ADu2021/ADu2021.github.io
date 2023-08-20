@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://adu2021.github.io/undefined/red/</loc>
+    <lastmod>2023-08-19</lastmod>
+  </url>
+  <url>
+    <loc>https://adu2021.github.io/undefined/summary2023spring/</loc>
+    <lastmod>2023-06-19</lastmod>
+  </url>
+  <url>
     <loc>https://adu2021.github.io/undefined/ics-lab3/</loc>
     <lastmod>2023-01-23</lastmod>
   </url>
@@ -39,9 +47,5 @@
   <url>
     <loc>https://adu2021.github.io/undefined/summaryGrade1/</loc>
     <lastmod>2022-08-05</lastmod>
-  </url>
-  <url>
-    <loc>https://adu2021.github.io/undefined/writing-communication/</loc>
-    <lastmod>2022-06-12</lastmod>
   </url>
 </urlset> 
