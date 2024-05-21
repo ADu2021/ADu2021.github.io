@@ -2,11 +2,11 @@ main:
 
   - title: Model Composition for Multimodal Large Language Models
     authors: Chi Chen*, <strong>Yiyang Du*</strong>, Zheng Fang, Ziyue Wang, Fuwen Luo, Peng Li, Ming Yan, Ji Zhang, Fei Huang, Maosong Sun, Yang Liu (* indicates equal contribution)
-    conference_short: preprint
-    conference: preprint
+    conference_short: ACL 2024
+    conference: To appear in Proceedings of The 62nd Annual Meeting of the Association for Computational Linguistics
     pdf: https://arxiv.org/pdf/2402.12750.pdf
     code: https://github.com/THUNLP-MT/ModelCompose
     image: ./assets/img/model_composition_v5.png
-    notes: Under Review
+    notes:
   
 
