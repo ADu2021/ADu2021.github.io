@@ -7,6 +7,6 @@ main:
     pdf: https://arxiv.org/pdf/2402.12750.pdf
     code: https://github.com/THUNLP-MT/ModelCompose
     image: ./assets/img/model_composition_v5.png
-    notes:
+    notes: ACL 2024 main conference
   
 
