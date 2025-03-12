@@ -3,7 +3,7 @@ main:
   - title: Model Composition for Multimodal Large Language Models
     authors: Chi Chen*, <strong>Yiyang Du*</strong>, Zheng Fang, Ziyue Wang, Fuwen Luo, Peng Li, Ming Yan, Ji Zhang, Fei Huang, Maosong Sun, Yang Liu
     conference_short: ACL 2024
-    conference: In Proceedings of <strong>ACL 2024</strong>.
+    conference: In Proceedings of <strong>ACL 2024</strong>
     pdf: https://arxiv.org/pdf/2402.12750.pdf
     code: https://github.com/THUNLP-MT/ModelCompose
     image: ./assets/img/model_composition_v5.png
@@ -12,8 +12,8 @@ main:
   - title: AdaMMS: Model Merging for Heterogeneous Multimodal Large Language Models with Unsupervised Coefficient Optimization
     authors: <strong>Yiyang Du*</strong>, Xiaochen Wang*, Chi Chen, Jiabo Ye, Yiru Wang, Peng Li, Ming Yan, Ji Zhang, Fei Huang, Zhifang Sui, Maosong Sun, Yang Liu
     conference_short: CVPR 2025
-    conference: To appear in Proceedings of <strong>CVPR 2025</strong>.
-    pdf: 
-    code: 
+    conference: To appear in Proceedings of <strong>CVPR 2025</strong>
+    pdf: https://openreview.net/pdf?id=Ndq6zZTe5s
+    code: https://github.com/THUNLP-MT/AdaMMS
     image: ./assets/img/AdaMMS_head.png
     notes: CVPR 2025 MAIN
