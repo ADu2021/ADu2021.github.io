@@ -9,7 +9,7 @@ main:
     image: ./assets/img/model_composition_v5.png
     notes: ACL 2024 MAIN
   
-  - title: AdaMMS: Model Merging for Heterogeneous Multimodal Large Language Models with Unsupervised Coefficient Optimization
+  - title: "AdaMMS: Model Merging for Heterogeneous Multimodal Large Language Models with Unsupervised Coefficient Optimization"
     authors: <strong>Yiyang Du*</strong>, Xiaochen Wang*, Chi Chen, Jiabo Ye, Yiru Wang, Peng Li, Ming Yan, Ji Zhang, Fei Huang, Zhifang Sui, Maosong Sun, Yang Liu
     conference_short: CVPR 2025
     conference: To appear in Proceedings of <strong>CVPR 2025</strong>
