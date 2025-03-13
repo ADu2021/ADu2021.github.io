@@ -10,10 +10,10 @@ main:
     notes: ACL 2024 MAIN
   
   - title: "AdaMMS: Model Merging for Heterogeneous Multimodal Large Language Models with Unsupervised Coefficient Optimization"
-    authors: <strong>Yiyang Du*</strong>, Xiaochen Wang*, Chi Chen, Jiabo Ye, Yiru Wang, Peng Li, Ming Yan, Ji Zhang, Fei Huang, Zhifang Sui, Maosong Sun, Yang Liu
+    authors: <strong>Yiyang Du*</strong>, Xiaochen Wang*, Chi Chen*, Jiabo Ye, Yiru Wang, Peng Li, Ming Yan, Ji Zhang, Fei Huang, Zhifang Sui, Maosong Sun, Yang Liu
     conference_short: CVPR 2025
     conference: To appear in Proceedings of <strong>CVPR 2025</strong>
     pdf: https://openreview.net/pdf?id=Ndq6zZTe5s
-    code: https://github.com/THUNLP-MT/AdaMMS
+    # code: https://github.com/THUNLP-MT/AdaMMS
     image: ./assets/img/AdaMMS_head.png
     notes: CVPR 2025 MAIN
