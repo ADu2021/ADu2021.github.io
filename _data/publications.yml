@@ -13,7 +13,7 @@ main:
     authors: <strong>Yiyang Du*</strong>, Xiaochen Wang*, Chi Chen*, Jiabo Ye, Yiru Wang, Peng Li, Ming Yan, Ji Zhang, Fei Huang, Zhifang Sui, Maosong Sun, Yang Liu
     conference_short: CVPR 2025
     conference: To appear in Proceedings of <strong>CVPR 2025</strong>
-    pdf: https://openreview.net/pdf?id=Ndq6zZTe5s
-    # code: https://github.com/THUNLP-MT/AdaMMS
+    pdf: https://arxiv.org/pdf/2503.23733
+    code: https://github.com/THUNLP-MT/AdaMMS
     image: ./assets/img/AdaMMS_head.png
     notes: CVPR 2025 MAIN
