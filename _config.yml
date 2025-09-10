@@ -1,8 +1,8 @@
 # Basic Information 
 title: Yiyang Du
-position: Undergraduate Student
-affiliation: Department of Computer Science and Technology, Tsinghua University
-email: duyy21 (at) mails.tsinghua.edu.cn
+position: PhD Student
+affiliation: Language Technologies Institute, Carnegie Mellon University
+email: yiyangd (at) cs.cmu.edu
 
 # Search Engine Optimization (SEO)
 # The following information is used to improve the website traffic from search engines, e.g., Google.
@@ -20,9 +20,9 @@ github_link: https://github.com/ADu2021
 
 # Images (e.g., your profile picture and your website's favicon) 
 # "favicon" and "favicon_dark" are used for the light and dark modes, respectively. 
-avatar: ./assets/img/avatar.png
-favicon: ./assets/img/favicon.png
-favicon_dark: ./assets/img/favicon-dark.png
+avatar: ./assets/img/yiyang.jpg
+favicon: ./assets/img/lti-logo_icon_full-color_rgb-300px.png
+favicon_dark: ./assets/img/lti-logo_icon_full-color_rgb-300px.png
 
 # Footnote
 # You may use the option to disable the footnote, "Powered by Jekyll and Minimal Light theme."
@@ -30,7 +30,7 @@ enable_footnote: true
 
 # Auto Dark Mode
 # You may use the option to disable the automatic dark theme
-auto_dark_mode: true
+auto_dark_mode: false
 
 # Font
 # You can use this option to choose between Serif or Sans Serif fonts.

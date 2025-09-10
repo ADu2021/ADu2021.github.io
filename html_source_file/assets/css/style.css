@@ -114,7 +114,7 @@ th { color: #444; }
   dt { color: #3eb7f0; } }
 img { max-width: 100%; }
 
-header { width: 232px; float: left; position: fixed; -webkit-font-smoothing: subpixel-antialiased; padding-top: 4.0em; text-align: center; }
+header { width: 300px; float: left; position: fixed; -webkit-font-smoothing: subpixel-antialiased; padding-top: 4.0em; text-align: center; }
 
 header ul { list-style: none; height: 40px; padding: 0; background: #f4f4f4; border-radius: 5px; border: 1px solid #e0e0e0; width: 270px; }
 
@@ -143,7 +143,7 @@ small { font-size: 11px; }
 
 hr { border: 0; background: #e5e5e5; height: 1px; margin: 0 0 20px; }
 
-footer { width: 232px; float: left; position: fixed; bottom: 30px; -webkit-font-smoothing: subpixel-antialiased; text-align: center; }
+footer { width: 300px; float: left; position: fixed; bottom: 30px; -webkit-font-smoothing: subpixel-antialiased; text-align: center; }
 
 @media print, screen and (max-width: 960px) { .pub-row { display: flex; align-items: center; }
   div.wrapper { width: auto; margin: 0; }
