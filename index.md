@@ -21,4 +21,4 @@ My research explores **multimodal large language models** and recently I'm inter
 
 <!-- {% include_relative _includes/services.md %} -->
 
-Last Update: Sep 2025
+Last Update: Jun 2026
