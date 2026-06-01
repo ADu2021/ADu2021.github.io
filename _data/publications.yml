@@ -1,13 +1,14 @@
 main:
 
-  - title: Model Composition for Multimodal Large Language Models
-    authors: Chi Chen*, <strong>Yiyang Du*</strong>, Zheng Fang, Ziyue Wang, Fuwen Luo, Peng Li, Ming Yan, Ji Zhang, Fei Huang, Maosong Sun, Yang Liu
-    conference_short: ACL 2024
-    conference: In Proceedings of <strong>ACL 2024</strong>
-    pdf: https://arxiv.org/pdf/2402.12750.pdf
-    code: https://github.com/THUNLP-MT/ModelCompose
-    image: ./assets/img/model_composition_v5.png
-    notes: ACL 2024 MAIN
+  - title: "EmbodiedMidtrain: Bridging the Gap between Vision-Language Models and Vision-Language-Action Models via Mid-training"
+    authors: <strong>Yiyang Du</strong>, Zhanqiu Guo, Xin Ye, Liu Ren, Chenyan Xiong
+    conference_short: Arxiv
+    conference: Under Review at COLM 2026.
+    pdf: https://arxiv.org/abs/2604.20012
+    # code: https://github.com/THUNLP-MT/AdaMMS
+    page: https://adu2021.github.io/blog/EmbodiedMidtrain/
+    image: ./assets/img/COLM26-Figure1.png
+    notes: FMEA @ CVPR 2026 Oral Presentation
   
   - title: "AdaMMS: Model Merging for Heterogeneous Multimodal Large Language Models with Unsupervised Coefficient Optimization"
     authors: <strong>Yiyang Du*</strong>, Xiaochen Wang*, Chi Chen*, Jiabo Ye, Yiru Wang, Peng Li, Ming Yan, Ji Zhang, Fei Huang, Zhifang Sui, Maosong Sun, Yang Liu
@@ -18,12 +19,11 @@ main:
     image: ./assets/img/AdaMMS_head.png
     notes: CVPR 2025 MAIN
 
-  - title: "EmbodiedMidtrain: Bridging the Gap between Vision-Language Models and Vision-Language-Action Models via Mid-training"
-    authors: <strong>Yiyang Du</strong>, Zhanqiu Guo, Xin Ye, Liu Ren, Chenyan Xiong
-    conference_short: Arxiv
-    conference: Under Review at COLM 2026.
-    pdf: https://arxiv.org/abs/2604.20012
-    # code: https://github.com/THUNLP-MT/AdaMMS
-    page: https://adu2021.github.io/blog/EmbodiedMidtrain/
-    image: ./assets/img/COLM26-Figure1.png
-    notes: FMEA @ CVPR 2026 Oral Presentation
+  - title: Model Composition for Multimodal Large Language Models
+    authors: Chi Chen*, <strong>Yiyang Du*</strong>, Zheng Fang, Ziyue Wang, Fuwen Luo, Peng Li, Ming Yan, Ji Zhang, Fei Huang, Maosong Sun, Yang Liu
+    conference_short: ACL 2024
+    conference: In Proceedings of <strong>ACL 2024</strong>
+    pdf: https://arxiv.org/pdf/2402.12750.pdf
+    code: https://github.com/THUNLP-MT/ModelCompose
+    image: ./assets/img/model_composition_v5.png
+    notes: ACL 2024 MAIN
