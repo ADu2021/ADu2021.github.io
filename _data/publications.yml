@@ -8,7 +8,7 @@ main:
     # code: https://github.com/THUNLP-MT/AdaMMS
     page: https://adu2021.github.io/blog/EmbodiedMidtrain/
     image: ./assets/img/COLM26-Figure1.png
-    notes: FMEA @ CVPR 2026 Oral Presentation
+    notes: FMEA @ CVPR 2026 Best Paper Award
   
   - title: "AdaMMS: Model Merging for Heterogeneous Multimodal Large Language Models with Unsupervised Coefficient Optimization"
     authors: <strong>Yiyang Du*</strong>, Xiaochen Wang*, Chi Chen*, Jiabo Ye, Yiru Wang, Peng Li, Ming Yan, Ji Zhang, Fei Huang, Zhifang Sui, Maosong Sun, Yang Liu
