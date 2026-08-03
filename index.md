@@ -8,7 +8,7 @@ I’m a first-year PhD student at the **Language Technologies Institute, Carnegi
 
 Before that, I received my B.Eng. in Computer Science and Technology from Tsinghua University as an outstanding graduate under the guidance of [**<u>Prof. Yang Liu</u>**](https://nlp.csai.tsinghua.edu.cn/~ly/).
 
-My research explores **embodied foundation models** to bring AI systems to the physical world with **multimodal perception and generation**. I’m always happy to chat and collaborate, so feel free to reach out!
+My research explores **embodied foundation models** to bring AI systems to the physical world, with a focus on their pretraining and midtraining. I’m always happy to chat and collaborate, so feel free to reach out!
 
 
 <!-- I am currently visiting Stanford University as a summer intern in Professor Diyi Yang's group, and collaborating with Yanzhe Zhang and William Held. -->
