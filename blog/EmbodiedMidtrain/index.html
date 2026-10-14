@@ -8,12 +8,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>EmbodiedMidtrain: Bridging the Gap between VLMs and VLAs via Mid-training</title>
-  <meta name="description" content="EmbodiedMidtrain bridges the data distribution gap between Vision-Language Models and Vision-Language-Action Models through proximity-based mid-training data selection.">
+  <meta name="description" content="EmbodiedMidtrain bridges the data distribution gap between Vision-Language Models and Vision-Language-Action Models through proximity-based mid-training data selection, with consistent gains across simulation benchmarks and real-robot tasks.">
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 
   <!-- MathJax -->
   <script>
@@ -37,6 +37,8 @@
       --border: #e2e8f0;
       --hero-gradient-start: #ede9fe;
       --hero-gradient-end: #dbeafe;
+      --success: #16804b;
+      --fail: #c23c40;
       --max-width: 1020px;
     }
 
@@ -69,20 +71,18 @@
       padding: 5px 16px;
       border-radius: 20px;
       margin-bottom: 24px;
-      text-transform: uppercase;
     }
 
     .hero h1 {
-      font-family: 'Noto Sans', sans-serif;
       font-size: 2.1rem;
       font-weight: 700;
-      line-height: 1.2;
-      max-width: 850px;
+      line-height: 1.25;
+      max-width: 880px;
       margin: 0 auto 12px;
       color: var(--text);
     }
 
-    .hero h1 span.hl {
+    .hero h1 .hl {
       background: linear-gradient(135deg, var(--primary), var(--accent));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -90,13 +90,12 @@
     }
 
     .hero .subtitle {
-      font-size: 1.15rem;
+      font-size: 1.12rem;
       color: var(--text-secondary);
       max-width: 720px;
       margin: 0 auto 28px;
     }
 
-    /* Authors */
     .authors {
       display: flex;
       flex-wrap: wrap;
@@ -104,30 +103,27 @@
       gap: 6px 18px;
       margin-bottom: 10px;
       font-size: 1.0rem;
+      max-width: 760px;
+      margin-left: auto;
+      margin-right: auto;
     }
-    .authors span {
-      color: var(--text);
-      font-weight: 500;
-    }
-    .authors sup {
-      font-size: 0.7rem;
-      color: var(--primary);
-    }
+    .authors span { color: var(--text); font-weight: 500; }
+    .authors sup { font-size: 0.7rem; color: var(--primary); }
 
     .affiliations {
       font-size: 0.88rem;
       color: var(--text-secondary);
       margin-bottom: 30px;
     }
+    .affiliations sup { color: var(--primary); }
 
-    /* Link buttons */
     .link-buttons {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 12px;
     }
-    .link-buttons a {
+    .link-buttons a, .link-buttons span.btn-disabled {
       display: inline-flex;
       align-items: center;
       gap: 8px;
@@ -138,698 +134,740 @@
       text-decoration: none;
       transition: all 0.2s;
     }
-    .btn-primary {
-      background: var(--primary);
-      color: #fff;
-    }
+    .btn-primary { background: var(--primary); color: #fff; }
     .btn-primary:hover { background: var(--primary-light); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(91,33,182,0.3); }
     .btn-outline {
       background: var(--card-bg);
       color: var(--text);
       border: 1.5px solid var(--border);
     }
-    .btn-outline:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+    .btn-outline:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-1px); }
+    .btn-disabled {
+      background: var(--card-bg);
+      color: #94a3b8;
+      border: 1.5px dashed var(--border);
+      cursor: default;
+    }
 
     /* ---- Sections ---- */
     .section {
       max-width: var(--max-width);
       margin: 0 auto;
-      padding: 50px 20px;
+      padding: 48px 20px;
     }
-
-    .section-title {
+    .section h2 {
       font-size: 1.55rem;
       font-weight: 700;
-      text-align: center;
-      margin-bottom: 28px;
+      margin-bottom: 18px;
       color: var(--text);
     }
+    .section h2 .accent-bar {
+      display: inline-block;
+      width: 26px;
+      height: 5px;
+      border-radius: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      margin-right: 12px;
+      vertical-align: middle;
+    }
+    .section h3 {
+      font-size: 1.12rem;
+      font-weight: 600;
+      margin: 26px 0 12px;
+    }
+    .section p { color: var(--text-secondary); margin-bottom: 14px; }
+    .section p strong { color: var(--text); }
 
     .card {
       background: var(--card-bg);
-      border-radius: 16px;
-      padding: 36px 40px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.04), 0 4px 20px rgba(0,0,0,0.03);
-      margin-bottom: 32px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 26px 30px;
+      box-shadow: 0 1px 3px rgba(15,23,42,0.05);
     }
 
-    /* Abstract */
-    .abstract-text {
-      font-size: 1.0rem;
-      line-height: 1.8;
+    .tldr {
+      border-left: 5px solid var(--primary);
+      font-size: 1.02rem;
+    }
+    .tldr p { margin-bottom: 0; }
+
+    figure { margin: 0; }
+    figure img { width: 100%; height: auto; display: block; }
+    figcaption {
+      font-size: 0.86rem;
       color: var(--text-secondary);
-      text-align: justify;
-    }
-
-    /* Figures */
-    .figure-container {
+      margin-top: 10px;
       text-align: center;
-      margin-bottom: 24px;
     }
-    .figure-container img {
-      max-width: 100%;
-      border-radius: 10px;
-    }
-    .figure-caption {
-      font-size: 0.88rem;
-      color: var(--text-secondary);
-      margin-top: 14px;
-      line-height: 1.6;
-      text-align: left;
-      max-width: 90%;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .figure-caption strong {
-      color: var(--text);
-    }
+    figcaption b { color: var(--text); }
 
-    /* Key Contributions */
-    .contributions-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
+    .fig-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 0.95fr 1.05fr 0.75fr;
       gap: 18px;
+      align-items: end;
     }
-    .contributions-list li {
-      display: flex;
-      gap: 14px;
-      align-items: flex-start;
-    }
-    .contributions-list .icon-circle {
-      flex-shrink: 0;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: var(--hero-gradient-start);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--primary);
-      font-size: 0.95rem;
-    }
-    .contributions-list .contrib-content strong {
-      display: block;
-      font-size: 0.98rem;
-      margin-bottom: 2px;
-      color: var(--text);
-    }
-    .contributions-list .contrib-content p {
-      font-size: 0.92rem;
+    .fig-grid img { width: 100%; height: auto; display: block; }
+    .fig-grid .panel-caption {
+      font-size: 0.82rem;
+      text-align: center;
       color: var(--text-secondary);
-      line-height: 1.6;
+      margin-top: 8px;
     }
 
-    /* Results table */
-    .table-wrapper {
-      overflow-x: auto;
-      margin: 0 -10px;
-    }
-    .results-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.85rem;
-      min-width: 900px;
-    }
-    .results-table thead th {
-      background: var(--hero-gradient-start);
-      padding: 10px 10px;
-      text-align: center;
-      font-weight: 600;
-      font-size: 0.82rem;
-      border-bottom: 2px solid var(--border);
-      white-space: nowrap;
-    }
-    .results-table thead th:first-child,
-    .results-table thead th:nth-child(2) {
-      text-align: left;
-    }
-    .results-table tbody td {
-      padding: 8px 10px;
-      text-align: center;
-      border-bottom: 1px solid var(--border);
-    }
-    .results-table tbody td:first-child {
-      text-align: left;
-      font-weight: 500;
-    }
-    .results-table tbody td:nth-child(2) {
-      text-align: left;
-    }
-    .results-table .section-header td {
-      background: #f1f5f9;
-      font-weight: 700;
-      font-size: 0.82rem;
-      color: var(--text-secondary);
-      text-align: center;
-      padding: 6px 10px;
-      letter-spacing: 0.03em;
-    }
-    .results-table .ours-row td {
-      background: #faf5ff;
-      font-weight: 600;
-    }
-    .results-table .best-val {
-      color: var(--primary);
-      font-weight: 700;
-    }
-
-    /* Two-column figure layout */
-    .two-col-figures {
+    /* ---- Videos ---- */
+    .video-pair-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 24px;
+      gap: 22px;
     }
-
-    /* BibTeX */
-    .bibtex-box {
-      position: relative;
-      background: #1e293b;
-      border-radius: 10px;
-      padding: 24px 28px;
-      overflow-x: auto;
+    .video-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(15,23,42,0.05);
     }
-    .bibtex-box pre {
-      color: #e2e8f0;
-      font-family: 'Fira Code', 'Courier New', monospace;
-      font-size: 0.82rem;
-      line-height: 1.6;
-      margin: 0;
-      white-space: pre;
+    .video-card .task-title {
+      padding: 12px 18px;
+      font-weight: 600;
+      font-size: 0.97rem;
+      border-bottom: 1px solid var(--border);
+      background: #fbfbfe;
     }
-    .bibtex-box .copy-btn {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      background: rgba(255,255,255,0.1);
-      color: #e2e8f0;
-      border: none;
-      border-radius: 6px;
-      padding: 6px 12px;
+    .video-card .task-title .task-quote { color: var(--text-secondary); font-weight: 400; font-style: italic; }
+    .video-duo { display: grid; grid-template-columns: 1fr 1fr; }
+    .video-cell { position: relative; }
+    .video-cell + .video-cell { border-left: 1px solid var(--border); }
+    .video-cell video { width: 100%; display: block; aspect-ratio: 4 / 3; background: #111; }
+    .video-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 8px 12px;
+      font-size: 0.8rem;
+      border-top: 1px solid var(--border);
+    }
+    .video-label .model { color: var(--text-secondary); line-height: 1.3; }
+    .video-label .model b { color: var(--text); }
+    .outcome {
+      flex-shrink: 0;
+      font-weight: 700;
       font-size: 0.78rem;
-      cursor: pointer;
-      transition: background 0.2s;
+      padding: 2px 10px;
+      border-radius: 12px;
     }
-    .bibtex-box .copy-btn:hover { background: rgba(255,255,255,0.2); }
-
-    /* Footer */
-    .footer {
-      text-align: center;
-      padding: 30px 20px 40px;
-      font-size: 0.82rem;
+    .outcome.success { color: var(--success); background: rgba(22,128,75,0.1); }
+    .outcome.fail { color: var(--fail); background: rgba(194,60,64,0.1); }
+    .video-note {
+      font-size: 0.85rem;
       color: var(--text-secondary);
-    }
-    .footer a { color: var(--primary); text-decoration: none; }
-    .footer a:hover { text-decoration: underline; }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .hero h1 { font-size: 1.4rem; }
-      .hero { padding: 50px 16px 36px; }
-      .card { padding: 24px 20px; }
-      .section { padding: 32px 16px; }
-      .two-col-figures { grid-template-columns: 1fr; }
-      .authors { font-size: 0.9rem; }
+      text-align: center;
+      margin-top: 16px;
     }
 
-    /* Method overview highlight boxes */
-    .method-highlights {
+    /* ---- Stat strip ---- */
+    .stat-strip {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      margin-top: 24px;
+      gap: 18px;
+      margin: 22px 0;
     }
-    .method-highlight-card {
-      background: var(--bg);
-      border-radius: 12px;
-      padding: 20px;
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 20px;
       text-align: center;
     }
-    .method-highlight-card .mh-icon {
-      font-size: 1.8rem;
-      margin-bottom: 10px;
+    .stat-card .num {
+      font-size: 1.7rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
-    .method-highlight-card h4 {
-      font-size: 0.9rem;
+    .stat-card .lbl { font-size: 0.84rem; color: var(--text-secondary); line-height: 1.45; margin-top: 4px; }
+
+    /* ---- Tables ---- */
+    .table-scroll { overflow-x: auto; border: 1px solid var(--border); border-radius: 14px; background: var(--card-bg); }
+    table.results {
+      border-collapse: collapse;
+      width: 100%;
+      min-width: 760px;
+      font-size: 0.86rem;
+    }
+    table.results th, table.results td {
+      padding: 7px 12px;
+      text-align: center;
+      white-space: nowrap;
+    }
+    table.results th { font-weight: 600; border-bottom: 2px solid var(--border); }
+    table.results td:first-child, table.results th:first-child { text-align: left; }
+    table.results tr.group-row td {
+      background: #f1f0fa;
       font-weight: 600;
-      margin-bottom: 6px;
-      color: var(--text);
-    }
-    .method-highlight-card p {
+      text-align: center;
       font-size: 0.82rem;
+      color: var(--primary);
+    }
+    table.results tr.ours td { background: #fbfaff; }
+    table.results tr:not(:last-child) td { border-bottom: 1px solid #eef1f6; }
+    table.results td b { color: var(--text); }
+    .table-caption { font-size: 0.86rem; color: var(--text-secondary); margin-top: 10px; }
+
+    /* ---- Findings list ---- */
+    .finding { display: flex; gap: 14px; margin-bottom: 18px; }
+    .finding .icon {
+      flex-shrink: 0;
+      width: 40px; height: 40px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--hero-gradient-start), var(--hero-gradient-end));
+      color: var(--primary);
+      font-size: 1.05rem;
+    }
+    .finding p { margin-bottom: 0; font-size: 0.95rem; }
+
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+
+    .eq-block {
+      overflow-x: auto;
+      padding: 6px 2px;
+    }
+
+    /* ---- BibTeX ---- */
+    .bibtex-box { position: relative; }
+    .bibtex-box pre {
+      background: #0f172a;
+      color: #e2e8f0;
+      border-radius: 14px;
+      padding: 22px 26px;
+      overflow-x: auto;
+      font-size: 0.84rem;
+      line-height: 1.6;
+    }
+    .copy-btn {
+      position: absolute;
+      top: 12px; right: 12px;
+      background: rgba(255,255,255,0.1);
+      color: #cbd5e1;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+    .copy-btn:hover { background: rgba(255,255,255,0.2); }
+
+    footer {
+      text-align: center;
+      padding: 36px 20px 48px;
+      font-size: 0.85rem;
       color: var(--text-secondary);
-      line-height: 1.5;
     }
+    footer a { color: var(--primary); }
 
-    @media (max-width: 600px) {
-      .method-highlights { grid-template-columns: 1fr; }
-    }
-
-    /* Separator */
-    .sep {
-      width: 60px;
-      height: 3px;
-      background: linear-gradient(90deg, var(--primary), var(--accent));
-      border-radius: 2px;
-      margin: 0 auto 20px;
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 1.55rem; }
+      .fig-grid { grid-template-columns: 1fr 1fr; align-items: end; }
+      .video-pair-grid { grid-template-columns: 1fr; }
+      .stat-strip { grid-template-columns: 1fr; }
+      .two-col { grid-template-columns: 1fr; }
+      .section { padding: 36px 16px; }
+      .card { padding: 20px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ============ Hero ============ -->
+  <!-- ================= Hero ================= -->
   <section class="hero">
-    <h1><span class="hl">EmbodiedMidtrain</span>: Bridging the Gap between Vision-Language Models and Vision-Language-Action Models via Mid-training</h1>
-    <p class="subtitle">Better VLM initialization for VLA with mid-training on aligned data distribution</p>
-    <p style="color: #dc2626; font-weight: 600; margin: -16px auto 24px; text-align: center;">🏆 FMEA @ CVPR 2026 Best Paper Award</p>
+    <div class="venue-badge">🏆 Best Paper Award — FMEA Workshop @ CVPR 2026</div>
+    <h1>EmbodiedMidtrain: Bridging the Gap between <span class="hl">Vision-Language Models</span> and <span class="hl">Vision-Language-Action Models</span> via Mid-training</h1>
+    <p class="subtitle">A better VLM initialization for VLAs: mid-train on the VLM data that lies closest to the VLA domain.</p>
 
     <div class="authors">
-      <span>Yiyang Du<sup>1</sup></span>,
-      <span>Zhanqiu Guo<sup>1</sup></span>,
-      <span>Xin Ye<sup>2</sup></span>,
-      <span>Liu Ren<sup>2</sup></span>,
+      <span>Yiyang Du<sup>1</sup></span>
+      <span>Zhanqiu Guo<sup>1</sup></span>
+      <span>Haochen Zhang<sup>1</sup></span>
+      <span>Annabella Macaluso<sup>1</sup></span>
+      <span>Xin Ye<sup>2</sup></span>
+      <span>Liu Ren<sup>2</sup></span>
+      <span>Yonatan Bisk<sup>1</sup></span>
       <span>Chenyan Xiong<sup>1</sup></span>
     </div>
     <div class="affiliations">
-      <sup>1</sup>Language Technologies Institute, Carnegie Mellon University<br>
-      <sup>2</sup>Bosch Research North America &amp; Bosch Center for Artificial Intelligence (BCAI)<br>
-      <span style="font-family: monospace; font-size: 0.82rem;">{yiyangd, zhanqiug, cx}@cs.cmu.edu &nbsp; {xin.ye3, liu.ren}@us.bosch.com</span>
+      <sup>1</sup>Carnegie Mellon University &nbsp;&nbsp;
+      <sup>2</sup>Bosch Research North America &amp; Bosch Center for Artificial Intelligence (BCAI)
     </div>
 
-    <!-- Resource links hidden for now — un-comment when arXiv / code / data / models are ready to release.
     <div class="link-buttons">
-      <a href="#" class="btn-primary"><i class="ai ai-arxiv"></i> arXiv</a>
-      <a href="#" class="btn-outline"><i class="fab fa-github"></i> Code</a>
-      <a href="#" class="btn-outline"><i class="fas fa-database"></i> Data</a>
-      <a href="#" class="btn-outline"><i class="fas fa-robot"></i> Models</a>
-    </div>
-    -->
-  </section>
-
-  <!-- ============ TLDR ============ -->
-  <section class="section" style="padding-bottom: 0;">
-    <div class="card" style="border-left: 4px solid var(--primary);">
-      <p style="font-size: 1.02rem; color: var(--text-secondary);">
-        <strong style="color: var(--primary);">TL;DR</strong> &mdash;
-        Most VLAs initialize from off-the-shelf VLMs that aren't tailored to embodied domains. <em>EmbodiedMidtrain</em> bridges this gap with a lightweight data engine that selects VLM samples closest to the VLA distribution for mid-training, consistently boosting VLA performance across benchmarks and backbones.
-      </p>
+      <a class="btn-primary" href="https://arxiv.org/abs/2604.20012"><i class="ai ai-arxiv"></i> arXiv</a>
+      <a class="btn-outline" href="https://arxiv.org/pdf/2604.20012"><i class="fas fa-file-pdf"></i> Paper</a>
+      <a class="btn-outline" href="https://huggingface.co/datasets/cx-cmu/EmbodiedMidtrain-RealWorld-Eval"><i class="fas fa-database"></i> Real-Robot Eval Data</a>
+      <span class="btn-disabled"><i class="fab fa-github"></i> Code (coming soon)</span>
+      <a class="btn-outline" href="#bibtex"><i class="fas fa-quote-right"></i> BibTeX</a>
     </div>
   </section>
 
-  <!-- ============ Overview Figure ============ -->
-  <section class="section" style="padding-top: 20px;">
-    <div class="card">
-      <div class="figure-container">
-        <div style="display: flex; justify-content: center; align-items: flex-end; gap: 8px;">
-          <div style="flex: 0 1 22%; text-align:center;"><img src="static/images/fig1a.png" alt="VLM-VLA Distribution Gap" style="width:100%; max-height:200px; object-fit:contain; object-position:bottom;"><div style="font-size:0.78rem;color:var(--text-secondary);margin-top:6px;">(a) VLM-VLA Data<br>Distribution Gap</div></div>
-          <div style="flex: 0 1 27.5%; text-align:center;"><img src="static/images/fig1b.png" alt="VLM Data Distribution Shift" style="width:100%; max-height:200px; object-fit:contain; object-position:bottom;"><div style="font-size:0.78rem;color:var(--text-secondary);margin-top:6px;">(b) VLM Data<br>Distribution Shift</div></div>
-          <div style="flex: 0 1 22%; text-align:center;"><img src="static/images/fig1c.png" alt="VLM Mid-training" style="width:100%; max-height:200px; object-fit:contain; object-position:bottom;"><div style="font-size:0.78rem;color:var(--text-secondary);margin-top:6px;">(c) VLM Mid-training</div></div>
-          <div style="flex: 0 1 22%; text-align:center;"><img src="static/images/fig1d.png" alt="Downstream VLA Gains" style="width:100%; max-height:200px; object-fit:contain; object-position:bottom;"><div style="font-size:0.78rem;color:var(--text-secondary);margin-top:6px;">(d) Downstream<br>VLA Gains</div></div>
+  <!-- ================= Overview figure ================= -->
+  <section class="section" style="padding-bottom: 24px;">
+    <div class="fig-grid">
+      <div>
+        <img src="static/images/fig1a.png" alt="VLM-VLA data distribution gap">
+        <div class="panel-caption">(a) VLM&ndash;VLA Data Distribution Gap</div>
+      </div>
+      <div>
+        <img src="static/images/fig1b.png" alt="VLM data distribution shift">
+        <div class="panel-caption">(b) VLM Data Distribution Shift</div>
+      </div>
+      <div>
+        <img src="static/images/fig1c.png" alt="VLM mid-training">
+        <div class="panel-caption">(c) VLM Mid-training</div>
+      </div>
+      <div>
+        <img src="static/images/fig1d.png" alt="Downstream VLA gains">
+        <div class="panel-caption">(d) Downstream VLA Gains</div>
+      </div>
+    </div>
+    <figcaption style="margin-top:16px;">
+      <b>Overview of <i>EmbodiedMidtrain</i>.</b> We analyze the data distribution gap between VLMs and VLAs, and select VLM samples with higher proximity to the VLA domain for mid-training, yielding a stronger initialization for downstream VLA fine-tuning.
+    </figcaption>
+  </section>
+
+  <!-- ================= TL;DR ================= -->
+  <section class="section" style="padding-top: 24px; padding-bottom: 24px;">
+    <div class="card tldr">
+      <p><strong>TL;DR</strong> &mdash; Most VLAs initialize from off-the-shelf VLMs that are not adapted to the embodied domain. <strong>EmbodiedMidtrain</strong> bridges this gap with a lightweight learnable proximity estimator that selects the most VLA-aligned samples from a large VLM pool, producing <strong>EmbodiedMidtrain-1M</strong>, a mid-training dataset that consistently improves downstream VLA performance across VLM backbones, VLA action heads, and target tasks &mdash; in simulation and on a real robot.</p>
+    </div>
+  </section>
+
+  <!-- ================= Real-robot demos ================= -->
+  <section class="section" style="padding-top: 24px;">
+    <h2><span class="accent-bar"></span>Real-Robot Demonstrations</h2>
+    <p>
+      We fine-tune VLAs on 50 teleoperated demonstrations per task and evaluate 10 rollouts per task on a
+      <strong>Franka Research 3</strong> arm with a Robotiq 2F-85 gripper. The same mid-trained checkpoint used in our
+      simulation experiments &mdash; selected with <em>simulation</em> VLA data only &mdash; lifts the overall real-world success rate
+      from <strong>54% to 72%</strong> on the InternVL3.5-1B backbone.
+      Below are paired rollouts from our evaluation runs: for each task, the same scene is attempted by the VLA fine-tuned from the
+      off-the-shelf VLM (left) and from the VLM after <i>EmbodiedMidtrain</i> (right).
+    </p>
+
+    <div class="video-pair-grid" style="margin-top: 20px;">
+      <div class="video-card">
+        <div class="task-title"><span class="task-quote">&ldquo;put the carrot on the plate&rdquo;</span></div>
+        <div class="video-duo">
+          <div class="video-cell">
+            <video muted loop playsinline preload="metadata" src="static/videos/carrot_base.mp4"></video>
+            <div class="video-label"><span class="model">InternVL3.5-1B</span><span class="outcome fail">✕ Fail</span></div>
+          </div>
+          <div class="video-cell">
+            <video muted loop playsinline preload="metadata" src="static/videos/carrot_midtrain.mp4"></video>
+            <div class="video-label"><span class="model"><b>+ EmbodiedMidtrain</b></span><span class="outcome success">✓ Success</span></div>
+          </div>
         </div>
-        <div class="figure-caption">
-          <strong>Figure 1: Overview of EmbodiedMidtrain.</strong> We analyze the data distribution gap between VLMs and VLAs, and select VLM samples with higher proximity to the VLA domain for mid-training, yielding a stronger initialization for downstream VLA fine-tuning.
+      </div>
+
+      <div class="video-card">
+        <div class="task-title"><span class="task-quote">&ldquo;put the hamburger on the plate&rdquo;</span></div>
+        <div class="video-duo">
+          <div class="video-cell">
+            <video muted loop playsinline preload="metadata" src="static/videos/burger_base.mp4"></video>
+            <div class="video-label"><span class="model">InternVL3.5-1B</span><span class="outcome fail">✕ Fail</span></div>
+          </div>
+          <div class="video-cell">
+            <video muted loop playsinline preload="metadata" src="static/videos/burger_midtrain.mp4"></video>
+            <div class="video-label"><span class="model"><b>+ EmbodiedMidtrain</b></span><span class="outcome success">✓ Success</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <div class="task-title"><span class="task-quote">&ldquo;put the red cube in the cup on the left&rdquo;</span></div>
+        <div class="video-duo">
+          <div class="video-cell">
+            <video muted loop playsinline preload="metadata" src="static/videos/cup_base.mp4"></video>
+            <div class="video-label"><span class="model">InternVL3.5-1B</span><span class="outcome fail">✕ Fail</span></div>
+          </div>
+          <div class="video-cell">
+            <video muted loop playsinline preload="metadata" src="static/videos/cup_midtrain.mp4"></video>
+            <div class="video-label"><span class="model"><b>+ EmbodiedMidtrain</b></span><span class="outcome success">✓ Success</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="video-card">
+        <div class="task-title"><span class="task-quote">&ldquo;stack the red cube on top of the green cube&rdquo;</span></div>
+        <div class="video-duo">
+          <div class="video-cell">
+            <video muted loop playsinline preload="metadata" src="static/videos/stack_base.mp4"></video>
+            <div class="video-label"><span class="model">InternVL3.5-1B</span><span class="outcome fail">✕ Fail</span></div>
+          </div>
+          <div class="video-cell">
+            <video muted loop playsinline preload="metadata" src="static/videos/stack_midtrain.mp4"></video>
+            <div class="video-label"><span class="model"><b>+ EmbodiedMidtrain</b></span><span class="outcome success">✓ Success</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="video-note">Videos play at 3&times; real time. All rollouts are from the released
+      <a href="https://huggingface.co/datasets/cx-cmu/EmbodiedMidtrain-RealWorld-Eval">real-robot evaluation runs</a>, unedited.</p>
+
+    <h3>Shared outcomes</h3>
+    <p style="font-size: 0.95rem;">
+      Not every pair is a win: both models succeed on 90% of the cube-to-plate rollouts, and some trials fail for both.
+      The pair below shows one shared success and one shared failure on the same task.
+    </p>
+    <div class="video-pair-grid">
+      <div class="video-card">
+        <div class="task-title"><span class="task-quote">&ldquo;put the red cube on the plate&rdquo;</span> &mdash; shared success</div>
+        <div class="video-duo">
+          <div class="video-cell">
+            <video muted loop playsinline preload="metadata" src="static/videos/cube_shared_success_base.mp4"></video>
+            <div class="video-label"><span class="model">InternVL3.5-1B</span><span class="outcome success">✓ Success</span></div>
+          </div>
+          <div class="video-cell">
+            <video muted loop playsinline preload="metadata" src="static/videos/cube_shared_success_midtrain.mp4"></video>
+            <div class="video-label"><span class="model"><b>+ EmbodiedMidtrain</b></span><span class="outcome success">✓ Success</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="video-card">
+        <div class="task-title"><span class="task-quote">&ldquo;put the red cube on the plate&rdquo;</span> &mdash; shared failure</div>
+        <div class="video-duo">
+          <div class="video-cell">
+            <video muted loop playsinline preload="metadata" src="static/videos/cube_shared_fail_base.mp4"></video>
+            <div class="video-label"><span class="model">InternVL3.5-1B</span><span class="outcome fail">✕ Fail</span></div>
+          </div>
+          <div class="video-cell">
+            <video muted loop playsinline preload="metadata" src="static/videos/cube_shared_fail_midtrain.mp4"></video>
+            <div class="video-label"><span class="model"><b>+ EmbodiedMidtrain</b></span><span class="outcome fail">✕ Fail</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="two-col" style="margin-top: 28px;">
+      <figure class="card" style="padding: 18px;">
+        <img src="static/images/realworld_results.png" alt="Real-world success rates with and without EmbodiedMidtrain">
+        <figcaption>Real-world success rates across five manipulation tasks on the InternVL3.5-1B backbone (10 rollouts per task).</figcaption>
+      </figure>
+      <div>
+        <div class="finding">
+          <div class="icon"><i class="fas fa-robot"></i></div>
+          <p><strong>Sim-selected data transfers to the real world.</strong> The proximity estimator only ever sees simulation VLA data (CALVIN, Bridge, LIBERO), yet the resulting mid-trained VLM improves four of five real-robot tasks.</p>
+        </div>
+        <div class="finding">
+          <div class="icon"><i class="fas fa-hand-fist"></i></div>
+          <p><strong>Better grasping and placement.</strong> Qualitatively, the mid-trained policy establishes firmer grasps, lifts objects high enough to clear obstacles, and maintains its grip through transport.</p>
+        </div>
+        <div class="finding">
+          <div class="icon"><i class="fas fa-chart-column"></i></div>
+          <p><strong>+18 points overall.</strong> Success over 50 evaluation rollouts rises from 54% to 72%, with the largest gain (+30) on the cube-to-cup task.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ============ Abstract ============ -->
+  <!-- ================= Abstract ================= -->
   <section class="section" style="padding-top: 0;">
-    <h2 class="section-title">Abstract</h2>
-    <div class="sep"></div>
+    <h2><span class="accent-bar"></span>Abstract</h2>
     <div class="card">
-      <p class="abstract-text">
-        Vision-Language-Action Models (VLAs) inherit their visual and linguistic capabilities from Vision-Language Models (VLMs), yet most VLAs are built from off-the-shelf VLMs that are not adapted to the embodied domain, limiting their downstream performance. In this work, we propose <em>EmbodiedMidtrain</em> to bridge the gap between VLMs and VLAs. We first characterize the data distribution gap between them, showing that VLA data occupy compact regions that are largely separated from the broader VLM distribution, while the degree of alignment varies substantially both across and within VLM data sources. Then, we build a mid-training data engine that leverages a lightweight learnable proximity estimator to select the most VLA-aligned candidates from a large VLM pool, and mid-trains the VLM on this curated mixture before downstream VLA fine-tuning. Experiments on three robot manipulation benchmarks show that mid-training consistently improves performance across different VLM backbones, achieving results competitive with expert VLAs and off-the-shelf VLMs trained with larger model scale and training budgets. Further analysis reveals that mid-training provides a stronger initialization for VLA fine-tuning, with gains emerging from the earliest steps and widening throughout training. Moreover, the data engine captures both dataset-level and sample-level alignment signals, favoring spatial reasoning over text-centric tasks while preserving the diversity of the VLM data.
+      <p style="margin-bottom: 0;">
+        Vision-Language-Action Models (VLAs) inherit their visual and linguistic capabilities from Vision-Language Models (VLMs),
+        yet most VLAs are built from off-the-shelf VLMs that are not adapted to the embodied domain, limiting their downstream
+        performance. In this work, we propose <em>EmbodiedMidtrain</em> to bridge the gap between VLMs and VLAs. We first
+        characterize the data distribution gap between them, showing that VLA data occupy compact regions that are largely
+        separated from the broader VLM distribution, while the degree of alignment varies substantially both across and within
+        VLM data sources. Then, we build a mid-training data engine that leverages a lightweight learnable proximity estimator
+        to select the most VLA-aligned candidates from a large VLM pool, and produce <em>EmbodiedMidtrain-1M</em>, a VLM dataset
+        that we further use to mid-train the VLM before downstream VLA fine-tuning. Experiments on both simulated robot
+        manipulation benchmarks and real-world tasks show consistent VLA performance gains over off-the-shelf checkpoints across
+        VLM backbones and VLA action heads. These gains extend to downstream tasks not used to guide data selection. Further
+        analysis reveals that mid-training provides a stronger initialization for VLA fine-tuning, with gains emerging from the
+        earliest steps and widening throughout training. Moreover, the data engine captures both dataset-level and sample-level
+        alignment signals, favoring spatial reasoning over text-centric tasks while preserving the diversity of the VLM data.
+        We will release all code, data and models for future research.
       </p>
     </div>
   </section>
 
-  <!-- ============ Key Contributions ============ -->
+  <!-- ================= Distribution gap ================= -->
   <section class="section" style="padding-top: 0;">
-    <h2 class="section-title">Key Contributions</h2>
-    <div class="sep"></div>
-    <div class="card">
-      <ul class="contributions-list">
-        <li>
-          <div class="icon-circle"><i class="fas fa-database"></i></div>
-          <div class="contrib-content">
-            <strong>Proximity-based mid-training pipeline</strong>
-            <p>A mid-training data engine that learns a proximity estimator to score VLM samples by their closeness to the VLA domain, and selects the top-ranked candidates to curate a distribution-aligned mid-training mixture.</p>
-          </div>
-        </li>
-        <li>
-          <div class="icon-circle"><i class="fas fa-chart-line"></i></div>
-          <div class="contrib-content">
-            <strong>Consistent VLA performance gains across benchmarks and backbones</strong>
-            <p>Extensive experiments on Calvin ABC-D, SimplerEnv Bridge, and Libero-10 demonstrate large and consistent improvements, achieving results competitive with substantially larger models.</p>
-          </div>
-        </li>
-        <li>
-          <div class="icon-circle"><i class="fas fa-lightbulb"></i></div>
-          <div class="contrib-content">
-            <strong>Insights on better VLM initialization for VLAs</strong>
-            <p>Mid-training produces an initialization whose advantages emerge from the earliest fine-tuning steps and amplify over time, while the learned proximity estimator outperforms hand-crafted alternatives.</p>
-          </div>
-        </li>
-      </ul>
+    <h2><span class="accent-bar"></span>The Data Distribution Gap between VLMs and VLAs</h2>
+    <p>
+      Since most VLAs inherit their representations from VLM pretraining, the quality of this initialization is fundamentally
+      shaped by the data the VLM was trained on. We represent VLM and VLA data in a shared feature space (last hidden states of
+      InternVL3.5) and quantify the distance between each pair of datasets with <strong>Maximum Mean Discrepancy (MMD)</strong>:
+    </p>
+    <div class="eq-block">
+      $$\operatorname{MMD}^2(P,Q) = \mathbb{E}_{x,x' \sim P}[k(x,x')] + \mathbb{E}_{y,y' \sim Q}[k(y,y')] - 2\,\mathbb{E}_{x \sim P,\, y \sim Q}[k(x,y)]$$
+    </div>
+    <p>
+      where $k(x,y) = \exp\!\big(-\|h(x) - h(y)\|_2^2 \,/\, 2\sigma^2\big)$ is a Gaussian RBF kernel with bandwidth $\sigma$
+      set via the median heuristic.
+    </p>
+
+    <div class="two-col" style="margin-top: 22px;">
+      <figure class="card" style="padding: 18px;">
+        <img src="static/images/fig2a_heatmap.png" alt="Pairwise normalized MMD distance matrix between VLM and VLA datasets">
+        <figcaption>(a) Pairwise MMD distance matrix between VLM and VLA datasets.</figcaption>
+      </figure>
+      <figure class="card" style="padding: 18px;">
+        <img src="static/images/fig2b_tsne.png" alt="t-SNE visualization of visual feature distributions across VLM and VLA datasets">
+        <figcaption>(b) t-SNE of visual features across VLM and VLA datasets.</figcaption>
+      </figure>
+    </div>
+
+    <h3>Key findings</h3>
+    <div class="finding">
+      <div class="icon"><i class="fas fa-arrows-left-right"></i></div>
+      <p><strong>The gap is large and clear.</strong> Cross-group MMD distances are consistently larger than within-group distances, and VLA datasets form compact clusters detached from the main regions occupied by VLM data.</p>
+    </div>
+    <div class="finding">
+      <div class="icon"><i class="fas fa-layer-group"></i></div>
+      <p><strong>The gap is heterogeneous.</strong> Some VLM sources &mdash; and some samples within each source &mdash; lie noticeably closer to the VLA domain than others, so alignment is better described as a spectrum than a binary split.</p>
+    </div>
+    <div class="finding">
+      <div class="icon"><i class="fas fa-bullseye"></i></div>
+      <p><strong>Implication.</strong> Preparing VLMs for embodied tasks requires reshaping the training distribution toward the VLA domain &mdash; with sample-wise selection, not just coarse dataset-level mixture adjustment.</p>
     </div>
   </section>
 
-  <!-- ============ Distribution Gap (Section 3) ============ -->
+  <!-- ================= Data engine ================= -->
   <section class="section" style="padding-top: 0;">
-    <h2 class="section-title">Data Distribution Gap between VLMs and VLAs</h2>
-    <div class="sep"></div>
+    <h2><span class="accent-bar"></span>Data Engine for EmbodiedMidtrain</h2>
+    <p>
+      We construct a candidate pool spanning <strong>general VLM data</strong> (LAION-400M, CC-12M with BLIP captions,
+      LLaVA-Instruct-665k, VCR) and <strong>embodied-oriented VLM data</strong> (RefSpatial, EmbSpatial-Bench, Robo2VLM,
+      RoboPoint), and select at the <em>sample</em> level to account for variation within each source.
+    </p>
 
-    <div class="card">
-      <p style="color: var(--text-secondary); margin-bottom: 16px; font-size: 0.95rem;">
-        Since most VLAs inherit their visual and linguistic representations from VLM pretraining, the quality of this initialization is fundamentally shaped by the data the VLM was trained on. We analyze VLM and VLA data in a shared representation space using the last hidden states of a VLM as the feature representation $h(\cdot)$ for each data sample, and quantify the distance between each pair of datasets with <strong>Maximum Mean Discrepancy</strong> (MMD):
-      </p>
-      <p style="text-align:center; margin: 18px 0; font-size: 0.95rem;">
-        $\operatorname{MMD}^2(P,Q) = \mathbb{E}_{x,x' \sim P}[k(x,x')] - 2\,\mathbb{E}_{\substack{x \sim P \\ y \sim Q}}[k(x,y)] + \mathbb{E}_{y,y' \sim Q}[k(y,y')]$
-      </p>
-      <p style="color: var(--text-secondary); font-size: 0.92rem; margin-bottom: 0;">
-        where $k(x,y) = \exp(-\|h(x) - h(y)\|_2^2 / 2\sigma^2)$ is a Gaussian RBF kernel with bandwidth $\sigma$ set via the median heuristic.
-      </p>
+    <h3>Proximity-based data selection</h3>
+    <p>
+      Given a selection budget $K$ and a scoring function $s$, we select the subset of the candidate pool
+      $\mathcal{D}_{\mathrm{VLM}}$ with the highest aggregate proximity to the target VLA corpus $\mathcal{D}_{\mathrm{VLA}}$:
+    </p>
+    <div class="eq-block">
+      $$\mathcal{D}_{\mathrm{sel}} = \underset{\substack{\mathcal{D}' \subseteq \mathcal{D}_{\mathrm{VLM}} \\ |\mathcal{D}'| = K}}{\arg\max} \sum_{x \in \mathcal{D}'} s(x) \;=\; \operatorname{TopK}_{x \in \mathcal{D}_{\mathrm{VLM}}}\, s(x)$$
+    </div>
+    <p>
+      Framing sample scoring as domain-membership classification, the population-optimal score under equal domain priors is
+      monotonically increasing in the density ratio between the two domains:
+    </p>
+    <div class="eq-block">
+      $$s^{*}(x) = \frac{p_{\mathrm{VLA}}(\phi(x))}{p_{\mathrm{VLA}}(\phi(x)) + p_{\mathrm{VLM}}(\phi(x))}$$
     </div>
 
-    <!-- Distribution Analysis Figure + Key Findings -->
-    <div class="card">
-      <div class="figure-container" style="margin-bottom: 20px;">
-        <div style="display: flex; justify-content: center; align-items: flex-end; gap: 16px;">
-          <div style="flex: 0 1 54%; text-align:center;"><img src="static/images/fig2a.png" alt="Pairwise normalized MMD distance matrix" style="width:100%;"><div style="font-size:0.78rem;color:var(--text-secondary);margin-top:4px;">(a) Pairwise normalized MMD distance matrix<br>between VLM and VLA datasets</div></div>
-          <div style="flex: 0 1 40%; text-align:center;"><img src="static/images/fig2b.png" alt="t-SNE visualization" style="width:100%;"><div style="font-size:0.78rem;color:var(--text-secondary);margin-top:4px;">(b) t-SNE visualization of visual feature<br>distributions across VLM and VLA datasets</div></div>
-        </div>
-        <div class="figure-caption">
-          <strong>Figure 2: Distribution analysis of VLM and VLA datasets.</strong> (a) Pairwise MMD distances quantify the distribution gap, with cross-group distances larger than within-group distances. (b) VLA datasets form compact, concentrated clusters that are separated from the broader VLM distributions.
-        </div>
+    <h3>A lightweight learnable proximity estimator</h3>
+    <p>
+      We instantiate the estimator as a linear scoring function $f$ on the frozen VLM&rsquo;s last-token, last-hidden-state
+      representation $\phi(x)$, followed by a sigmoid: $\; s(x) = \sigma\big(f(\phi(x))\big)$. It is trained with VLA samples
+      as positives and candidate VLM samples as negatives under binary cross-entropy:
+    </p>
+    <div class="eq-block">
+      $$\mathcal{L}_{\mathrm{cls}} = -\mathbb{E}_{y \sim \mathcal{D}_{\mathrm{VLA}}} [\log s(y)] - \mathbb{E}_{x \sim \mathcal{D}_{\mathrm{VLM}}} [\log (1-s(x))]$$
+    </div>
+    <p>
+      Scoring the full pool and retaining the top $K{=}1.28$M samples produces <strong><em>EmbodiedMidtrain-1M</em></strong>,
+      the corpus used to mid-train the VLM before VLA fine-tuning. The pipeline is lightweight, effective, and requires no
+      architectural changes to the underlying VLM or VLA.
+    </p>
+  </section>
+
+  <!-- ================= Main results ================= -->
+  <section class="section" style="padding-top: 0;">
+    <h2><span class="accent-bar"></span>Main Results</h2>
+    <p>
+      Following the VLM4VLA evaluation protocol, we fine-tune each VLM into a VLA with an identical two-branch MLP action head
+      and robot data, and evaluate on <strong>CALVIN ABC-D</strong> (avg. consecutive tasks completed),
+      <strong>SimplerEnv-Bridge</strong> and <strong>LIBERO-10</strong> (success rates).
+    </p>
+
+    <div class="table-scroll">
+      <table class="results">
+        <thead>
+          <tr>
+            <th>Model</th><th>Size</th><th>CALVIN Avg. Len.&uarr;</th><th>SimplerEnv&uarr;</th><th>LIBERO&uarr;</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="group-row"><td colspan="5">Expert VLA Baselines*</td></tr>
+          <tr><td>OpenVLA (Llama-2)</td><td>7.7B</td><td>2.548</td><td>4.2</td><td>53.7</td></tr>
+          <tr><td>&pi;<sub>0</sub> (PaliGemma-1)</td><td>3.1B</td><td>3.509</td><td>60.4</td><td>46.0</td></tr>
+          <tr class="group-row"><td colspan="5">Off-the-shelf VLM Baselines*</td></tr>
+          <tr><td>Qwen2.5-VL-3B</td><td>3.8B</td><td>3.856</td><td>48.0</td><td>43.0</td></tr>
+          <tr><td>Qwen2.5-VL-7B</td><td>8.3B</td><td>4.057</td><td>46.8</td><td>45.0</td></tr>
+          <tr><td>Qwen3-VL-4B</td><td>4.4B</td><td>3.943</td><td>56.3</td><td>44.4</td></tr>
+          <tr><td>Qwen3-VL-8B</td><td>8.8B</td><td>4.035</td><td>58.3</td><td>46.2</td></tr>
+          <tr><td>Qwen3-VL-30B-A3B</td><td>30B-A3B</td><td>4.075</td><td>44.8</td><td>46.8</td></tr>
+          <tr><td>PaliGemma-1</td><td>2.9B</td><td>3.506</td><td>55.3</td><td>44.2</td></tr>
+          <tr><td>PaliGemma-2</td><td>3.0B</td><td>3.406</td><td>57.3</td><td>46.2</td></tr>
+          <tr><td>Kosmos-2</td><td>1.7B</td><td>3.096</td><td>60.4</td><td>55.0</td></tr>
+          <tr class="group-row"><td colspan="5">VLM with <i>EmbodiedMidtrain</i> (Ours)</td></tr>
+          <tr class="ours"><td>Qwen3-VL-2B</td><td>2.1B</td><td>3.205</td><td>38.5</td><td>33.8</td></tr>
+          <tr class="ours"><td>&nbsp;&nbsp;<i>+ EmbodiedMidtrain</i></td><td>2.1B</td><td>3.584</td><td>45.8</td><td>40.2</td></tr>
+          <tr class="ours"><td>InternVL3.5-1B</td><td>1.1B</td><td>3.173</td><td>36.5</td><td>39.0</td></tr>
+          <tr class="ours"><td>&nbsp;&nbsp;<i>+ EmbodiedMidtrain</i></td><td>1.1B</td><td><b>3.714</b></td><td><b>56.3</b></td><td><b>54.2</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="table-caption">
+      Table 1 (abridged): main results across CALVIN ABC-D, SimplerEnv-Bridge, and LIBERO-10.
+      * Results for the baselines are reported by VLM4VLA under the same framework. Per-subtask CALVIN breakdowns are in the paper.
+    </p>
+
+    <div class="stat-strip">
+      <div class="stat-card">
+        <div class="num">+0.54 / +19.8 / +15.2</div>
+        <div class="lbl">InternVL3.5-1B gains on CALVIN (avg. len.) / SimplerEnv / LIBERO over its off-the-shelf initialization</div>
       </div>
-
-      <h3 style="font-size: 1.0rem; margin-bottom: 12px;">Key Findings</h3>
-      <p style="color: var(--text-secondary); margin-bottom: 14px; font-size: 0.95rem;">
-        <strong style="color: var(--text);">The distribution gap between VLM and VLA data is large and clear.</strong>
-        The distribution space of VLM data and VLA data is largely separated, with only a few near-neighbors. MMD distances are generally smaller within the VLM group and within the VLA group than across the two groups, quantitatively confirming a clear distributional mismatch. VLA datasets form compact clusters that are mostly detached from the main regions occupied by VLM datasets, while only a small subset of the VLM data lies nearby.
-      </p>
-      <p style="color: var(--text-secondary); margin-bottom: 14px; font-size: 0.95rem;">
-        <strong style="color: var(--text);">The distribution gap exhibits substantial internal heterogeneity.</strong>
-        Although VLM and VLA data are separated overall, their mismatch is not uniform within each dataset. Some VLM sources lie noticeably closer to VLA domains than others, with a few local regions exhibiting clear cross-domain proximity despite the global separation. This suggests that the gap is better characterized as a spectrum of alignment rather than a binary distinction, motivating <em>sample-level</em> selection within each dataset.
-      </p>
-      <p style="color: var(--text-secondary); font-size: 0.95rem; padding: 12px 16px; background: var(--bg); border-radius: 8px; border-left: 3px solid var(--primary);">
-        These insights suggest that <strong style="color: var(--text);">enhancing VLMs for embodied tasks requires reshaping the training data distribution toward the VLA domain</strong> &mdash; not through coarse dataset-level mixture adjustment, but through fine-grained sample-wise selection.
-      </p>
-    </div>
-  </section>
-
-  <!-- ============ Data Engine (Section 4) ============ -->
-  <section class="section" style="padding-top: 0;">
-    <h2 class="section-title">Data Engine for EmbodiedMidtrain</h2>
-    <div class="sep"></div>
-
-    <div class="card">
-      <p style="color: var(--text-secondary); margin-bottom: 16px; font-size: 0.95rem;">
-        We propose a mid-training data engine that selects VLM samples whose distribution best aligns with the VLA domain. The data mixture spans both general and embodied-oriented VLM sources to preserve diversity, and selection operates at the <em>sample</em> level rather than the dataset level.
-      </p>
-
-      <h3 style="font-size: 1.0rem; margin-bottom: 12px;">Proximity-Based Data Selection</h3>
-      <p style="color: var(--text-secondary); margin-bottom: 14px; font-size: 0.95rem;">
-        Let $\mathcal{D}_{\mathrm{VLM}}$ and $\mathcal{D}_{\mathrm{VLA}}$ denote the candidate VLM pool and target VLA corpus, with densities $p_{\mathrm{VLM}}$ and $p_{\mathrm{VLA}}$ over a shared representation space. Our goal is to select a size-$K$ subset whose distribution best aligns with VLA data:
-      </p>
-      <p style="text-align:center; margin: 16px 0; font-size: 0.95rem;">
-        $\mathcal{D}_{\mathrm{VLM}}^{*} = \underset{\mathcal{D}' \subseteq \mathcal{D}_{\mathrm{VLM}},\; |\mathcal{D}'| = K}{\operatorname{argmin}} \; d(P_{\mathcal{D}'},\; P_{\mathrm{VLA}})$
-      </p>
-      <p style="color: var(--text-secondary); margin-bottom: 14px; font-size: 0.95rem;">
-        where $d$ is a distributional divergence. Solving this exactly is intractable, so we relax it to per-sample scoring and top-$K$ selection: $\mathcal{D}_{\mathrm{VLM}}^{*} = \operatorname{top\text{-}K}_{x_i \in \mathcal{D}_{\mathrm{VLM}}} s(x_i)$. The key question is how to define the scoring function $s$. A natural choice is the density ratio $p_{\mathrm{VLA}}(x)/p_{\mathrm{VLM}}(x)$, but estimating this directly in high-dimensional feature spaces is difficult. We instead leverage a classical result from density ratio estimation: a binary classifier trained to distinguish two distributions recovers this ratio at optimality:
-      </p>
-      <p style="text-align:center; margin: 16px 0; font-size: 0.95rem;">
-        $s^{*}(x) = \dfrac{p_{\mathrm{VLA}}(x)}{p_{\mathrm{VLA}}(x) + p_{\mathrm{VLM}}(x)}$
-      </p>
-      <p style="color: var(--text-secondary); margin-bottom: 14px; font-size: 0.95rem;">
-        Since $s^{*}$ is monotonically increasing in the density ratio, ranking by the classifier output is equivalent to ranking by the density ratio.
-      </p>
-
-      <h3 style="font-size: 1.0rem; margin-bottom: 12px;">Proximity Estimator</h3>
-      <p style="color: var(--text-secondary); margin-bottom: 14px; font-size: 0.95rem;">
-        We instantiate this as a lightweight <strong>proximity estimator</strong> on frozen VLM features. The estimator applies a learnable scoring function $f$ on top of the frozen VLM's last hidden state $\phi(\mathbf{x})$, followed by a sigmoid:
-      </p>
-      <p style="text-align:center; margin: 16px 0; font-size: 0.95rem;">
-        $s(\mathbf{x}) = \sigma\!\big(f(\phi(\mathbf{x}))\big)$
-      </p>
-      <p style="color: var(--text-secondary); margin-bottom: 14px; font-size: 0.95rem;">
-        We train with VLA samples as positives and VLM samples as negatives, using binary cross-entropy loss:
-      </p>
-      <p style="text-align:center; margin: 16px 0; font-size: 0.95rem;">
-        $\mathcal{L}_{\mathrm{cls}} = -\mathbb{E}_{y \sim \mathcal{D}_{\mathrm{VLA}}} [\log s(y)] - \mathbb{E}_{x \sim \mathcal{D}_{\mathrm{VLM}}} [\log (1-s(x))]$
-      </p>
-      <p style="color: var(--text-secondary); font-size: 0.95rem;">
-        After training, we rank all candidate VLM samples by $s(x)$ and retain the top-$K$ to form $\mathcal{D}_{\mathrm{VLM}}^{*}$ for mid-training. This procedure turns a broad candidate pool into a more targeted corpus for embodied adaptation, preserving the useful diversity of VLM data while shifting the training distribution toward the VLA domain.
-      </p>
-    </div>
-  </section>
-
-  <!-- ============ Results ============ -->
-  <section class="section" style="padding-top: 0;">
-    <h2 class="section-title">Main Results</h2>
-    <div class="sep"></div>
-
-    <div class="card">
-      <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 0.95rem;">
-        We evaluate on three simulated manipulation benchmarks: Calvin ABC-D, SimplerEnv Bridge, and LIBERO-10. Our mid-trained models achieve consistent and substantial improvements, competitive with expert VLAs and much larger off-the-shelf VLMs.
-      </p>
-      <div class="table-wrapper">
-        <table class="results-table">
-          <thead>
-            <tr>
-              <th rowspan="2">Model</th>
-              <th rowspan="2">Size</th>
-              <th rowspan="2" style="font-size:0.75rem;"># Samples Seen<br><span style="font-weight:400;font-size:0.7rem;">(Calvin / Simpler / Libero)</span></th>
-              <th colspan="6">Calvin (Tasks Completed in a Row)</th>
-              <th rowspan="2">Simpler&uarr;</th>
-              <th rowspan="2">Libero&uarr;</th>
-            </tr>
-            <tr>
-              <th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>Avg. Len.&uarr;</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Expert VLA Baselines -->
-            <tr class="section-header"><td colspan="11">Expert VLA Baselines*</td></tr>
-            <tr>
-              <td>OpenVLA (Llama-2)</td><td>7.7B</td><td style="font-size:0.78rem;">7.7M / 25.6M / 25.6M</td>
-              <td>0.792</td><td>0.644</td><td>0.499</td><td>0.368</td><td>0.245</td><td>2.548</td><td>4.2</td><td>53.7</td>
-            </tr>
-            <tr>
-              <td>&pi;<sub>0</sub> (Paligemma-1)</td><td>3.1B</td><td style="font-size:0.78rem;">7.7M / 25.6M / 25.6M</td>
-              <td>0.896</td><td>0.785</td><td>0.786</td><td>0.610</td><td>0.532</td><td>3.509</td><td>60.4</td><td>46.0</td>
-            </tr>
-
-            <!-- Off-the-shelf VLM Baselines -->
-            <tr class="section-header"><td colspan="11">Off-the-shelf VLM Baselines*</td></tr>
-            <tr>
-              <td>Qwen2.5VL-3B</td><td>3.8B</td><td style="font-size:0.78rem;">7.7M / 25.6M / 25.6M</td>
-              <td>0.922</td><td>0.842</td><td>0.766</td><td>0.700</td><td>0.626</td><td>3.856</td><td>48.0</td><td>43.0</td>
-            </tr>
-            <tr>
-              <td>Qwen2.5VL-7B</td><td>8.3B</td><td style="font-size:0.78rem;">7.7M / 25.6M / 25.6M</td>
-              <td>0.935</td><td>0.864</td><td>0.807</td><td>0.758</td><td>0.693</td><td>4.057</td><td>46.8</td><td>45.0</td>
-            </tr>
-            <tr>
-              <td>Qwen3VL-2B</td><td>2.1B</td><td style="font-size:0.78rem;">7.7M / 25.6M / 25.6M</td>
-              <td>0.943</td><td>0.882</td><td>0.831</td><td>0.776</td><td>0.710</td><td>4.142</td><td>49.0</td><td>55.8</td>
-            </tr>
-            <tr>
-              <td>Qwen3VL-4B</td><td>4.4B</td><td style="font-size:0.78rem;">7.7M / 25.6M / 25.6M</td>
-              <td>0.933</td><td>0.857</td><td>0.790</td><td>0.719</td><td>0.644</td><td>3.943</td><td>56.3</td><td>44.4</td>
-            </tr>
-            <tr>
-              <td>Qwen3VL-8B</td><td>8.8B</td><td style="font-size:0.78rem;">7.7M / 25.6M / 25.6M</td>
-              <td>0.940</td><td>0.868</td><td>0.797</td><td>0.746</td><td>0.684</td><td>4.035</td><td>58.3</td><td>46.2</td>
-            </tr>
-            <tr>
-              <td>Qwen3VL-30B-A3B</td><td>30B-A3B</td><td style="font-size:0.78rem;">7.7M / 25.6M / 25.6M</td>
-              <td>0.939</td><td>0.877</td><td>0.820</td><td>0.757</td><td>0.682</td><td>4.075</td><td>44.8</td><td>46.8</td>
-            </tr>
-            <tr>
-              <td>Paligemma-1</td><td>2.9B</td><td style="font-size:0.78rem;">7.7M / 25.6M / 25.6M</td>
-              <td>0.914</td><td>0.813</td><td>0.692</td><td>0.599</td><td>0.488</td><td>3.506</td><td>55.3</td><td>44.2</td>
-            </tr>
-            <tr>
-              <td>Paligemma-2</td><td>3.0B</td><td style="font-size:0.78rem;">7.7M / 25.6M / 25.6M</td>
-              <td>0.901</td><td>0.775</td><td>0.669</td><td>0.575</td><td>0.486</td><td>3.406</td><td>57.3</td><td>46.2</td>
-            </tr>
-            <tr>
-              <td>KosMos-2</td><td>1.7B</td><td style="font-size:0.78rem;">7.7M / 25.6M / 25.6M</td>
-              <td>0.878</td><td>0.721</td><td>0.591</td><td>0.498</td><td>0.408</td><td>3.096</td><td>60.4</td><td>55.0</td>
-            </tr>
-
-            <!-- Ours -->
-            <tr class="section-header"><td colspan="11">VLM with <em>EmbodiedMidtrain</em> (Ours)</td></tr>
-            <tr>
-              <td>InternVL3.5-1B</td><td>1.1B</td><td style="font-size:0.78rem;">1.0M / 4.1M / 4.1M</td>
-              <td>0.909</td><td>0.754</td><td>0.606</td><td>0.498</td><td>0.406</td><td>3.173</td><td>36.5</td><td>39.0</td>
-            </tr>
-            <tr class="ours-row">
-              <td>+ <em>EmbodiedMidtrain</em></td><td>1.1B</td><td style="font-size:0.78rem;">1.0M / 4.1M / 4.1M</td>
-              <td>0.935</td><td>0.838</td><td>0.737</td><td>0.653</td><td>0.551</td><td class="best-val">3.714</td><td class="best-val">56.3</td><td class="best-val">54.2</td>
-            </tr>
-            <tr>
-              <td>Qwen3VL-2B</td><td>2.1B</td><td style="font-size:0.78rem;">1.0M / 4.1M / 4.1M</td>
-              <td>0.887</td><td>0.747</td><td>0.612</td><td>0.527</td><td>0.432</td><td>3.205</td><td>38.5</td><td>33.8</td>
-            </tr>
-            <tr class="ours-row">
-              <td>+ <em>EmbodiedMidtrain</em></td><td>2.1B</td><td style="font-size:0.78rem;">1.0M / 4.1M / 4.1M</td>
-              <td>0.922</td><td>0.808</td><td>0.700</td><td>0.623</td><td>0.533</td><td class="best-val">3.584</td><td class="best-val">45.8</td><td class="best-val">40.2</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="stat-card">
+        <div class="num">1.1B beats 30B</div>
+        <div class="lbl">The mid-trained 1.1B model surpasses VLAs fine-tuned from much larger off-the-shelf VLMs on SimplerEnv and LIBERO</div>
       </div>
-      <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 14px;">
-        <strong>Table 1:</strong> Main results across Calvin ABC-D, SimplerEnv-Bridge, and Libero-10. <strong># Samples Seen</strong> is reported as the training budgets on <em>Calvin / SimplerEnv / Libero</em>. * Results for Expert VLA Baselines and Off-the-shelf VLM Baselines are reproduced and reported by VLM4VLA.
-      </p>
+      <div class="stat-card">
+        <div class="num">Zero re-selection</div>
+        <div class="lbl">The mixture selected with InternVL3.5-1B features transfers directly to Qwen3-VL-2B with consistent gains</div>
+      </div>
+    </div>
+
+    <h3>The gains transfer</h3>
+    <div class="finding">
+      <div class="icon"><i class="fas fa-shuffle"></i></div>
+      <p><strong>Across VLM backbones.</strong> Mid-training Qwen3-VL-2B on the same data selected using InternVL3.5-1B&rsquo;s feature space improves all three benchmarks &mdash; no new proximity estimator or re-selection needed.</p>
+    </div>
+    <div class="finding">
+      <div class="icon"><i class="fas fa-network-wired"></i></div>
+      <p><strong>Across VLA action heads.</strong> Beyond the two-branch MLP head, <i>EmbodiedMidtrain</i> improves OpenVLA-OFT-style parallel decoding (36.5 &rarr; 49.0 on SimplerEnv) and &pi;<sub>0</sub>-style flow matching (88.4 &rarr; 92.4 on LIBERO) for InternVL3.5-1B, with similar gains on Qwen3-VL-2B.</p>
+    </div>
+    <div class="finding">
+      <div class="icon"><i class="fas fa-crosshairs"></i></div>
+      <p><strong>Across target tasks.</strong> Holding LIBERO entirely out of the selection targets retains 95% of the full method&rsquo;s gain on LIBERO-10 (53.4 vs. 54.2), and the real-robot results above use selection guided by simulation data only.</p>
+    </div>
+    <div class="finding">
+      <div class="icon"><i class="fas fa-scale-balanced"></i></div>
+      <p><strong>And it is not a compute artifact.</strong> At matched total FLOPs, spending the extra budget on longer VLA fine-tuning yields 43.8 / 45.8 (SimplerEnv / LIBERO), far below mid-training&rsquo;s 56.3 / 54.2.</p>
     </div>
   </section>
 
-  <!-- ============ Analysis ============ -->
+  <!-- ================= Analysis ================= -->
   <section class="section" style="padding-top: 0;">
-    <h2 class="section-title">Analysis</h2>
-    <div class="sep"></div>
+    <h2><span class="accent-bar"></span>Analysis</h2>
 
-    <!-- Training Dynamics -->
-    <div class="card">
-      <h3 style="font-size: 1.1rem; margin-bottom: 16px;">Training Dynamics</h3>
-      <div class="figure-container">
-        <img src="static/images/fig3_dynamics.png" alt="Training dynamics across VLA tasks" loading="lazy">
-        <div class="figure-caption">
-          <strong>Figure 3:</strong> Training dynamics across VLA tasks for VLMs with and without EmbodiedMidtrain. The mid-trained model already achieves higher performance in the early stages of fine-tuning, and the gap widens over time &mdash; indicating that mid-training provides a fundamentally better initialization.
-        </div>
-      </div>
-      <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 18px;">
-        The mid-trained model already achieves higher performance in the early stages of fine-tuning, providing direct evidence that <strong>proximity-based mid-training yields a better initialization for VLA learning</strong>.
-      </p>
-    </div>
+    <h3 style="margin-top: 6px;">Mid-training provides a better initialization, not a head start</h3>
+    <figure class="card" style="padding: 18px;">
+      <img src="static/images/training_dynamics.png" alt="Training dynamics across VLA tasks with and without EmbodiedMidtrain">
+      <figcaption>VLA fine-tuning trajectories with and without <i>EmbodiedMidtrain</i> (left three panels), and the proximity-score distribution of the VLM pool before and after selection (right).</figcaption>
+    </figure>
+    <p style="margin-top: 14px;">
+      The mid-trained model leads from the earliest fine-tuning checkpoints, and the gap <em>widens</em> rather than narrows
+      over training &mdash; evidence that proximity-based mid-training yields a backbone better suited to VLA learning, not a
+      transient warm start.
+    </p>
 
-    <!-- Data Analysis -->
-    <div class="card">
-      <h3 style="font-size: 1.1rem; margin-bottom: 16px;">Analysis of Selected VLM Data</h3>
-      <div class="figure-container">
-        <div style="display: flex; align-items: stretch; gap: 16px;">
-          <!-- (a) Violin plot -->
-          <div style="flex: 0 0 38%; display:flex; flex-direction:column;">
-            <img src="static/images/fig4a_violin.png" alt="Per-dataset proximity score" style="width:100%; max-height:320px; object-fit:contain;">
-            <div style="flex:1;"></div>
-            <div style="text-align:center;font-size:0.78rem;color:var(--text-secondary);padding-top:6px;">(a) Per-dataset proximity score</div>
-          </div>
-          <!-- (b) High-scoring sample -->
-          <div style="flex: 0 0 30%; display:flex; flex-direction:column;">
-            <img src="static/images/fig4b_positive.jpg" alt="High-scoring sample" style="width:100%;">
-            <div style="font-size:0.73rem;color:var(--text-secondary);margin-top:6px;line-height:1.5;text-align:left;">
-              <strong>Q:</strong> <em>You are standing at the point marked by the coordinate point at point (0.878, 0.780). Which object is directly in front of you?</em><br>
-              <strong>A:</strong> <em>The white matte truck at lower right.</em><br><br>
-              <strong>Q:</strong> <em>Locate a point on the yellow metallic crane at upper right.</em> (format instructions...)<br>
-              <strong>A:</strong> <code>[(0.976, 0.244)]</code>
-            </div>
-            <div style="flex:1;"></div>
-            <div style="text-align:center;font-size:0.78rem;color:var(--text-secondary);padding-top:6px;">(b) High-scoring sample</div>
-          </div>
-          <!-- (c) Low-scoring sample -->
-          <div style="flex: 0 0 25%; display:flex; flex-direction:column;">
-            <img src="static/images/fig4c_negative.jpg" alt="Low-scoring sample" style="width:65%; display:block; margin:0 auto;">
-            <div style="font-size:0.73rem;color:var(--text-secondary);margin-top:6px;line-height:1.5;text-align:left;padding-left:18%;">
-              <strong>Q:</strong> <em>Who wrote this book?</em><br>
-              <strong>A:</strong> <em>Charles P. McKeague.</em><br><br>
-              <strong>Q:</strong> <em>What is the title of this book?</em><br>
-              <strong>A:</strong> <em>Trigonometry.</em>
-            </div>
-            <div style="flex:1;"></div>
-            <div style="text-align:center;font-size:0.78rem;color:var(--text-secondary);padding-top:6px;">(c) Low-scoring sample</div>
-          </div>
-        </div>
-        <div class="figure-caption">
-          <strong>Figure 4:</strong> Analysis of proximity-based data selection. (a) Distribution of proximity scores across VLM data sources. (b) A high-scoring sample from RefSpatial requiring spatial grounding and reasoning. (c) A low-scoring sample: a book cover with text-only VQA.
-        </div>
+    <h3>What does the proximity estimator prefer?</h3>
+    <div class="two-col">
+      <figure class="card" style="padding: 18px;">
+        <img src="static/images/violin.png" alt="Per-dataset proximity score distributions">
+        <figcaption>Proximity-score distributions across the eight candidate VLM datasets.</figcaption>
+      </figure>
+      <div>
+        <figure class="card" style="padding: 18px; margin-bottom: 16px;">
+          <img src="static/images/case_positive.jpg" alt="High-scoring sample requiring spatial grounding and reasoning">
+          <figcaption>A high-scoring sample (RefSpatial): spatial grounding and reasoning.</figcaption>
+        </figure>
+        <figure class="card" style="padding: 18px;">
+          <img src="static/images/case_negative.jpg" alt="Low-scoring text-centric sample" style="max-width: 65%; margin: 0 auto;">
+          <figcaption>A low-scoring sample: text-only VQA on a book cover.</figcaption>
+        </figure>
       </div>
-      <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 18px;">
-        While all datasets concentrate in the low-to-moderate score range, the distribution shapes vary noticeably across datasets. Among them, RefSpatial achieves the highest average scores while VCR receives the lowest, indicating that the estimator assigns clear <em>dataset-level</em> preferences. At the same time, the within-dataset score spread shows that the estimator also performs fine-grained <em>sample-level</em> selection, retaining only the most VLA-aligned samples even from high-scoring datasets.
-      </p>
     </div>
+    <p style="margin-top: 14px;">
+      The estimator assigns clear <em>dataset-level</em> preferences (RefSpatial highest, VCR lowest) while also performing
+      fine-grained <em>sample-level</em> selection within every source: it favors visual reasoning that transfers to embodied
+      control &mdash; spatial grounding, affordances, object relations &mdash; over text-centric content, without any manual
+      domain expertise. The selected mixture preserves the diversity of the original pool
+      (uniformity 1.93 vs. 1.96 for the full general-VLM pool), reshaping the distribution toward the VLA domain without
+      collapsing it.
+    </p>
+    <figure class="card" style="padding: 18px; margin-top: 10px;">
+      <img src="static/images/mixture.png" alt="Composition of the selected mid-training mixture" style="max-width: 720px; margin: 0 auto;">
+      <figcaption>Composition of <i>EmbodiedMidtrain-1M</i> after proximity-based selection.</figcaption>
+    </figure>
   </section>
 
-  <!-- ============ Ablations ============ -->
+  <!-- ================= Ablations ================= -->
   <section class="section" style="padding-top: 0;">
-    <h2 class="section-title">Ablation Studies</h2>
-    <div class="sep"></div>
-    <div class="card">
-      <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 0.95rem;">
-        We ablate two central design choices: the advantage of proximity-based selection over random sampling, and the effectiveness of different proximity measurements on mid-training InternVL3.5-1B backbone.
-      </p>
-      <div class="table-wrapper">
-        <table class="results-table">
-          <thead>
-            <tr>
-              <th style="text-align:left;">Setting</th>
-              <th>Calvin&uarr;</th>
-              <th>Simpler&uarr;</th>
-              <th>Libero&uarr;</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Random Selection</td><td>3.398</td><td>43.8</td><td>48.4</td>
-            </tr>
-            <tr class="section-header"><td colspan="4" style="text-align:left;padding-left:10px;">Proximity Measurements</td></tr>
-            <tr><td>Feat.-space Avg. Dist.</td><td>3.126</td><td>53.1</td><td>51.2</td></tr>
-            <tr><td>VLA-cond. Perplexity</td><td>3.159</td><td>55.2</td><td>48.0</td></tr>
-            <tr><td>Delta Perplexity</td><td>1.527</td><td>39.6</td><td>54.2</td></tr>
-            <tr class="ours-row"><td>Learned Estimator (Ours)</td><td class="best-val">3.714</td><td class="best-val">56.3</td><td class="best-val">54.2</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <p style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 14px;">
-        <strong>Table 2:</strong> Ablation results for random selection and different proximity measurements on mid-training InternVL3.5-1B backbone. The learned proximity estimator consistently outperforms all alternatives.
-      </p>
-      <p style="color: var(--text-secondary); font-size: 0.95rem; margin-top: 18px;">
-        Both random sampling and the three hand-crafted alternatives &mdash; feature-space average distance, VLA-conditioned perplexity, and delta perplexity &mdash; underperform our learned estimator across all three benchmarks, confirming that mid-training&rsquo;s gains come from identifying VLA-aligned samples rather than from additional data alone, and that a <em>learned</em> proximity signal captures this alignment far more robustly than heuristic metrics.
-      </p>
+    <h2><span class="accent-bar"></span>Ablations</h2>
+    <p>
+      Random sampling from the candidate pool consistently <em>underperforms</em> the learned estimator, showing that the gains
+      come from identifying the aligned subset, not merely from additional mid-training. Hand-crafted proximity metrics capture
+      VLA alignment only partially; the learned estimator is the most robust and transferable signal.
+    </p>
+    <div class="table-scroll" style="max-width: 720px;">
+      <table class="results" style="min-width: 560px;">
+        <thead>
+          <tr><th>Selection strategy</th><th>CALVIN&uarr;</th><th>SimplerEnv&uarr;</th><th>LIBERO&uarr;</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Random selection</td><td>3.398</td><td>43.8</td><td>48.4</td></tr>
+          <tr><td>Feature-space avg. distance</td><td>3.126</td><td>53.1</td><td>51.2</td></tr>
+          <tr><td>VLA-conditioned perplexity</td><td>3.159</td><td>55.2</td><td>48.0</td></tr>
+          <tr><td>Delta perplexity</td><td>3.221</td><td>39.6</td><td>54.2</td></tr>
+          <tr class="ours"><td><b>Learned estimator (Ours)</b></td><td><b>3.714</b></td><td><b>56.3</b></td><td><b>54.2</b></td></tr>
+        </tbody>
+      </table>
     </div>
+    <p class="table-caption">Ablation of selection strategies for mid-training the InternVL3.5-1B backbone.</p>
   </section>
 
-  <!-- ============ BibTeX (commented out for now) ============ -->
-  <!--
-  <section class="section" style="padding-top: 0;">
-    <h2 class="section-title">BibTeX</h2>
-    <div class="sep"></div>
-    <div class="card">
-      <div class="bibtex-box">
-        <button class="copy-btn" onclick="copyBibtex()"><i class="fas fa-copy"></i> Copy</button>
-        <pre><code>@article{du2026embodiedmidtrain,
+  <!-- ================= BibTeX ================= -->
+  <section class="section" style="padding-top: 0;" id="bibtex">
+    <h2><span class="accent-bar"></span>BibTeX</h2>
+    <div class="bibtex-box">
+      <button class="copy-btn" onclick="copyBibtex()"><i class="far fa-copy"></i> Copy</button>
+      <pre><code>@article{du2026embodiedmidtrain,
   title={EmbodiedMidtrain: Bridging the Gap between Vision-Language
          Models and Vision-Language-Action Models via Mid-training},
-  author={Du, Yiyang and Guo, Zhanqiu and Ye, Xin and Ren, Liu
-          and Xiong, Chenyan},
-  journal={Conference on Language Modeling (COLM)},
+  author={Du, Yiyang and Guo, Zhanqiu and Zhang, Haochen and
+          Macaluso, Annabella and Ye, Xin and Ren, Liu and
+          Bisk, Yonatan and Xiong, Chenyan},
+  journal={arXiv preprint arXiv:2604.20012},
   year={2026}
 }</code></pre>
-      </div>
     </div>
   </section>
-  -->
 
-  <!-- ============ Footer ============ -->
-  <footer class="footer">
-    <p>
-      The website template is borrowed from <a href="https://nerfies.github.io/" target="_blank">Nerfies</a>.
-    </p>
+  <footer>
+    The website template is adapted from <a href="https://nerfies.github.io/">Nerfies</a>.
   </footer>
 
   <script>
     function copyBibtex() {
-      const bibtex = document.querySelector('.bibtex-box code').textContent;
+      const bibtex = document.querySelector('.bibtex-box code').innerText;
       navigator.clipboard.writeText(bibtex).then(() => {
         const btn = document.querySelector('.copy-btn');
-        btn.innerHTML = '<i class="fas fa-check"></i> Copied!';
-        setTimeout(() => {
-          btn.innerHTML = '<i class="fas fa-copy"></i> Copy';
-        }, 2000);
+        btn.innerHTML = '<i class="fas fa-check"></i> Copied';
+        setTimeout(() => { btn.innerHTML = '<i class="far fa-copy"></i> Copy'; }, 1600);
       });
     }
+
+    // Play rollout videos only while they are on screen.
+    const videos = document.querySelectorAll('video');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const v = entry.target;
+        if (entry.isIntersecting) { v.play().catch(() => {}); }
+        else { v.pause(); }
+      });
+    }, { threshold: 0.25 });
+    videos.forEach((v) => observer.observe(v));
   </script>
 </body>
 </html>
