@@ -1,7 +1,7 @@
 main:
 
   - title: "EmbodiedMidtrain: Bridging the Gap between Vision-Language Models and Vision-Language-Action Models via Mid-training"
-    authors: <strong>Yiyang Du</strong>, Zhanqiu Guo, Xin Ye, Liu Ren, Chenyan Xiong
+    authors: <strong>Yiyang Du</strong>, Zhanqiu Guo, Haochen Zhang, Annabella Macaluso, Xin Ye, Liu Ren, Yonatan Bisk, Chenyan Xiong
     conference_short: Arxiv
     pdf: https://arxiv.org/abs/2604.20012
     # code: https://github.com/THUNLP-MT/AdaMMS
