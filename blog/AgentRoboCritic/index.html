@@ -1,0 +1,590 @@
+---
+# Front matter (even empty) makes Jekyll process this page so {% include %} works.
+---
+<!doctype html>
+<html lang="en">
+<head>
+  {% include analytics.html %}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>AgentRoboCritic: Understanding the Capability of Frontier Agents on Direct Robot Control</title>
+<meta name="description" content="AgentRoboCritic: an intent-grounded, action-level analysis of frontier agents on direct robot control across 12 manipulation benchmarks.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="AgentRoboCritic">
+<meta property="og:description" content="Understanding the capability of frontier agents on direct robot control, one action at a time.">
+<meta property="og:url" content="https://adu2021.github.io/blog/AgentRoboCritic/">
+<meta property="og:image" content="https://adu2021.github.io/blog/AgentRoboCritic/static/img/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%233d5fa8'/%3E%3Cpath d='M9 8v9a3 3 0 0 0 3 3M23 8v9a3 3 0 0 1-3 3M9 8h14M16 20v5' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Tinos:ital,wght@0,400;0,700;1,400&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<link rel="stylesheet" href="static/css/style.css?v=20261119-7">
+</head>
+<body>
+
+<svg class="sprite" aria-hidden="true" focusable="false">
+  <symbol id="i-paper" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h6"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></symbol>
+  <symbol id="i-data" viewBox="0 0 24 24"><ellipse cx="12" cy="5.5" rx="7.5" ry="2.5"/><path d="M4.5 5.5v13c0 1.4 3.4 2.5 7.5 2.5s7.5-1.1 7.5-2.5v-13M4.5 12c0 1.4 3.4 2.5 7.5 2.5s7.5-1.1 7.5-2.5"/></symbol>
+  <symbol id="i-model" viewBox="0 0 24 24"><path d="M12 2.8l8 4.4v9.6l-8 4.4-8-4.4V7.2z"/><path d="M4 7.2l8 4.4 8-4.4M12 11.6v9.6"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8.5 5.5v13M15.5 5.5v13" stroke-width="3"/></symbol>
+</svg>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ================================================================== HERO -->
+<header class="hero">
+  <h1>AgentRoboCritic</h1>
+  <p class="subtitle">Understanding the Capability of Frontier Agents on Direct Robot Control</p>
+  <p class="authors"><span class="author">Yiyang Du<sup>1</sup></span>, <span class="author">Yuxuan Kuang<sup>1*</sup></span>, <span class="author">Qitao Zhao<sup>1*</sup></span>, <span class="author">Yixuan Wang<sup>2*</sup></span>, <span class="author">Zhanqiu Guo<sup>1</sup></span>, <span class="author">Yi Xu<sup>3</sup></span>, <span class="author">Xin Li<sup>3</sup></span>, <span class="author">Wenbin He<sup>3</sup></span>, <span class="author">Liu Ren<sup>3</sup></span>, <span class="author">Chenyan Xiong<sup>1</sup></span></p>
+  <p class="affil"><span class="inst"><sup>1</sup>Carnegie Mellon University</span> <span class="inst"><sup>2</sup>University of Illinois at Urbana-Champaign</span> <span class="inst"><sup>3</sup>Bosch Research North America &amp; Bosch Center for Artificial Intelligence (BCAI)</span></p>
+  <p class="affil"><sup>*</sup>Equal contribution</p>
+  <!-- Links: set href and remove class "is-pending" once each one is public. -->
+  <nav class="links" aria-label="Project links">
+    <a class="link-btn is-pending" href="#"><svg class="i"><use href="#i-paper"/></svg>Paper</a>
+    <a class="link-btn is-pending" href="#"><svg class="i"><use href="#i-code"/></svg>Code</a>
+    <a class="link-btn is-pending" href="#"><svg class="i"><use href="#i-data"/></svg>Dataset</a>
+    <a class="link-btn is-pending" href="#"><svg class="i"><use href="#i-model"/></svg>Critic model</a>
+  </nav>
+
+  <figure class="teaser" id="teaser">
+    <div class="paperfig-scroll">
+      <div class="paperfig" style="--w: 495; --h: 129.5" role="img" aria-label="Overview of AgentRoboCritic. (a) Intent-grounded action-level critique: episode-level evaluation gives no feedback on individual actions, action-level evaluation with the global goal only is ambiguous, and adding the local intent makes it fine-grained and well-posed. (b) Capabilities of frontier agents on direct robot control: closed-loop recovery, semantic grounding and zero-shot manipulation, shown as rollout clips with charts. (c) Failure-mode accuracy of critics on the human-labeled benchmark.">
+        <img class="layer" src="static/fig/teaser_under.svg" alt="" width="1980" height="518">
+        <img class="layer" src="static/fig/teaser_over.svg" alt="" width="1980" height="518">
+      </div>
+    </div>
+    <p class="scroll-hint">Swipe to see panels (b) and (c) →</p>
+    <figcaption><b>Figure 1. Overview of AgentRoboCritic.</b> (a) Local intent makes action-level critique fine-grained and well-posed. (b) Capabilities of frontier agents on direct robot control. (c) Evaluation of action-level critics on the human-labeled benchmark. Select a panel to go to its section.</figcaption>
+  </figure>
+</header>
+
+<!-- ================================================================== BODY -->
+<div class="layout">
+  <nav class="toc" id="toc" aria-label="Contents">
+    <div class="toc-label">Contents</div>
+    <ol class="toc-top">
+      <li><a href="#abstract">Abstract</a></li>
+      <li><a href="#direct-control">Direct Robot Control</a></li>
+      <li><a href="#evaluation">Evaluating Robot Execution</a></li>
+      <li><a href="#critique">Intent-Grounded Critique</a></li>
+      <li><a href="#failure-modes">Action-Level Failure Modes</a></li>
+      <li class="has-sub">
+        <div class="toc-row"><a href="#capabilities">Capabilities of Frontier Agents</a><button class="toc-toggle" type="button" aria-expanded="false" aria-label="Show subsections of Capabilities of Frontier Agents"><svg class="i"><use href="#i-chev"/></svg></button></div>
+        <ol class="toc-sub">
+          <li><a href="#recovery">Closed-Loop Recovery</a></li>
+          <li><a href="#grounding">Semantic Grounding</a></li>
+          <li><a href="#zero-shot">Zero-Shot Manipulation</a></li>
+        </ol>
+      </li>
+      <li class="has-sub">
+        <div class="toc-row"><a href="#limitations">Limitations of Frontier Agents</a><button class="toc-toggle" type="button" aria-expanded="false" aria-label="Show subsections of Limitations of Frontier Agents"><svg class="i"><use href="#i-chev"/></svg></button></div>
+        <ol class="toc-sub">
+          <li><a href="#bottlenecks">Physical Execution Bottlenecks</a></li>
+          <li><a href="#uneven-recovery">Uneven Recovery Across Failure Modes</a></li>
+          <li><a href="#grasp">Where Grasps Fail</a></li>
+        </ol>
+      </li>
+      <li class="has-sub">
+        <div class="toc-row"><a href="#critics">Reliability of the Critic</a><button class="toc-toggle" type="button" aria-expanded="false" aria-label="Show subsections of Reliability of the Critic"><svg class="i"><use href="#i-chev"/></svg></button></div>
+        <ol class="toc-sub">
+          <li><a href="#benchmark">Human-Annotated Benchmark</a></li>
+          <li><a href="#ablation">Ablation on Local Intent</a></li>
+          <li><a href="#open-critic">Open-Source Critic</a></li>
+          <li><a href="#self-preference">Self-Preference Bias</a></li>
+        </ol>
+      </li>
+      <li><a href="#release">Dataset and Release</a></li>
+      <li><a href="#bibtex">BibTeX</a></li>
+    </ol>
+  </nav>
+
+  <main id="main">
+
+    <section id="abstract">
+      <h2>Abstract</h2>
+      <p>Frontier multimodal language agents such as GPT-6 Astra have demonstrated strong capabilities in controlling robots directly via low-level numerical actions without high-level primitives. However, existing benchmarks report only episode-level success rates, which show neither how these agents succeed nor where they fail. In this paper, we present a systematic action-level analysis of frontier agents on direct robot control across 12 manipulation benchmarks. We introduce <b>AgentRoboCritic</b>, an intent-grounded critique framework in which the policy agent states a local intent alongside each action, and a critic evaluates the action’s outcome and failure mode against this intent. Our action-level analysis demonstrates the promising capabilities of frontier agents on direct robot control, including closed-loop recovery from local execution failures, reliable semantic grounding across diverse scenes, and strong zero-shot manipulation without task-specific adaptation. It also identifies their current limitations, including task-relevant physical execution bottlenecks such as grasping and alignment, and uneven recovery across failure modes. Finally, we validate our critic on a 400-action human-annotated benchmark and release a dataset of 12,844 annotated actions alongside a fine-tuned open-source critic, Muse-Glimmer-30B, whose failure-mode accuracy rises from 32.58% to 74.24%, enabling low-cost action-level analysis.</p>
+    </section>
+
+    <section id="direct-control">
+      <h2>Direct Robot Control</h2>
+      <p>Frontier multimodal agents such as GPT-6 Astra can control a robot directly. At every turn the agent receives the task instruction <span class="m">G</span>, the current camera images <span class="m">O<sub>t</sub><sup>pre</sup></span> and its interaction history <span class="m">h<sub>t</sub></span>, and issues a low-level numerical command <span class="m">a<sub>t</sub></span>, such as an end-effector pose, joint targets or a gripper opening, as a structured tool call. The robot executes the command and returns new images, closing the loop without high-level primitives or task-specific fine-tuning:</p>
+      <div class="eq" data-tex="a_t \sim \pi\!\left(\cdot \mid G,\, O_t^{\text{pre}},\, h_t\right).">a<sub>t</sub> ~ π( · | G, O<sub>t</sub><sup>pre</sup>, h<sub>t</sub>)</div>
+    </section>
+
+    <section id="evaluation">
+      <h2>Evaluating Robot Execution</h2>
+      <p>To learn how these agents succeed and where they fail, we need to judge their execution, and the two usual granularities both fall short (Figure 1(a)).</p>
+      <p><b>Episode-level evaluation</b> reports one success bit per episode. It shows neither how the agent succeeded nor where it failed: half of the successful episodes we analyze contain at least one failed action, and a failed episode does not say which action went wrong.</p>
+      <p><b>Action-level evaluation against the task goal alone</b> is ill-posed. Robot manipulation is multimodal: many different trajectories can validly advance the same task, so whether a single action succeeded depends on the sub-goal it was meant to reach. The same motion can be an incomplete reach, a missed alignment or a failed grasp depending on its intended result, and without that sub-goal even GPT-6 Astra labels most actions <i>Unverifiable</i>.</p>
+      <p>We therefore make the sub-goal explicit: the agent states a local intent with every action, and each action is judged against it (Figure 2).</p>
+      <figure class="fig">
+        <div class="vid" style="--ar: 1440 / 360">
+          <video src="static/videos/fig1a_trowel_pickup.mp4" poster="static/posters/fig1a_trowel_pickup.jpg" muted playsinline loop preload="none" data-autoplay aria-label="GPT-6 Astra rollout on RoboDojo general_pickup, calls 7 to 10, head and both wrist cameras"></video>
+        </div>
+        <figcaption><b>Figure 2. One rollout, judged action by action.</b> GPT-6 Astra on RoboDojo <span class="tt">general_pickup</span>. Judged against the agent’s own local intents, the first three actions are <span class="badge badge--ok">Achieved</span> and the fourth is <span class="badge badge--fail">Failed: Grasp</span>; an episode-level score reports a single bit for the whole episode.</figcaption>
+      </figure>
+    </section>
+
+    <section id="critique">
+      <h2>Intent-Grounded Action-Level Critique</h2>
+      <p>In <b>AgentRoboCritic</b>, the policy agent states a natural-language local intent <span class="m intent">g<sub>t</sub></span>, the immediate sub-goal of the action, in the same tool call as each action <span class="m">a<sub>t</sub></span>; the execution harness rejects any call that omits it. A critic <span class="m">𝒞</span> then judges every action against its own intent:</p>
+      <div class="eq-row">
+        <div class="eq" data-tex="\left(a_t,\, \htmlClass{tex-intent}{g_t}\right) \sim \pi\!\left(\cdot \mid G,\, O_t^{\text{pre}},\, h_t\right),">(a<sub>t</sub>, g<sub>t</sub>) ~ π( · | G, O<sub>t</sub><sup>pre</sup>, h<sub>t</sub>),</div>
+        <div class="eq" data-tex="\left(\hat{y}_t,\, \hat{m}_t,\, \hat{e}_t\right) = \mathcal{C}\!\left(G,\, \htmlClass{tex-intent}{g_t},\, \mathcal{O}_t\right).">(ŷ<sub>t</sub>, m̂<sub>t</sub>, ê<sub>t</sub>) = 𝒞(G, g<sub>t</sub>, 𝒪<sub>t</sub>)</div>
+      </div>
+      <p>The critic, GPT-6 Astra, sees the task goal, the local intent and the frames around the action <span class="m">𝒪<sub>t</sub></span>, and returns the outcome <span class="m">ŷ<sub>t</sub></span> (Achieved, Failed, Partial or Unverifiable), the failure mode <span class="m">m̂<sub>t</sub></span> of a failed action and a short note <span class="m">ê<sub>t</sub></span> stating the physical evidence (Figure 3). It follows three principles:</p>
+      <ul class="plain plain--bullets">
+        <li><b>Contact-aware windows:</b> reaching and alignment are judged from the frames before and after the action; gripper closures also need the lift that follows.</li>
+        <li><b>Local validity:</b> an action is judged against its own intent, so an early failed grasp is a failure even if the agent recovers later.</li>
+        <li><b>Evidence-bounded attribution:</b> each failure gets one mode and a note naming the arm, object, contact geometry and timing.</li>
+      </ul>
+      <figure class="fig">
+        <div class="paperfig-scroll">
+          <div class="paperfig" style="--w: 494.994; --h: 149.998" role="img" aria-label="Pipeline of intent-grounded action-level critique. (1) The policy agent issues one tool call with the action and its local intent. (2) The critic, GPT-6 Astra, receives the global goal, the local intent and the before, after and lift-check frames, and outputs Failed, failure mode Grasp, and the note: the upper-edge closure does not establish a retaining grasp of the coin. (3) Human annotators label the same 400 actions to measure agreement.">
+            <img class="layer" src="static/fig/pipeline_under.svg" alt="" width="1980" height="600">
+            <div class="slots" id="pipeline-slots"></div>
+            <img class="layer" src="static/fig/pipeline_over.svg" alt="" width="1980" height="600">
+          </div>
+        </div>
+        <p class="scroll-hint">Swipe to see panels (2) and (3) →</p>
+        <figcaption><b>Figure 3. Intent-grounded action-level critique.</b> (1) The policy states a local intent with every action. (2) The critic judges the outcome and failure mode against it. (3) Humans label the same actions to validate critics.</figcaption>
+      </figure>
+    </section>
+
+    <section id="failure-modes">
+      <h2>Action-Level Failure Modes</h2>
+      <p>Knowing that an action failed is only half of a diagnosis. For every failed action the critic also names why it failed, choosing one of seven failure modes that are defined against the local intent:</p>
+      <dl class="defs">
+        <dt><span class="fm-tag fm-tag--grasp">Grasp</span></dt><dd>The object is not acquired or not retained, which defeats the local intent.</dd>
+        <dt><span class="fm-tag fm-tag--alignment">Alignment</span></dt><dd>A held object or an intended contact misses its local target relation.</dd>
+        <dt><span class="fm-tag fm-tag--interference">Interference</span></dt><dd>Unintended motion, collision or displacement defeats the local intent.</dd>
+        <dt><span class="fm-tag fm-tag--effect">Effect</span></dt><dd>A tool stays under control but does not produce its stated effect.</dd>
+        <dt><span class="fm-tag fm-tag--incomplete">Incomplete motion</span></dt><dd>A commanded movement, opening or reset remains incomplete and no more specific failure mode applies.</dd>
+        <dt><span class="fm-tag fm-tag--choice">Choice</span></dt><dd>The execution contradicts the object, order or category stated in the local intent.</dd>
+        <dt><span class="fm-tag fm-tag--unresolved">Unresolved</span></dt><dd>The action fails, but its failure mode cannot be established from the evidence.</dd>
+      </dl>
+      <figure class="fig">
+        <div class="fm-grid" id="fig3-grid"></div>
+        <figcaption><b>Figure 4. Action-level failure modes.</b> One failed action for each of six modes, with the agent’s local intent. <i>Unresolved</i> marks failures with occluded or ambiguous evidence.</figcaption>
+      </figure>
+      <p>With these labels on the annotated actions of 12 manipulation benchmarks, we can ask what frontier agents already do well and where they still fail.</p>
+    </section>
+
+    <section id="capabilities">
+      <h2>Capabilities of Frontier Agents on Direct Robot Control</h2>
+      <p>The action-level labels first reveal three strengths of frontier agents that episode-level success rates hide: they recover from their own failures, act on the objects they intend, and manipulate zero-shot.</p>
+
+      <h3 id="recovery">Closed-Loop Recovery</h3>
+      <p>Frontier agents recover from local execution failures in closed loop, unlike imitation-trained policies whose errors compound under covariate shift (Ross et al., 2011). 49.8% of successful episodes contain at least one failed action, and episodes with one or two failed actions still succeed 40.3% of the time (75.1% without failures). 57.7% of failed actions are verifiably recovered by the end of the episode (38.9% within 10 actions), and benchmarks that recover more also succeed more (<i>r</i> = 0.81).</p>
+      <figure class="fig fig--clip">
+        <div class="vid" style="--ar: 1344 / 448">
+          <video src="static/videos/fig1b_recovery_marker.mp4" poster="static/posters/fig1b_recovery_marker.jpg" muted playsinline loop preload="none" data-autoplay aria-label="Real robot: the right gripper misses the marker cap, reopens and regrasps it, and pulls the cap off"></video>
+        </div>
+        <figcaption><b>Figure 5. Closed-loop recovery on a real robot.</b> StationeryBench: the right gripper misses the cap <span class="badge badge--fail">Failed: Grasp</span>, reopens, regrasps <span class="badge badge--ok">Achieved</span> and pulls the cap off <span class="badge badge--success">Success</span>.</figcaption>
+      </figure>
+      <figure class="fig fig--fig5">
+        <div class="chart-grid chart-grid--2" id="fig5"></div>
+        <figcaption><b>Figure 6. Closed-loop recovery from local execution failures.</b> Overall combines all 12 benchmarks. (a) Successful episodes with a failure. (b) Success by number of local failures. (c) Failures recovered within a number of later actions. (d) Recovery against success, one point per benchmark; click a benchmark to see its statistics beside the plot.</figcaption>
+      </figure>
+      <!-- appx:recovery:start -->
+      <div class="appx-list">
+<details class="appx" data-section="recovery" id="appx-recovery-criterion">
+  <summary>Recovery analysis: criterion and counts</summary>
+  <div class="appx-body">
+    <p><b>Failed actions.</b> We analyze all 12,163 failed actions with an annotated failure mode in the 1,989 officially graded episodes that contain at least one, across the 12 benchmarks. The reported shares give every failed action equal weight. RoboDojo contributes 9,923 of the failed actions; Figure 6(d) shows every benchmark separately (select a point for its statistics).</p>
+    <p><b>Recovery criterion.</b> For each failed action, we follow the saved trajectory forward and record the first later action that shows a verified recovery. A recovery is either a repair of the original sub-goal or progress along a different route that bypasses it. After a missed grasp, a regrasp counts once the object visibly rises with the gripper. In one trajectory, after failing to grasp a ball inside a cup, the agent grasps and lifts the cup with the ball inside, which prepares the pour and counts as a recovery along a different route. A later action that only achieves its own stated intent, such as lifting an empty gripper after a missed grasp, does not count. A recovery is counted even if the episode later fails. Of the 12,163 failures, 6,435 are repaired directly and 589 are bypassed along a different route, and the remaining 5,139 are not recovered. All 12,163 remain in the denominator.</p>
+    <p><b>Recovery over actions.</b> Figure 6(c) shows the cumulative share of analyzed failures whose first verified recovery occurs within a given number of later actions. In total, 4,734 failures (38.9%) are recovered within 10 actions and 7,024 (57.7%) by the end of the episode. The panel shows the overall curve and three benchmarks, and its band and error bars are Wilson 95% intervals.</p>
+    <p><b>Recovery and task success.</b> Figure 6(d) plots, for each benchmark, the share of its analyzed failures recovered by the end of the episode against the official success rate of its graded episodes that contain at least one failed action, 1,989 episodes in total. The two rates correlate across the 12 benchmarks with Pearson <i>r</i> = 0.81 (<i>p</i> = 0.001) and Spearman <i>ρ</i> = 0.86.</p>
+<p><b>Review procedure.</b> Candidate recoveries are identified from the local intents and the saved frames of each trajectory, and every recorded recovery is checked against the later action that it cites. A second independent reading of 24 failures, two per benchmark, agrees with the first on whether a recovery occurred in 21 cases.</p>
+  </div>
+</details>
+      </div>
+      <!-- appx:recovery:end -->
+
+      <h3 id="grounding">Semantic Grounding</h3>
+      <p>Specialized VLAs and WAMs remain vulnerable to visual perturbations, camera shifts and rearranged scenes. A failed action is labeled <i>Choice</i> when its execution contradicts the object, order or category stated in its local intent, and such errors are only 0.2% of all failed actions, at most 3.3% on any single benchmark (Figure 8). Even with novel object instances and visual distractors, frontier agents act on the object, order and category they intend.</p>
+      <figure class="fig fig--narrow">
+        <div class="vid" style="--ar: 640 / 480">
+          <video src="static/videos/fig1b_grounding_cover_blocks.mp4" poster="static/posters/fig1b_grounding_cover_blocks.jpg" muted playsinline loop preload="none" data-autoplay aria-label="RoboDojo cover_blocks, full episode from the head camera"></video>
+        </div>
+        <figcaption><b>Figure 7. Semantic grounding.</b> RoboDojo <span class="tt">cover_blocks</span>: the agent observes the colors, covers all blocks, then uncovers red and then green.</figcaption>
+      </figure>
+      <figure class="fig">
+        <div class="chart" id="fig4"></div>
+        <figcaption><b>Figure 8. Action-level failure modes per benchmark.</b> <sup>*</sup>Vision-only settings of visuo-tactile benchmarks. Select a legend entry to sort by that mode.</figcaption>
+      </figure>
+
+      <h3 id="zero-shot">Zero-Shot Manipulation</h3>
+      <p>Without task-specific fine-tuning, GPT-6 Astra succeeds in 91% of RoboTwin 2.0 and 90% of YAMLab episodes, where π<sub>0.5</sub> reaches 6% and 0% and InternW0-Δ 0%.</p>
+      <figure class="fig">
+        <div class="fig6" id="fig6"></div>
+        <figcaption><b>Figure 9. Zero-shot comparison with a VLA.</b> Paired rollouts from the same initial state: GPT-6 Astra (left) and π<sub>0.5</sub> (right), with the zero-shot success rate on each benchmark. The two rollouts of a task play in sync. InternW0-Δ succeeds in no episode on either benchmark.</figcaption>
+      </figure>
+      <!-- appx:zero-shot:start -->
+      <div class="appx-list">
+<details class="appx" data-section="zero-shot" id="appx-latency">
+  <summary>Inference latency</summary>
+  <div class="appx-body">
+    <p>We measure the decision latency of GPT-6 Astra and π<sub>0.5</sub> on the tasks of the zero-shot comparison (Figure 9) and on further matched tasks of the Embodied First Exam suites. A latency interval runs from the completion of the most recent observation request to the start of the next executed action submission, both read from the journal of the robot service. Read-only tool calls inside the interval are included, and intervals across resets or episodes and actions that are not executed are excluded. For each run we take the median interval, and the table of decision latency below reports the mean and standard deviation of these run medians over the tasks timed for both policies. Across 74 matched tasks, a decision takes 33.3&nbsp;±&nbsp;27.9&nbsp;s for GPT-6 Astra and 0.12&nbsp;±&nbsp;0.02&nbsp;s for π<sub>0.5</sub>, and the gap is similar on RoboTwin 2.0 and YAMLab. GPT-6 Astra can issue several commands within one model turn, so the median over all 882 of its recorded intervals is 0.17&nbsp;s, and we therefore summarize each run by its median interval. This shows that frontier agents reach their zero-shot success at a decision latency more than two orders of magnitude above that of a VLA.</p>
+    <div class="table-wrap">
+      <table class="booktabs booktabs--small">
+        <caption><b>Decision latency</b>, the mean and standard deviation over tasks of each run’s median interval from an observation to the next executed action, in seconds.</caption>
+        <thead>
+          <tr class="rule-top rule-mid"><th scope="col" class="l">Tasks</th><th scope="col">GPT-6 Astra (s)</th><th scope="col">π<sub>0.5</sub> (s)</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">RoboTwin 2.0</th><td>40.5 ± 27.6</td><td>0.109 ± 0.002</td></tr>
+          <tr><th scope="row">YAMLab</th><td>36.1 ± 30.0</td><td>0.142 ± 0.002</td></tr>
+          <tr class="rule-bottom"><th scope="row">All matched tasks</th><td>33.3 ± 27.9</td><td>0.121 ± 0.024</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</details>
+      </div>
+      <!-- appx:zero-shot:end -->
+    </section>
+
+    <section id="limitations">
+      <h2>Limitations of Frontier Agents on Direct Robot Control</h2>
+      <p>The same labels also show where frontier agents still fail: in low-level physical interaction, and in recovering from precision failures.</p>
+
+      <h3 id="bottlenecks">Physical Execution Bottlenecks</h3>
+      <p>The bottleneck follows task geometry (Table 1): <i>Grasp</i> is the most frequent failure mode on nine of the ten non-tactile benchmarks, <i>Alignment</i> dominates tight-tolerance insertion from vision alone (UniVTAC, OpenViTac), clutter raises <i>Interference</i>, and LIBERO-MAX and StationeryBench show many <i>Incomplete motion</i> failures.</p>
+      <div class="table-wrap">
+        <table class="booktabs booktabs--small">
+          <caption><b>Table 1. Failure modes of failed actions</b>, as a percentage of the <i>n</i> failed actions with a failure-mode label in each row.</caption>
+          <thead>
+            <tr class="rule-top"><td></td><th scope="col" colspan="7" class="cmid">Share of <i>n</i> (%)</th><td></td></tr>
+            <tr class="rule-mid"><th scope="col" class="l">Benchmark</th><th scope="col"><span class="sc">Grasp</span></th><th scope="col"><span class="sc">Alignment</span></th><th scope="col"><span class="sc">Interference</span></th><th scope="col"><span class="sc">Effect</span></th><th scope="col"><span class="sc">Incomplete</span><br><span class="sc">motion</span></th><th scope="col"><span class="sc">Unresolved</span></th><th scope="col"><span class="sc">Choice</span></th><th scope="col" class="r"><i>n</i></th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">RoboDojo</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="r"></td></tr>
+            <tr><th scope="row" class="indent">Precision</th><td class="hw" style="background:#557CBB">63</td><td class="hc" style="background:#C8E0F6">17</td><td class="hc" style="background:#CEE3F7">15</td><td class="hc" style="background:#E7F0FA">2</td><td class="hc" style="background:#E3EEFA">4</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#ECECEC">–</td><td class="r">1,500</td></tr>
+            <tr><th scope="row" class="indent">Open</th><td class="hw" style="background:#4B70B3">68</td><td class="hc" style="background:#DBE9F8">9</td><td class="hc" style="background:#CAE1F6">16</td><td class="hc" style="background:#E2EEFA">4</td><td class="hc" style="background:#E6EFFA">3</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#F4F6F9"></td><td class="r">1,489</td></tr>
+            <tr><th scope="row" class="indent">Long-horizon</th><td class="hw" style="background:#709DD1">49</td><td class="hc" style="background:#C1DDF6">20</td><td class="hc" style="background:#B2D6F4">26</td><td class="hc" style="background:#E8F1FB">1</td><td class="hc" style="background:#E4EEFA">4</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#EAF2FB">&lt;1</td><td class="r">2,586</td></tr>
+            <tr><th scope="row" class="indent">Generalization</th><td class="hw" style="background:#78A4D6">47</td><td class="hc" style="background:#CDE3F7">15</td><td class="hc" style="background:#A2CCF0">32</td><td class="hc" style="background:#E3EEFA">4</td><td class="hc" style="background:#E6F0FA">2</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#EAF2FB">&lt;1</td><td class="r">3,646</td></tr>
+            <tr><th scope="row" class="indent">Memory</th><td class="hw" style="background:#4D73B5">67</td><td class="hc" style="background:#E1EDF9">5</td><td class="hc" style="background:#AFD4F4">27</td><td class="hc" style="background:#EAF2FB">&lt;1</td><td class="hc" style="background:#E9F1FB">1</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#F4F6F9"></td><td class="r">938</td></tr>
+            <tr><th scope="row">StationeryBench</th><td class="hc" style="background:#84B0DD">42</td><td class="hc" style="background:#DEEBF9">7</td><td class="hc" style="background:#C9E0F6">17</td><td class="hc" style="background:#E8F1FB">1</td><td class="hc" style="background:#9FC9EE">33</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#F4F6F9"></td><td class="r">411</td></tr>
+            <tr><th scope="row">Astranomy</th><td class="hw" style="background:#3B5CA3">77</td><td class="hc" style="background:#DBE9F8">9</td><td class="hc" style="background:#E3EEFA">4</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#D7E7F8">11</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#F4F6F9"></td><td class="r">869</td></tr>
+            <tr><th scope="row">UniVTAC</th><td class="hc" style="background:#B3D6F4">25</td><td class="hw" style="background:#3E60A9">75</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#F4F6F9"></td><td class="r">110</td></tr>
+            <tr><th scope="row">OpenViTac</th><td class="hc" style="background:#D8E8F8">10</td><td class="hw" style="background:#304A84">86</td><td class="hc" style="background:#E5EFFA">3</td><td class="hc" style="background:#E9F1FB">1</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#F4F6F9"></td><td class="r">164</td></tr>
+            <tr><th scope="row">ContactBench 1.0</th><td class="hw" style="background:#4569AF">71</td><td class="hc" style="background:#D1E4F7">13</td><td class="hc" style="background:#E5EFFA">3</td><td class="hc" style="background:#E3EEFA">4</td><td class="hc" style="background:#DAE9F8">9</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#F4F6F9"></td><td class="r">75</td></tr>
+            <tr><th scope="row">LIBERO-MAX</th><td class="hc" style="background:#BAD9F5">23</td><td class="hc" style="background:#D0E4F7">14</td><td class="hc" style="background:#E5EFFA">3</td><td class="hc" style="background:#E9F2FB">&lt;1</td><td class="hw" style="background:#608AC5">57</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#E4EFFA">3</td><td class="r">273</td></tr>
+            <tr><th scope="row">Meta-World+</th><td class="hc" style="background:#87B3DF">41</td><td class="hc" style="background:#C3DEF6">19</td><td class="hc" style="background:#A8D1F3">30</td><td class="hc" style="background:#E2EDFA">5</td><td class="hc" style="background:#E2EDFA">5</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#F4F6F9"></td><td class="r">63</td></tr>
+            <tr><th scope="row">DexJoCo</th><td class="hw" style="background:#6995CC">52</td><td class="hc" style="background:#B4D6F4">25</td><td class="hc" style="background:#DEEBF9">7</td><td class="hc" style="background:#E5EFFA">3</td><td class="hc" style="background:#D7E7F8">11</td><td class="hc" style="background:#E7F0FA">2</td><td class="hc" style="background:#F4F6F9"></td><td class="r">103</td></tr>
+            <tr><th scope="row">RoboWits</th><td class="hw" style="background:#537ABA">64</td><td class="hc" style="background:#D7E7F8">11</td><td class="hc" style="background:#C8E0F6">17</td><td class="hc" style="background:#E5EFFA">3</td><td class="hc" style="background:#E3EEFA">4</td><td class="hc" style="background:#E8F1FB">1</td><td class="hc" style="background:#F4F6F9"></td><td class="r">94</td></tr>
+            <tr><th scope="row">RoboTwin 2.0</th><td class="hc" style="background:#8EB9E3">39</td><td class="hc" style="background:#BBDAF5">22</td><td class="hc" style="background:#B7D8F4">24</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#CDE2F7">15</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#F4F6F9"></td><td class="r">54</td></tr>
+            <tr class="rule-bottom"><th scope="row">YAMLab</th><td class="hw" style="background:#2E4881">87</td><td class="hc" style="background:#DCEAF9">8</td><td class="hc" style="background:#E5EFFA">3</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#E7F0FB">2</td><td class="hc" style="background:#F4F6F9"></td><td class="r">62</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- appx:bottlenecks:start -->
+      <div class="appx-list">
+<details class="appx" data-section="bottlenecks" id="appx-benchmark-outcomes">
+  <summary>Action outcomes per benchmark</summary>
+  <div class="appx-body">
+    <p>The per-benchmark tables report the action outcomes, failure modes and <i>Grasp</i> stages of every benchmark, with RoboDojo shown by its five evaluation dimensions. The RoboDojo statistics in the main text combine all five dimensions. Each cell gives the share of its row in percent and is shaded by that share, <i>n</i> is the row total, and an empty cell is zero.</p>
+    <div class="table-wrap">
+      <table class="booktabs booktabs--small">
+        <caption><b>Action outcomes</b>, as a percentage of the <i>n</i> annotated actions in each row.</caption>
+        <thead>
+          <tr class="rule-top"><td></td><th scope="col" colspan="5" class="cmid">Share of <i>n</i> (%)</th><td></td></tr>
+          <tr class="rule-mid"><th scope="col" class="l">Benchmark</th><th scope="col"><span class="sc">Achieved</span></th><th scope="col"><span class="sc">Failed</span></th><th scope="col"><span class="sc">Partial</span></th><th scope="col"><span class="sc">Unverifiable</span></th><th scope="col"><span class="sc">Not</span><br><span class="sc">applicable</span></th><th scope="col" class="r"><i>n</i></th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">RoboDojo</th><td></td><td></td><td></td><td></td><td></td><td class="r"></td></tr>
+          <tr><th scope="row" class="indent">Precision</th><td class="hw" style="background:#5881BE">61</td><td class="hc" style="background:#DCEAF9">8</td><td class="hc" style="background:#ABD3F3">29</td><td class="hc" style="background:#E6F0FA">2</td><td class="hc" style="background:#F4F6F9"></td><td class="r">18,315</td></tr>
+          <tr><th scope="row" class="indent">Open</th><td class="hw" style="background:#38579A">79</td><td class="hc" style="background:#D7E7F8">11</td><td class="hc" style="background:#DAE9F8">9</td><td class="hc" style="background:#E8F1FB">1</td><td class="hc" style="background:#F4F6F9"></td><td class="r">13,984</td></tr>
+          <tr><th scope="row" class="indent">Long-horizon</th><td class="hw" style="background:#39589D">78</td><td class="hc" style="background:#D6E7F8">11</td><td class="hc" style="background:#D9E8F8">10</td><td class="hc" style="background:#E9F2FB">&lt;1</td><td class="hc" style="background:#F4F6F9"></td><td class="r">23,299</td></tr>
+          <tr><th scope="row" class="indent">Generalization</th><td class="hw" style="background:#375598">80</td><td class="hc" style="background:#D8E7F8">11</td><td class="hc" style="background:#DCEAF9">8</td><td class="hc" style="background:#E8F1FB">1</td><td class="hc" style="background:#F4F6F9"></td><td class="r">34,430</td></tr>
+          <tr><th scope="row" class="indent">Memory</th><td class="hw" style="background:#314C88">85</td><td class="hc" style="background:#E0ECF9">6</td><td class="hc" style="background:#DDEAF9">8</td><td class="hc" style="background:#E8F1FB">1</td><td class="hc" style="background:#F4F6F9"></td><td class="r">15,401</td></tr>
+          <tr><th scope="row">StationeryBench</th><td class="hw" style="background:#5D87C2">58</td><td class="hc" style="background:#B0D5F4">27</td><td class="hc" style="background:#CDE2F7">15</td><td class="hc" style="background:#EAF2FB">&lt;1</td><td class="hc" style="background:#F4F6F9"></td><td class="r">1,544</td></tr>
+          <tr><th scope="row">Astranomy</th><td class="hw" style="background:#4E74B6">66</td><td class="hc" style="background:#DAE8F8">10</td><td class="hc" style="background:#B7D8F5">24</td><td class="hc" style="background:#EAF2FB">&lt;1</td><td class="hc" style="background:#F4F6F9"></td><td class="r">9,003</td></tr>
+          <tr><th scope="row">UniVTAC</th><td class="hw" style="background:#2F4983">86</td><td class="hc" style="background:#DCEAF8">8</td><td class="hc" style="background:#E1EDF9">5</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#F4F6F9"></td><td class="r">1,297</td></tr>
+          <tr><th scope="row">OpenViTac</th><td class="hw" style="background:#2A4175">91</td><td class="hc" style="background:#DEEBF9">7</td><td class="hc" style="background:#E6F0FA">2</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#F4F6F9"></td><td class="r">2,303</td></tr>
+          <tr><th scope="row">ContactBench 1.0</th><td class="hc" style="background:#7EAADA">44</td><td class="hc" style="background:#DFECF9">6</td><td class="hw" style="background:#73A0D3">48</td><td class="hc" style="background:#E9F1FB">1</td><td class="hc" style="background:#EAF2FB">&lt;1</td><td class="r">1,161</td></tr>
+          <tr><th scope="row">LIBERO-MAX</th><td class="hw" style="background:#6F9CD1">50</td><td class="hc" style="background:#E3EEFA">4</td><td class="hc" style="background:#A5CEF1">31</td><td class="hc" style="background:#CDE2F7">15</td><td class="hc" style="background:#F4F6F9"></td><td class="r">6,376</td></tr>
+          <tr><th scope="row">Meta-World+</th><td class="hw" style="background:#365394">81</td><td class="hc" style="background:#D6E7F8">11</td><td class="hc" style="background:#DDEAF9">8</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#F4F6F9"></td><td class="r">581</td></tr>
+          <tr><th scope="row">DexJoCo</th><td class="hw" style="background:#5B83C0">60</td><td class="hc" style="background:#C6DFF6">18</td><td class="hc" style="background:#BBDAF5">22</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#F4F6F9"></td><td class="r">575</td></tr>
+          <tr><th scope="row">RoboWits</th><td class="hw" style="background:#5278B9">65</td><td class="hc" style="background:#CAE1F7">16</td><td class="hc" style="background:#C5DEF6">18</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#E8F1FB">1</td><td class="r">589</td></tr>
+          <tr><th scope="row">RoboTwin 2.0</th><td class="hw" style="background:#4366AD">72</td><td class="hc" style="background:#DCEAF9">8</td><td class="hc" style="background:#DDEAF9">8</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#D3E5F7">12</td><td class="r">705</td></tr>
+          <tr class="rule-bottom"><th scope="row">YAMLab</th><td class="hw" style="background:#4F75B7">66</td><td class="hc" style="background:#CCE2F7">15</td><td class="hc" style="background:#C3DEF6">19</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#F4F6F9"></td><td class="r">406</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</details>
+      </div>
+      <!-- appx:bottlenecks:end -->
+
+      <h3 id="uneven-recovery">Uneven Recovery Across Failure Modes</h3>
+      <p>Most <i>Incomplete motion</i>, <i>Grasp</i> and <i>Interference</i> failures are recovered, but only about one in three <i>Alignment</i> and <i>Effect</i> failures, and additional actions do not close the gap (Figure 10(a)).</p>
+      <figure class="fig">
+        <div class="chart-grid chart-grid--7" id="fig7"></div>
+        <figcaption><b>Figure 10. Recovery by failure mode and <i>Grasp</i> sub-categories.</b> (a) Recovered by the end of the episode, with Wilson 95% intervals. (b) Share of all <i>Grasp</i> failures.</figcaption>
+      </figure>
+      <!-- appx:uneven-recovery:start -->
+      <div class="appx-list">
+<details class="appx" data-section="uneven-recovery" id="appx-recovery-modes">
+  <summary>Recovery over actions by failure mode</summary>
+  <div class="appx-body">
+    <p><b>Recovery by failure mode.</b> Figure 10(a) splits the analyzed failures by failure mode, and its error bars are Wilson 95% intervals. By the end of the episode, the recovered share is 68.2% for <i>Incomplete motion</i> (479 of 702), 63.7% for <i>Grasp</i> (4,155 of 6,523), 59.1% for <i>Interference</i> (1,602 of 2,711), 35.7% for <i>Alignment</i> (681 of 1,908) and 29.6% for <i>Effect</i> (87 of 294). <i>Choice</i> and <i>Unresolved</i> have 21 and 4 analyzed failures, of which 18 and 2 are recovered. The figure below shows the recovered share within a given number of later actions. For <i>Alignment</i> and <i>Effect</i>, it changes by less than three percentage points after 30 actions.</p>
+    <figure class="appx-fig">
+      <div class="chart" id="appx-recovery-modes-chart"></div>
+      <figcaption><b>Recovery over actions by failure mode.</b> Share of failed actions with a verified recovery within a given number of later actions.</figcaption>
+    </figure>
+  </div>
+</details>
+      </div>
+      <!-- appx:uneven-recovery:end -->
+
+      <h3 id="grasp">Where Grasps Fail</h3>
+      <p>Three in five <i>Grasp</i> failures occur as the gripper closes: it pinches a rim, tip or edge, or closes beside or above the right object (Figure 10(b)). The bottleneck is the fine 3D localization of the gripper relative to the object. After capture, most losses happen while carrying, and 9.5% of <i>Grasp</i> failures are actions issued with an already empty gripper.</p>
+      <!-- appx:grasp:start -->
+      <div class="appx-list">
+<details class="appx" data-section="grasp" id="appx-grasp-subcategories">
+  <summary>Grasp sub-categories and their stages</summary>
+  <div class="appx-body">
+    <p><b>Grasp sub-categories.</b> Each <i>Grasp</i> failure receives a sub-category that describes the contact error or the moment of loss (table below). The sub-categories are grouped as in Figure 10(b) into failures at closure, losses after capture, actions issued with an already empty gripper, and failed grasps whose contact cannot be resolved. A sub-category is assigned only after the action is judged as failed.</p>
+    <div class="table-wrap">
+      <table class="booktabs booktabs--small">
+        <caption><b>Grasp sub-categories</b> and their stages. Figure 10(b) combines the last four closure errors into other closure errors, the two carry losses into loss during carry, and failed transfers and releases into one category.</caption>
+        <thead>
+          <tr class="rule-top rule-mid"><th scope="col" class="l">Sub-category</th><th scope="col" class="l">Stage</th></tr>
+        </thead>
+        <tbody>
+          <tr><th colspan="2" scope="rowgroup" class="l"><i>At closure</i></th></tr>
+          <tr><th scope="row" class="l">Closure above the object</th><td class="l"><i>Closure</i></td></tr>
+          <tr><th scope="row" class="l">Closure beside the object</th><td class="l"><i>Closure</i></td></tr>
+          <tr><th scope="row" class="l">Pinch on a rim, tip, or edge</th><td class="l"><i>Closure</i></td></tr>
+          <tr><th scope="row" class="l">Closure pushes or tips the object away</th><td class="l"><i>Closure</i></td></tr>
+          <tr><th scope="row" class="l">The support or another object is caught</th><td class="l"><i>Closure</i></td></tr>
+          <tr><th scope="row" class="l">Wrong jaw faces or axis oppose the contact</th><td class="l"><i>Closure</i></td></tr>
+          <tr><th scope="row" class="l">Failed nut-bore grasp</th><td class="l"><i>Closure</i></td></tr>
+        </tbody>
+        <tbody>
+          <tr><th colspan="2" scope="rowgroup" class="l"><i>After capture</i></th></tr>
+          <tr><th scope="row" class="l">Receiving hand fails to secure a transfer</th><td class="l"><i>Handover</i></td></tr>
+          <tr><th scope="row" class="l">Loss during the first lift</th><td class="l"><i>Lift</i></td></tr>
+          <tr><th scope="row" class="l">Loss during carry or wrist turning</th><td class="l"><i>Carry</i></td></tr>
+          <tr><th scope="row" class="l">External contact dislodges the object</th><td class="l"><i>Carry</i></td></tr>
+          <tr><th scope="row" class="l">Opening before support is established</th><td class="l"><i>Release</i></td></tr>
+        </tbody>
+        <tbody>
+          <tr><th colspan="2" scope="rowgroup" class="l"><i>Other</i></th></tr>
+          <tr><th scope="row" class="l">Action with an empty gripper</th><td class="l"><i>Other</i></td></tr>
+          <tr class="rule-bottom"><th scope="row" class="l">Unresolved contact</th><td class="l"><i>Other</i></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</details>
+<details class="appx" data-section="grasp" id="appx-benchmark-grasp-stages">
+  <summary>Grasp failures by stage per benchmark</summary>
+  <div class="appx-body">
+    <div class="table-wrap">
+      <table class="booktabs booktabs--small">
+        <caption><b><i>Grasp</i> failures by stage</b>, grouped as in Figure 10(b), as a percentage of the <i>n</i> <i>Grasp</i> failures in each row.</caption>
+        <thead>
+          <tr class="rule-top"><td></td><th scope="col" class="cmid">At closure</th><th scope="col" colspan="4" class="cmid">After capture</th><th scope="col" colspan="2" class="cmid">Other</th><td></td></tr>
+          <tr class="rule-mid"><th scope="col" class="l">Benchmark</th><th scope="col"><span class="sc">Closure</span></th><th scope="col"><span class="sc">Handover</span></th><th scope="col"><span class="sc">Lift</span></th><th scope="col"><span class="sc">Carry</span></th><th scope="col"><span class="sc">Release</span></th><th scope="col"><span class="sc">Empty</span><br><span class="sc">gripper</span></th><th scope="col"><span class="sc">Unresolved</span><br><span class="sc">contact</span></th><th scope="col" class="r"><i>n</i></th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">RoboDojo</th><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="r"></td></tr>
+          <tr><th scope="row" class="indent">Precision</th><td class="hc" style="background:#98C2E9">35</td><td class="hc" style="background:#E6F0FA">2</td><td class="hc" style="background:#E2EDFA">5</td><td class="hc" style="background:#DCEAF9">8</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#AAD2F3">29</td><td class="hc" style="background:#C0DCF5">20</td><td class="r">944</td></tr>
+          <tr><th scope="row" class="indent">Open</th><td class="hw" style="background:#466AAF">70</td><td class="hc" style="background:#EAF2FB">&lt;1</td><td class="hc" style="background:#E0ECF9">6</td><td class="hc" style="background:#CFE3F7">14</td><td class="hc" style="background:#EAF2FB">&lt;1</td><td class="hc" style="background:#E1EDF9">5</td><td class="hc" style="background:#E2EDFA">5</td><td class="r">1,012</td></tr>
+          <tr><th scope="row" class="indent">Long-horizon</th><td class="hw" style="background:#345190">82</td><td class="hc" style="background:#EAF2FB">&lt;1</td><td class="hc" style="background:#E4EEFA">4</td><td class="hc" style="background:#D8E8F8">10</td><td class="hc" style="background:#EAF2FB">&lt;1</td><td class="hc" style="background:#E7F0FA">2</td><td class="hc" style="background:#E8F1FB">1</td><td class="r">1,272</td></tr>
+          <tr><th scope="row" class="indent">Generalization</th><td class="hw" style="background:#5076B7">65</td><td class="hc" style="background:#E6EFFA">3</td><td class="hc" style="background:#E0ECF9">6</td><td class="hc" style="background:#C6DFF6">18</td><td class="hc" style="background:#EAF2FB">&lt;1</td><td class="hc" style="background:#DEEBF9">7</td><td class="hc" style="background:#E9F1FB">1</td><td class="r">1,703</td></tr>
+          <tr><th scope="row" class="indent">Memory</th><td class="hw" style="background:#537ABA">64</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#E1EDF9">5</td><td class="hc" style="background:#B1D5F4">27</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#E3EEFA">4</td><td class="hc" style="background:#E9F2FB">&lt;1</td><td class="r">626</td></tr>
+          <tr><th scope="row">StationeryBench</th><td class="hc" style="background:#87B2DF">41</td><td class="hc" style="background:#E3EEFA">4</td><td class="hc" style="background:#E6F0FA">2</td><td class="hc" style="background:#DBE9F8">9</td><td class="hc" style="background:#E5EFFA">3</td><td class="hc" style="background:#D8E8F8">10</td><td class="hc" style="background:#A7D0F2">30</td><td class="r">174</td></tr>
+          <tr><th scope="row">Astranomy</th><td class="hw" style="background:#567DBC">62</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#E2EDFA">5</td><td class="hc" style="background:#E0ECF9">6</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#D6E7F8">11</td><td class="hc" style="background:#CBE1F7">16</td><td class="r">665</td></tr>
+          <tr><th scope="row">UniVTAC</th><td class="hc" style="background:#B4D7F4">25</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#F4F6F9"></td><td class="hw" style="background:#6E9BD0">50</td><td class="hc" style="background:#DEEBF9">7</td><td class="hc" style="background:#DEEBF9">7</td><td class="hc" style="background:#D7E7F8">11</td><td class="r">28</td></tr>
+          <tr><th scope="row">OpenViTac</th><td class="hc" style="background:#D5E6F8">12</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#D5E6F8">12</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#E0ECF9">6</td><td class="hw" style="background:#466AAF">71</td><td class="r">17</td></tr>
+          <tr><th scope="row">ContactBench 1.0</th><td class="hc" style="background:#DAE9F8">9</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#DDEAF9">8</td><td class="hc" style="background:#DDEAF9">8</td><td class="hc" style="background:#E0ECF9">6</td><td class="hc" style="background:#E4EEFA">4</td><td class="hw" style="background:#4F75B6">66</td><td class="r">53</td></tr>
+          <tr><th scope="row">LIBERO-MAX</th><td class="hc" style="background:#DCEAF9">8</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#E5EFFA">3</td><td class="hc" style="background:#E7F0FB">2</td><td class="hc" style="background:#F4F6F9"></td><td class="hw" style="background:#5E88C3">58</td><td class="hc" style="background:#AAD2F3">29</td><td class="r">62</td></tr>
+          <tr><th scope="row">Meta-World+</th><td class="hw" style="background:#6E9BD0">50</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#DDEAF9">8</td><td class="hc" style="background:#D5E6F8">12</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#A6CFF2">31</td><td class="r">26</td></tr>
+          <tr><th scope="row">DexJoCo</th><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#E1ECF9">6</td><td class="hc" style="background:#E7F0FA">2</td><td class="hc" style="background:#E4EEFA">4</td><td class="hw" style="background:#2C447B">89</td><td class="r">54</td></tr>
+          <tr><th scope="row">RoboWits</th><td class="hc" style="background:#DCEAF8">8</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#DFEBF9">7</td><td class="hc" style="background:#BCDBF5">22</td><td class="hc" style="background:#E7F0FA">2</td><td class="hc" style="background:#D9E8F8">10</td><td class="hw" style="background:#6B97CD">52</td><td class="r">60</td></tr>
+          <tr><th scope="row">RoboTwin 2.0</th><td class="hw" style="background:#6995CC">52</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#DAE8F8">10</td><td class="hc" style="background:#E2EDFA">5</td><td class="hc" style="background:#E2EDFA">5</td><td class="hc" style="background:#ACD3F3">29</td><td class="r">21</td></tr>
+          <tr class="rule-bottom"><th scope="row">YAMLab</th><td class="hc" style="background:#D2E5F7">13</td><td class="hc" style="background:#DAE9F8">9</td><td class="hc" style="background:#E4EEFA">4</td><td class="hc" style="background:#D2E5F7">13</td><td class="hc" style="background:#F4F6F9"></td><td class="hc" style="background:#E4EEFA">4</td><td class="hw" style="background:#5F89C4">57</td><td class="r">54</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</details>
+      </div>
+      <!-- appx:grasp:end -->
+    </section>
+
+    <section id="critics">
+      <h2>Reliability of Action-Level Critics</h2>
+      <p>Every result above rests on the critic’s labels. We therefore test critics against human annotators.</p>
+
+      <h3 id="benchmark">Human-Annotated Benchmark</h3>
+      <p>We validate critics on 400 human-labeled actions (34% successful, 66% failed). GPT-6 Astra is the most accurate critic. Re-inspecting their disagreements, mostly compound failures with two valid modes, the annotators accepted most of its critiques; counting those, its agreement with them exceeds 90% on both outcome and failure mode. Judging the success of an action is within reach of current frontier models; attributing a failure to its physical cause is what separates them.</p>
+      <div class="table-wrap">
+        <table class="booktabs" id="table1">
+          <caption><b>Table 2. Action-level critics on the human-annotated test set.</b> Outcome on all 400 actions, failure mode on the 264 failed ones; overall accuracy needs both. Cost in US dollars. Bold: best; underlined: second best.</caption>
+          <thead>
+            <tr class="rule-top"><th rowspan="2" scope="col" class="l">Critic Model</th><th colspan="2" scope="colgroup">Outcome</th><th colspan="2" scope="colgroup">Failure Mode</th><th rowspan="2" scope="col">Overall Accuracy (%)</th><th rowspan="2" scope="col">Cost ($)</th></tr>
+            <tr class="rule-mid"><th scope="col">Acc. (%)</th><th scope="col">κ</th><th scope="col">Acc. (%)</th><th scope="col">κ</th></tr>
+          </thead>
+          <tbody>
+            <tr class="band"><th colspan="7" scope="rowgroup">Proprietary Models</th></tr>
+            <tr><th scope="row">GPT-6 Astra</th><td><b>79.25</b></td><td><u>0.497</u></td><td><b>80.68</b></td><td><b>0.600</b></td><td><b>71.25</b></td><td>26.06</td></tr>
+            <tr><th scope="row" class="indent">w/o local intent <span class="m">g<sub>t</sub></span></th><td>25.25</td><td>0.102</td><td>25.00</td><td>0.078</td><td>24.50</td><td>25.18</td></tr>
+            <tr><th scope="row">GPT-6.1 Sol</th><td>74.50</td><td>0.487</td><td>62.12</td><td>0.314</td><td>69.75</td><td>5.00</td></tr>
+            <tr><th scope="row">GPT-6.1 Terra</th><td>74.50</td><td>0.470</td><td>61.36</td><td>0.303</td><td>66.75</td><td>2.36</td></tr>
+            <tr><th scope="row">Claude Fable 5.2</th><td><u>78.25</u></td><td><b>0.523</b></td><td>72.73</td><td>0.468</td><td><u>71.00</u></td><td>26.52</td></tr>
+            <tr><th scope="row">Claude Opus 5.5</th><td>72.50</td><td>0.434</td><td>60.98</td><td>0.323</td><td>66.00</td><td>12.76</td></tr>
+            <tr><th scope="row">Claude Sonnet 5.5</th><td>56.75</td><td>0.223</td><td>32.58</td><td>0.120</td><td>50.75</td><td>5.51</td></tr>
+            <tr class="band"><th colspan="7" scope="rowgroup">Open-Source Models</th></tr>
+            <tr><th scope="row">Kimi K3.1 Pro</th><td>54.50</td><td>0.211</td><td>32.20</td><td>0.118</td><td>52.50</td><td>9.06</td></tr>
+            <tr><th scope="row">DeepSeek-V4.1-Flash-1017</th><td>54.50</td><td>0.202</td><td>32.95</td><td>0.118</td><td>52.00</td><td>1.96</td></tr>
+            <tr><th scope="row">GLM-5.3-Flash</th><td>62.00</td><td>0.310</td><td>42.80</td><td>0.177</td><td>58.25</td><td><u>0.97</u></td></tr>
+            <tr><th scope="row">Muse-Glimmer-30B (Zero-Shot)</th><td>52.50</td><td>0.144</td><td>32.58</td><td>0.122</td><td>34.75</td><td>1.34</td></tr>
+            <tr class="rule-bottom"><th scope="row">Muse-Glimmer-30B (Fine-Tuned, <b>Ours</b>)</th><td>76.25</td><td>0.444</td><td><u>74.24</u></td><td><u>0.484</u></td><td>67.75</td><td><b>0.79</b></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- appx:benchmark:start -->
+      <div class="appx-list">
+<details class="appx" data-section="benchmark" id="appx-annotation-interface">
+  <summary>Annotation interface</summary>
+  <div class="appx-body">
+    <p>The figure below shows the web-based interface used to label the human-annotated test set. For each action, it shows the task instruction, the local intent stated with the action and the frames of every camera view, synchronized by source time. The annotator selects one of the five outcomes and, for a failed action, its failure mode and, for <i>Grasp</i>, its sub-category, with the definitions of the failure modes and grasp sub-categories linked next to each field.</p>
+    <figure class="appx-fig">
+      <img src="static/img/appx/annotation_interface.jpg" alt="Web annotation interface for a RoboDojo-Long-Horizon action. Top: the task, Place all stacking toy pieces onto the correct pegs, and the action’s original note, The blue hole is centred between the side-aligned jaws. I am closing at the piece’s current height on the board. Middle: an observation window with synchronized Head, Left Wrist and Right Wrist frames. Right: the judgment panel, Did the action meet its intent?, with Not achieved selected among the five outcomes, failure mode Grasp, Grasp sub-category Pinch on a rim, tip, or edge, an optional failure reason and a Save &amp; next button." width="1800" height="701" loading="lazy">
+      <figcaption><b>Annotation interface.</b> The annotator judges one action at a time from the task instruction, the local intent and synchronized frames of all camera views.</figcaption>
+    </figure>
+  </div>
+</details>
+      </div>
+      <!-- appx:benchmark:end -->
+
+      <h3 id="ablation">Ablation on Local Intent</h3>
+      <p>Without the local intent, GPT-6 Astra’s outcome accuracy drops from 79.25% to 25.25% and its failure-mode accuracy from 80.68% to 25.00%: most actions become <i>Unverifiable</i>. This confirms that relying solely on the global goal leaves individual action evaluation ambiguous, preventing the critic from reliably determining action success.</p>
+
+      <h3 id="open-critic">Open-Source Critic</h3>
+      <p>Fine-tuned on 12,844 annotated actions, Muse-Glimmer-30B raises its failure-mode accuracy from 32.58% to 74.24%, second only to GPT-6 Astra, at over 30× lower cost.</p>
+      <!-- appx:open-critic:start -->
+      <div class="appx-list">
+<details class="appx" data-section="open-critic" id="appx-critic-training">
+  <summary>Critic training details</summary>
+  <div class="appx-body">
+    <p><b>Training data.</b> We keep executed actions with an achieved or failed outcome and complete pre- and post-action observations, and sample one achieved action for every three failed actions. The splits are separated at the episode level, and no episode contributes actions to more than one split (the table of critic dataset splits below). The 400 human-annotated actions used in Table 2 are drawn from the test split.</p>
+    <div class="table-wrap">
+      <table class="booktabs booktabs--small">
+        <caption><b>Splits of the critic dataset</b> in annotated actions.</caption>
+        <thead>
+          <tr class="rule-top rule-mid"><th scope="col" class="l">Split</th><th scope="col">Achieved</th><th scope="col">Failed</th><th scope="col">Total</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Training</th><td>3,211</td><td>9,633</td><td>12,844</td></tr>
+          <tr><th scope="row">Validation</th><td>387</td><td>1,161</td><td>1,548</td></tr>
+          <tr class="rule-bottom"><th scope="row">Test</th><td>484</td><td>1,452</td><td>1,936</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><b>Input and target.</b> Each sample follows the critic formulation of Intent-Grounded Critique. The input contains the task goal <i>G</i>, the local intent <i>g<sub>t</sub></i> and the ordered camera frames of 𝒪<sub><i>t</i></sub>, preceded by a system prompt with the complete definitions of the outcome and failure-mode categories. The target is a JSON object with four fields, namely the outcome, the failure mode, the grasp sub-category (the table of Grasp sub-categories under Grasp Failures) and a short failure reason. The last three fields are null for an achieved action.</p>
+    <p><b>Fine-tuning.</b> We fine-tune Muse-Glimmer-30B with a LoRA adapter of rank 32 on the Fireworks AI platform, keeping the base weights frozen. Training runs for 2 epochs with a batch size of 32 and a maximum context length of 65,536 tokens, with a learning rate of 5×10<sup>−5</sup>, 25 warmup steps and a cosine schedule.</p>
+    <p><b>Inference.</b> The fine-tuned critic decodes at temperature 0 with at most 1,024 output tokens. An output that is not valid JSON counts as incorrect.</p>
+  </div>
+</details>
+      </div>
+      <!-- appx:open-critic:end -->
+
+      <h3 id="self-preference">Self-Preference Bias</h3>
+      <p>GPT-6 Astra serves as both the control policy and the primary critic, so we examine whether it favors its own rollouts. A critic biased toward its own policy would systematically label failed actions as <i>Achieved</i>. GPT-6 Astra does so for only 19 of the 264 human-labeled failed actions, the fewest among all evaluated critics (Table 3). Claude Fable 5.2, a frontier model from a different model family, reaches a similar outcome accuracy of 78.25%, compared to 79.25% for GPT-6 Astra (Table 2). GPT-6 Astra is therefore the strictest evaluator of its own failed actions, and the high agreement with human labels holds across model families.</p>
+      <p>Fine-tuning on our dataset, annotated by GPT-6 Astra, does not pass such a bias on to the open-source critic. Scored on test episodes kept out of training, Muse-Glimmer-30B halves the failed actions it labels as <i>Achieved</i>, from 67 to 34, and becomes stricter on failed actions and more accurate on the human-annotated benchmark.</p>
+      <div class="table-wrap">
+        <table class="booktabs booktabs--small" id="table-leniency">
+          <caption><b>Table 3. Failed actions labeled <i>Achieved</i></b> by each critic, out of the 264 actions that the annotators judge as <i>Failed</i> in the human-annotated test set.</caption>
+          <thead>
+            <tr class="rule-top rule-mid"><th scope="col" class="l">Critic</th><th scope="col">Labeled <i>Achieved</i></th></tr>
+          </thead>
+          <tbody>
+            <tr class="band"><th colspan="2" scope="rowgroup">Proprietary Models</th></tr>
+            <tr><th scope="row">GPT-6 Astra</th><td>19 (7.2%)</td></tr>
+            <tr><th scope="row">Claude Fable 5.2</th><td>75 (28.4%)</td></tr>
+            <tr><th scope="row">Claude Opus 5.5</th><td>77 (29.2%)</td></tr>
+            <tr><th scope="row">GPT-6.1 Sol</th><td>81 (30.7%)</td></tr>
+            <tr><th scope="row">GPT-6.1 Terra</th><td>71 (26.9%)</td></tr>
+            <tr class="band"><th colspan="2" scope="rowgroup">Open-Source Models</th></tr>
+            <tr><th scope="row">Muse-Glimmer-30B (Zero-Shot)</th><td>67 (25.4%)</td></tr>
+            <tr class="rule-bottom"><th scope="row">Muse-Glimmer-30B (Fine-Tuned, <b>Ours</b>)</th><td>34 (12.9%)</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <section id="release">
+      <h2>Dataset and Release</h2>
+      <div class="bench-strip" id="bench-strip" role="region" aria-roledescription="carousel" aria-label="The 12 manipulation benchmarks of the annotated dataset"></div>
+      <p class="strip-note">The 12 manipulation benchmarks of the dataset, each shown with a typical rollout or scene from its project page (RoboDojo, StationeryBench and YAMLab: frames of our own rollouts). Select a card to visit the project page.</p>
+      <p>The dataset combines new GPT-6 Astra rollouts on seven benchmarks with released GPT-6 Astra traces of five others (RoboDojo, StationeryBench, Astranomy, UniVTAC, OpenViTac), whose local intents were logged with every action. We release:</p>
+      <ul class="plain plain--bullets">
+        <li><b>Critique dataset:</b> 12,844 annotated actions with the verbatim local intent, the commanded action, the frames shown to the critic, and the outcome, failure mode, grasp sub-category and failure reason.</li>
+        <li><b>Human-annotated benchmark:</b> 400 actions with human outcome and failure-mode labels.</li>
+        <li><b>Muse-Glimmer-30B critic:</b> the fine-tuned open-source critic VLM.</li>
+      </ul>
+      <!-- appx:release:start -->
+      <div class="appx-list">
+<details class="appx" data-section="release" id="appx-corpus-coverage">
+  <summary>Benchmarks, action units and coverage</summary>
+  <div class="appx-body">
+    <p><b>Benchmarks.</b> The table below lists the episodes, episode success rate, annotated actions and action success rate of each benchmark in the main dataset.</p>
+    <div class="table-wrap">
+      <table class="booktabs booktabs--small">
+        <caption><b>Main dataset composition.</b> <span class="sc">Success</span> is the percentage of scored episodes that succeed and the percentage of annotated actions judged <i>Achieved</i>. A darker cell marks a lower success rate. <sup>*</sup>Vision-only settings of visuo-tactile benchmarks.</caption>
+        <thead>
+          <tr class="rule-top rule-mid"><th scope="col" class="l">Benchmark</th><th scope="col">Episodes</th><th scope="col"><span class="sc">Success</span><br>(%)</th><th scope="col">Actions</th><th scope="col"><span class="sc">Success</span><br>(%)</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">RoboDojo</th><td>2,100</td><td class="hw" style="background:#3A5AA0">22</td><td>105,429</td><td class="hc" style="background:#B9D9F5">77</td></tr>
+          <tr><th scope="row">StationeryBench</th><td>100</td><td class="hw" style="background:#273C6E">7</td><td>1,544</td><td class="hc" style="background:#87B2DF">58</td></tr>
+          <tr><th scope="row">Astranomy</th><td>56</td><td class="hw" style="background:#73A0D3">52</td><td>9,003</td><td class="hc" style="background:#9DC7ED">66</td></tr>
+          <tr><th scope="row">UniVTAC<sup>*</sup></th><td>80</td><td class="hc" style="background:#B7D8F4">76</td><td>1,297</td><td class="hc" style="background:#D0E4F7">86</td></tr>
+          <tr><th scope="row">OpenViTac<sup>*</sup></th><td>130</td><td class="hc" style="background:#C0DCF6">80</td><td>2,303</td><td class="hc" style="background:#DAE9F8">91</td></tr>
+          <tr><th scope="row">ContactBench 1.0</th><td>71</td><td class="hw" style="background:#6A96CD">48</td><td>1,161</td><td class="hw" style="background:#638DC7">44</td></tr>
+          <tr><th scope="row">LIBERO-MAX</th><td>64</td><td class="hc" style="background:#E7F0FB">98</td><td>6,376</td><td class="hw" style="background:#6D9ACF">50</td></tr>
+          <tr><th scope="row">Meta-World+</th><td>50</td><td class="hc" style="background:#E7F0FA">98</td><td>581</td><td class="hc" style="background:#C4DEF6">81</td></tr>
+          <tr><th scope="row">DexJoCo</th><td>11</td><td class="hc" style="background:#96C0E8">64</td><td>575</td><td class="hc" style="background:#8AB6E1">60</td></tr>
+          <tr><th scope="row">RoboWits</th><td>15</td><td class="hc" style="background:#9EC8ED">67</td><td>589</td><td class="hc" style="background:#98C2E9">65</td></tr>
+          <tr><th scope="row">RoboTwin 2.0</th><td>47</td><td class="hc" style="background:#DCE9F8">91</td><td>705</td><td class="hc" style="background:#ADD3F4">72</td></tr>
+          <tr class="rule-bottom"><th scope="row">YAMLab</th><td>10</td><td class="hc" style="background:#D9E8F8">90</td><td>406</td><td class="hc" style="background:#9CC6EC">66</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p><b>Action units.</b> RoboDojo is reported by its five evaluation dimensions, Precision, Open, Long-horizon, Generalization and Memory, and an action is one executed call of the agent, indexed separately from policy turns and simulator frames. In StationeryBench, an action is one physical <code>move_to</code> call, matched to its turn and observation step in the released logs, and stop calls are not actions. In Astranomy, an action is one native action chunk. In UniVTAC and OpenViTac, an action is one block of primitives issued under a single local intent, and the low-level controls inside a block are not counted as separate actions.</p>
+    <p>We keep three sources of images separate: the images shown to the agent, the frames returned with each response and the frames of the replay.</p>
+    <p><b>Coverage.</b> Every action of the ingested benchmarks carries a local intent. This covers all 105,429 RoboDojo actions, 1,544 StationeryBench actions, 9,003 Astranomy actions and 3,600 UniVTAC and OpenViTac actions.</p>
+    <p>For LIBERO-MAX, Meta-World+, DexJoCo, RoboWits, RoboTwin 2.0 and YAMLab, all 9,232 actions across 197 episodes are annotated, including those judged <i>Partial</i>, <i>Unverifiable</i> or <i>Not applicable</i>.</p>
+  </div>
+</details>
+      </div>
+      <!-- appx:release:end -->
+    </section>
+
+    <section id="bibtex">
+      <h2>BibTeX</h2>
+      <pre class="bibtex"><code><span class="bl">@misc{agentrobocritic2026,</span><span class="bl">  title  = {AgentRoboCritic: Understanding the Capability of Frontier Agents on Direct Robot Control},</span><span class="bl">  author = {Du, Yiyang and Kuang, Yuxuan and Zhao, Qitao and Wang, Yixuan and Guo, Zhanqiu and Xu, Yi and Li, Xin and He, Wenbin and Ren, Liu and Xiong, Chenyan},</span><span class="bl">  year   = {2026}</span><span class="bl">}</span></code></pre>
+    </section>
+  </main>
+</div>
+
+<div class="tip" id="tip" role="tooltip" hidden></div>
+
+<script src="static/js/data.js?v=20261119-7"></script>
+<script src="static/js/main.js?v=20261119-7"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js" onload="window.ARCRenderTex && window.ARCRenderTex()"></script>
+</body>
+</html>
