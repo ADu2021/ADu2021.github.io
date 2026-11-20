@@ -472,7 +472,7 @@ pre { margin: 0; padding: 16px 18px; overflow-x: auto; background: var(--code-bg
 #bibtex { padding-bottom: 80px; }
 /* each BibTeX field stays one line in the copied text; long fields wrap with a hanging indent under the value */
 pre.bibtex { white-space: pre-wrap; overflow-x: visible; }
-pre.bibtex .bl { display: block; padding-left: 12ch; text-indent: -12ch; }
+pre.bibtex .bl { display: block; padding-left: 19ch; text-indent: -19ch; }
 
 /* ------------------------------------------------------------------ tooltip */
 .tip {
