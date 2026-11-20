@@ -54,14 +54,14 @@ button { font: inherit; color: inherit; }
 
 /* ------------------------------------------------------------------ hero */
 .hero { text-align: center; padding: 64px 24px 0; }
-.hero h1 { font-size: 50px; line-height: 1.1; font-weight: 700; letter-spacing: -0.02em; }
-.subtitle { margin: 10px auto 0; max-width: 900px; font-size: 24px; line-height: 1.35; font-weight: 400; color: #4a5263; }
-.authors { margin: 20px 0 0; font-size: 16px; }
-.authors a { color: var(--link); }
+.hero h1 { font-size: clamp(38px, 5.6vw, 58.8px); line-height: 1.1; font-weight: 700; letter-spacing: -0.02em; }
+.subtitle { margin: 12px auto 0; max-width: 1200px; font-size: clamp(20px, 3.2vw, 33.6px); line-height: 1.3; font-weight: 400; color: #4a5263; text-wrap: balance; }
+.authors { margin: 22px auto 0; max-width: 1200px; font-size: 18px; line-height: 1.5; text-wrap: balance; }
+.authors a { color: #3273dc; }
 .authors .author { white-space: nowrap; }
 .affil .inst { display: inline-block; margin: 0 7px; }
 .authors sup, .affil sup { font-size: 0.7em; margin-left: 1px; }
-.affil { margin: 4px 0 0; font-size: 14px; color: var(--muted-2); }
+.affil { margin: 4px 0 0; font-size: 15px; color: var(--muted-2); }
 .links { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 18px; }
 .link-btn {
   display: inline-flex; align-items: center; gap: 7px;
@@ -488,8 +488,6 @@ pre.bibtex .bl { display: block; padding-left: 12ch; text-indent: -12ch; }
 
 @media (max-width: 640px) {
   .hero { padding-top: 44px; }
-  .hero h1 { font-size: 38px; }
-  .subtitle { font-size: 19px; }
   .layout { padding: 0 16px; }
   main h2 { font-size: 24px; }
   main h3 { font-size: 18px; }
