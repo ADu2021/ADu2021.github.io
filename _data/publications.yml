@@ -1,8 +1,17 @@
 main:
 
+  - title: "AgentRoboCritic: Understanding the Capability of Frontier Agents on Direct Robot Control"
+    authors: <strong>Yiyang Du</strong>, Yuxuan Kuang*, Qitao Zhao*, Yixuan Wang*, Zhanqiu Guo, Yi Xu, Xin Li, Wenbin He, Liu Ren, Chenyan Xiong
+    conference_short: Preprint
+    pdf: https://arxiv.org/abs/2611.26613
+    code: https://github.com/cxcscmu/AgentRoboCritic
+    page: https://adu2021.github.io/blog/AgentRoboCritic/
+    image: ./assets/img/AgentRoboCritic_teaser.jpg
+    notes: Under Review
+
   - title: "EmbodiedMidtrain: Bridging the Gap between Vision-Language Models and Vision-Language-Action Models via Mid-training"
     authors: <strong>Yiyang Du</strong>, Zhanqiu Guo, Haochen Zhang, Annabella Macaluso, Xin Ye, Liu Ren, Yonatan Bisk, Chenyan Xiong
-    conference_short: Arxiv
+    conference_short: Preprint
     pdf: https://arxiv.org/abs/2604.20012
     # code: https://github.com/THUNLP-MT/AdaMMS
     page: https://adu2021.github.io/blog/EmbodiedMidtrain/

@@ -15,6 +15,7 @@ My research explores **Agents and foundation models for robotics**. I’m always
 <!-- **I am excited to share that I will be joining Carnegie Mellon University this fall to pursue my PhD in Language and Information Technology!** -->
 
 ## News
+- **[Nov. 2026]** 🤖 We released [AgentRoboCritic](https://adu2021.github.io/blog/AgentRoboCritic/), an action-level study of how well frontier agents can directly control robots.
 - **[Jun. 2026]** 🏆 Our paper, EmbodiedMidtrain, received <strong style="color:red">Best Paper Award</strong> on FMEA workshop at CVPR 2026!
 - **[Aug. 2025]** I started my Ph.D. at Carnegie Mellon University!
 

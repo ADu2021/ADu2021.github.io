@@ -296,8 +296,10 @@ a:hover small {
 }
 
 .wrapper {
-  width:960px;
+  max-width:1240px;
   margin:0 auto;
+  padding:0 clamp(16px, 4vw, 48px);
+  box-sizing:border-box;
 }
 
 blockquote {
@@ -356,7 +358,7 @@ img {
 }
 
 header {
-  width:232px;
+  width:260px;
   float:left;
   position:fixed;
   -webkit-font-smoothing:subpixel-antialiased;
@@ -432,7 +434,7 @@ header ul a strong {
 }
 
 section {
-  width:650px;
+  width:calc(100% - 310px);
   float:right;
   padding-top:4.0em;
   padding-bottom:50px;
@@ -450,7 +452,7 @@ hr {
 }
 
 footer {
-  width:232px;
+  width:260px;
   float:left;
   position:fixed;
   bottom:30px;
@@ -467,6 +469,7 @@ footer {
   div.wrapper {
     width:auto;
     margin:0;
+    padding:0;
   }
 
 
