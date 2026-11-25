@@ -8,7 +8,7 @@ I’m a second-year PhD student at the **Language Technologies Institute, Carneg
 
 Before that, I received my B.Eng. in Computer Science and Technology from Tsinghua University as an outstanding graduate under the guidance of [**<u>Prof. Yang Liu</u>**](https://nlp.csai.tsinghua.edu.cn/~ly/).
 
-My research explores **Agents and foundation models for robotics**. I’m always happy to chat and collaborate, so feel free to reach out!
+My research explores **foundation models and agents for robotics**. I’m always happy to chat and collaborate, so feel free to reach out!
 
 
 <!-- I am currently visiting Stanford University as a summer intern in Professor Diyi Yang's group, and collaborating with Yanzhe Zhang and William Held. -->
